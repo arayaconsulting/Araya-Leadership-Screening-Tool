@@ -62,7 +62,7 @@ function initializeQuestions() {
             const questionId = `Q${globalIndex}`; // ID unik untuk menyimpan jawaban
             allQuestionsFlat.push({
                 index: globalIndex,
-                id: questionId, 
+                id: questionId,
                 text: questionText,
                 levelGroup: levelData.group,
                 levelName: levelData.name,
@@ -383,12 +383,19 @@ function interpretStrengthsWeaknesses(finalScores, mainLevel) {
     if (strengths.length > 0) {
         strengthsDisplay.innerHTML = `<strong>Kekuatan Anda Terletak Pada:</strong><br><ul style="margin-top:5px; padding-left:20px;"><li>` + strengths.join('</li><li>') + '</li></ul>';
     } else {
-        weaknesses.push('Level 3: Production (Skor: ' + finalScores.L3 + ')'); // Tambahkan L3 jika tidak ada strength dan L3 lemah
         strengthsDisplay.innerHTML = '<strong>Kekuatan Anda:</strong> Anda berada pada jalur pertumbuhan. Belum ada level yang menonjol kuat (Skor di bawah 4.2), yang berarti ada peluang peningkatan di semua bidang.';
     }
 
     if (weaknesses.length > 0) {
-        weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>` + weaknesses.join('</li><li>') + '</li></ul>';
+        // Logika Khusus untuk Klarifikasi L3 di Level 5
+        const L3Score = parseFloat(finalScores.L3);
+        
+        if (mainLevel >= 4 && L3Score < 3.0 && weaknesses.length === 1 && weaknesses[0].includes('Level 3')) {
+             weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>Level 3: Production (Produksi) (Skor: ${L3Score})</li></ul>
+             <p style="margin-top:10px; font-weight:bold; color: #dc3545;">**Peringatan Penting:** Skor yang rendah di Level Produksi mengindikasikan bahwa **efektivitas pencapaian hasil tim harus segera diperkuat**. Kepemimpinan Level Tinggi (L4/L5) membutuhkan fondasi hasil yang kuat (L3) untuk mempertahankan kredibilitas.</p>`;
+        } else {
+             weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>` + weaknesses.join('</li><li>') + '</li></ul>';
+        }
     } else {
         weaknessesDisplay.innerHTML = '<strong>Area Pengembangan:</strong> Dasar kepemimpinan Anda sangat kuat. Fokus pada upaya untuk mempertahankan dan menggandakan pengaruh.';
     }
