@@ -1,4 +1,4 @@
-// A. DATA PERTANYAAN LENGKAP
+// A. DATA PERTANYAAN LENGKAP (REVISI PERILAKU LEVEL 4 & 5)
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", 
       description: "Pada level ini, pengaruh Anda berasal dari posisi formal Anda. Orang-orang mengikuti karena mereka HARUS.", 
@@ -30,27 +30,26 @@ const questionsData = [
     { level: 4, name: "People Development (Pengembangan Orang)", group: "L4", 
       description: "Fokus Anda beralih dari memimpin orang ke mengembangkan orang. Orang mengikuti Anda karena apa yang telah Anda lakukan UNTUK mereka.", 
       questions: [
-        "16. Saya mengidentifikasi dan secara aktif melatih calon pemimpin dalam tim saya.",
-        "17. Saya mendelegasikan tanggung jawab penting untuk mengembangkan keterampilan anggota tim.",
-        "18. Saya berinvestasi dalam pelatihan dan mentoring yang membantu anggota tim tumbuh secara profesional.",
-        "19. Tujuan utama saya adalah mengubah pengikut menjadi pemimpin.",
-        "20. Saya menempatkan orang yang tepat di posisi yang tepat untuk memaksimalkan potensi mereka."
+        "16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar bisa menggantikan peran saya.",
+        "17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit/proyek baru.",
+        "18. Saya berinvestasi dalam pengembangan orang bahkan jika itu berarti mereka akan pindah ke posisi yang lebih baik di luar tim saya.",
+        "19. Saya mendelegasikan tanggung jawab yang signifikan kepada anggota tim agar mereka tumbuh dan mengambil inisiatif kepemimpinan.",
+        "20. Saya aktif merekrut individu yang memiliki potensi besar, bukan hanya yang dapat memenuhi tugas saat ini."
     ]},
     { level: 5, name: "Pinnacle (Puncak)", group: "L5", 
       description: "Pengaruh Anda sangat luas dan dalam, melampaui tim atau organisasi Anda. Orang-orang mengikuti Anda karena siapa diri Anda dan warisan yang Anda ciptakan.", 
       questions: [
-        "21. Saya dihormati dan diikuti di luar organisasi atau industri saya.",
-        "22. Kepemimpinan saya telah menghasilkan pemimpin Level 4 lainnya dalam organisasi.",
-        "23. Saya fokus menciptakan warisan yang akan bertahan lama setelah saya tidak lagi memimpin.",
-        "24. Orang mengikuti saya karena siapa saya dan apa yang saya wakili (nilai-nilai).",
-        "25. Saya menggunakan pengaruh saya untuk memberi manfaat dan mentransformasi organisasi secara keseluruhan."
+        "21. Pemimpin di luar tim/departemen saya sering mencari nasihat atau panduan strategis dari saya.",
+        "22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat dan kinerja seluruh organisasi.",
+        "23. Keputusan dan tindakan saya selalu didasarkan pada prinsip yang diyakini oleh sebagian besar karyawan/stakeholder.",
+        "24. Saya telah menciptakan budaya atau sistem kepemimpinan yang akan tetap efektif setelah saya tidak lagi menjabat.",
+        "25. Saya dikenal luas di industri atau perusahaan sebagai panutan yang inspiratif dan memiliki integritas tinggi."
     ]}
 ];
 
 let currentQuestionIndex = 0;
 const totalQuestions = 25;
 const allQuestionsFlat = [];
-// Variabel baru untuk menyimpan semua jawaban
 const userAnswers = {}; 
 let myChart; 
 
@@ -87,7 +86,7 @@ function renderScaleLegend() {
     `;
 }
 
-// C. FUNGSI UNTUK MERENDER PERTANYAAN SAAT INI
+// C. FUNGSI UNTUK MERENDER PERTANYAAN SAAT INI (Integrity Test Mode)
 function renderCurrentQuestion() {
     const container = document.getElementById('questions-container');
     const question = allQuestionsFlat[currentQuestionIndex];
@@ -104,7 +103,6 @@ function renderCurrentQuestion() {
             <div class="scale-options">`;
     
     for (let i = 1; i <= 5; i++) {
-        // Gunakan questionId sebagai name, dan cek apakah skor sudah tersimpan
         const isChecked = (currentScore === i) ? 'checked' : '';
         html += `<input type="radio" id="${questionId}_${i}" name="${questionId}" value="${i}" ${isChecked} required>
                  <label for="${questionId}_${i}">${i}</label>`;
@@ -114,7 +112,6 @@ function renderCurrentQuestion() {
 
     container.innerHTML = html;
     
-    // Tambahkan event listener untuk mengaktifkan tombol Next saat ada pilihan
     const radioInputs = container.querySelectorAll(`input[name="${questionId}"]`);
     radioInputs.forEach(input => {
         input.addEventListener('change', enableNextButton);
@@ -128,19 +125,16 @@ function enableNextButton() {
     const nextBtn = document.getElementById('next-btn');
     const submitBtn = document.getElementById('submit-btn');
     
-    // Tombol Next/Submit hanya aktif jika ada jawaban yang dipilih
     const question = allQuestionsFlat[currentQuestionIndex];
     const form = document.getElementById('quiz-form');
     const checked = form.querySelector(`input[name="${question.id}"]:checked`);
     
     if (checked) {
-        // Simpan skor saat tombol diaktifkan/jawaban dipilih
         userAnswers[question.id] = parseInt(checked.value);
         
         if (currentQuestionIndex < totalQuestions - 1) {
              nextBtn.removeAttribute('disabled');
         } else {
-             // Di pertanyaan terakhir, kita hanya perlu tombol Submit aktif
              submitBtn.removeAttribute('disabled');
         }
     }
@@ -153,22 +147,20 @@ function updateNavigationButtons() {
     const nextBtn = document.getElementById('next-btn');
     const submitBtn = document.getElementById('submit-btn');
 
-    // Tombol Previous
     if (currentQuestionIndex > 0) {
         prevBtn.classList.remove('hidden');
     } else {
         prevBtn.classList.add('hidden');
     }
 
-    // Tombol Next / Submit
     if (currentQuestionIndex < totalQuestions - 1) {
         nextBtn.classList.remove('hidden');
         submitBtn.classList.add('hidden');
-        nextBtn.disabled = userAnswers[allQuestionsFlat[currentQuestionIndex].id] === 0; // Disable jika belum dijawab
+        nextBtn.disabled = userAnswers[allQuestionsFlat[currentQuestionIndex].id] === 0; 
     } else {
         nextBtn.classList.add('hidden');
         submitBtn.classList.remove('hidden');
-        submitBtn.disabled = userAnswers[allQuestionsFlat[currentQuestionIndex].id] === 0; // Disable jika belum dijawab
+        submitBtn.disabled = userAnswers[allQuestionsFlat[currentQuestionIndex].id] === 0; 
     }
 }
 
@@ -189,11 +181,11 @@ function previousQuestion() {
 }
 
 
-// H. LOGIKA PENILAIAN (Menggunakan userAnswers object)
+// H. LOGIKA PENILAIAN
 function calculateResults(event) {
     event.preventDefault(); 
     
-    // Final check Q25
+    // Simpan jawaban Q25
     const question = allQuestionsFlat[currentQuestionIndex];
     const form = document.getElementById('quiz-form');
     const checked = form.querySelector(`input[name="${question.id}"]:checked`);
@@ -201,7 +193,6 @@ function calculateResults(event) {
     if (checked) {
         userAnswers[question.id] = parseInt(checked.value);
     } else {
-        // Should not happen if button is disabled, but for safety:
         alert("Harap pilih jawaban untuk Pertanyaan 25 sebelum melihat hasil!");
         return;
     }
@@ -220,20 +211,18 @@ function calculateResults(event) {
         }
     });
 
-
-    // 2. Validasi Akhir (walaupun seharusnya sudah 25)
     if (totalAnswered < totalQuestions) {
-        alert("Terjadi kesalahan. Pastikan semua 25 pertanyaan sudah dijawab sebelum melihat hasil!");
+        alert("Terjadi kesalahan internal. Pastikan semua 25 pertanyaan sudah dijawab sebelum melihat hasil!");
         return;
     }
 
-    // 3. Hitung Rata-rata Skor per Level
+    // 2. Hitung Rata-rata Skor per Level
     const finalScores = {};
     for (const group in levelScores) {
         finalScores[group] = (levelScores[group] / levelCounts[group]).toFixed(1);
     }
 
-    // 4. Tentukan Level Utama (Ambang Batas >= 4.0)
+    // 3. Tentukan Level Utama (Ambang Batas >= 4.0)
     let mainLevel = 1; 
     let mainLevelName = "Position (Jabatan)";
     const AMBANG_BATAS = 4.0;
@@ -247,11 +236,11 @@ function calculateResults(event) {
         }
     }
 
-    // 5. Tampilkan Hasil
+    // 4. Tampilkan Hasil
     displayResults(mainLevel, mainLevelName, finalScores);
 }
 
-// FUNGSI PENDUKUNG (DisplayResults, getReportContent, dll.) (Sama seperti sebelumnya)
+// I. FUNGSI UNTUK MENYIAPKAN TEKS REKOMENDASI (Sama)
 function getReportContent(level) {
     let explanation = "";
     let recommendation = "";
@@ -365,6 +354,7 @@ function renderChart(finalScores) {
     });
 }
 
+// J. FUNGSI UNTUK INTERPRETASI KEKUATAN DAN KELEMAHAN (Perbaikan Logika Maxwell)
 function interpretStrengthsWeaknesses(finalScores, mainLevel) {
     let strengths = [];
     let weaknesses = [];
@@ -377,7 +367,12 @@ function interpretStrengthsWeaknesses(finalScores, mainLevel) {
             strengths.push(`Level ${levelData.level}: ${levelData.name} (Skor: ${score})`);
         } 
         
+        // LOGIKA PERBAIKAN: Abaikan Level 1 & 2 sebagai kelemahan jika pemimpin sudah di Level 3 ke atas.
         if (score < 3.0) { 
+            if (mainLevel >= 3 && (levelData.level === 1 || levelData.level === 2)) {
+                // Abaikan L1 & L2 karena skor rendah berarti mereka tidak mengandalkannya (Tanda baik)
+                continue; 
+            }
             weaknesses.push(`Level ${levelData.level}: ${levelData.name} (Skor: ${score})`);
         }
     }
@@ -388,13 +383,14 @@ function interpretStrengthsWeaknesses(finalScores, mainLevel) {
     if (strengths.length > 0) {
         strengthsDisplay.innerHTML = `<strong>Kekuatan Anda Terletak Pada:</strong><br><ul style="margin-top:5px; padding-left:20px;"><li>` + strengths.join('</li><li>') + '</li></ul>';
     } else {
+        weaknesses.push('Level 3: Production (Skor: ' + finalScores.L3 + ')'); // Tambahkan L3 jika tidak ada strength dan L3 lemah
         strengthsDisplay.innerHTML = '<strong>Kekuatan Anda:</strong> Anda berada pada jalur pertumbuhan. Belum ada level yang menonjol kuat (Skor di bawah 4.2), yang berarti ada peluang peningkatan di semua bidang.';
     }
 
     if (weaknesses.length > 0) {
         weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>` + weaknesses.join('</li><li>') + '</li></ul>';
     } else {
-        weaknessesDisplay.innerHTML = '<strong>Area Pengembangan:</strong> Dasar kepemimpinan Anda cukup kuat. Fokus pada upaya untuk naik ke level berikutnya.';
+        weaknessesDisplay.innerHTML = '<strong>Area Pengembangan:</strong> Dasar kepemimpinan Anda sangat kuat. Fokus pada upaya untuk mempertahankan dan menggandakan pengaruh.';
     }
 }
 
