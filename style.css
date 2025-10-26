@@ -1,0 +1,300 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 850px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+h1, h2 {
+    color: #0056b3;
+    text-align: center;
+}
+
+/* Style untuk Logo Placeholder */
+.logo-placeholder {
+    text-align: center;
+    font-size: 28px; 
+    font-weight: bold;
+    color: #007bff; 
+    margin-bottom: 25px; 
+    padding: 10px 0; 
+    letter-spacing: 2px; 
+    text-transform: uppercase;
+    
+    border-bottom: 3px solid #007bff; 
+    background-color: #e6f7ff; 
+    border-radius: 5px;
+}
+
+
+/* --- LAIN-LAIN (Tidak Berubah) --- */
+.question-group {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    background-color: #eaf3ff;
+}
+.question-group h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 3px solid #0056b3;
+    padding-bottom: 10px;
+}
+.question-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.scale-options label {
+    margin-right: 15px;
+    cursor: pointer;
+}
+.hidden {
+    display: none;
+}
+.navigation-controls-horizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+#next-btn, #prev-btn {
+    width: 50%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#next-btn {
+    background-color: #28a745; 
+    color: white;
+}
+#prev-btn {
+    background-color: #6c757d; 
+    color: white;
+}
+#next-btn:hover {
+    background-color: #1e7e34;
+}
+#prev-btn:hover {
+    background-color: #5a6268;
+}
+.navigation-submit-wrapper {
+    margin-top: 20px;
+}
+#submit-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#submit-btn:hover {
+    background-color: #1e7e34;
+}
+#next-btn[disabled], #submit-btn[disabled] {
+    background-color: #90ee90;
+    cursor: not-allowed;
+}
+
+/* Style untuk Keterangan Skala Penuh */
+.scale-legend-full {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 6px;
+    text-align: center;
+}
+#legend-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.legend-item {
+    flex-basis: 18%; 
+    padding: 5px;
+    font-size: 0.9em;
+    border-right: 1px dashed #ccc;
+}
+.legend-item:last-child {
+    border-right: none;
+}
+
+
+/* --- Style Hasil + WATERMARK FINAL FIX --- */
+#results {
+    padding-top: 20px;
+    border-top: 2px dashed #ccc;
+    text-align: center;
+    position: relative; 
+    background-color: #fff; 
+}
+
+#level-result {
+    font-size: 28px;
+    font-weight: bold;
+    color: #007bff; 
+    margin: 15px 0;
+}
+
+
+/* Watermark Base Style (Diulang untuk konsistensi) */
+.watermark-style-base {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 50%; 
+    opacity: 0.08; 
+    z-index: 1; 
+    pointer-events: none;
+}
+
+
+/* 1. Watermark untuk Penjelasan dan Rekomendasi Level Utama */
+#recommendation {
+    position: relative; 
+    background-color: #e6f7ff; 
+    border: 1px solid #b3e0ff;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: left;
+    margin-top: 15px;
+    z-index: 2; 
+}
+#recommendation::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 50%; 
+    opacity: 0.08; 
+    z-index: 1; 
+    pointer-events: none;
+}
+
+
+/* 2. Watermark untuk Analisis Kekuatan/Kelemahan */
+#strength-weakness {
+    position: relative;
+    background-color: #f0fff0; 
+    border: 1px solid #c3e6cb;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+    z-index: 2;
+}
+#strength-weakness::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 50%; 
+    opacity: 0.08; 
+    z-index: 1; 
+    pointer-events: none;
+}
+
+
+/* 3. Watermark untuk Visualisasi Skor (GRAFIK) - FIX KRITIS */
+.chart-box {
+    position: relative;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #fff; 
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+.chart-box::before {
+    /* COPY BASE WATERMARK STYLE */
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 50%; 
+    opacity: 0.08; 
+    z-index: 1; 
+    pointer-events: none;
+}
+/* FIX KRITIS UNTUK CANVAS: Pastikan elemen canvas tidak menutupi watermark */
+.chart-box canvas {
+    background-color: transparent !important; /* HARUS TRANSPARAN agar watermark terlihat */
+    position: relative;
+    z-index: 3; 
+}
+
+
+/* 4. Rangkuman Skor (TABEL) - FIX WATERMARK */
+#score-table {
+    position: relative;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff; 
+    z-index: 2;
+}
+#score-table::before {
+    /* COPY BASE WATERMARK STYLE */
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 50%; 
+    opacity: 0.08; 
+    z-index: 1; 
+    pointer-events: none;
+}
+
+/* Final Layering: Konten harus di atas */
+#recommendation, #strength-weakness, .chart-box, #score-table {
+    position: relative;
+}
+#recommendation *, #strength-weakness *, .chart-box *, #score-table * {
+    position: relative;
+    z-index: 3;
+}
+#score-table th, #score-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+#score-table th {
+    background-color: #007bff;
+    color: white;
+}
+#score-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}

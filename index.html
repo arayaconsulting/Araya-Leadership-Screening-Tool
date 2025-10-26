@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes 5 Level Kepemimpinan - Araya Consulting</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        
+      <div class="logo-placeholder"><img src="logo-araya.png" alt="Logo Araya Consulting" style="max-width: 200px; height: auto;"></div>
+        
+        <h1>Tes 5 Level Kepemimpinan</h1>
+        <p>Alat ini dirancang untuk mengukur dan mengevaluasi level pengaruh kepemimpinan Anda, sebagai bagian dari asesmen strategis Araya Consulting.</p>
+        
+        <div class="scale-legend-full">
+            <p><strong>Jawab 25 pernyataan di bawah ini dengan jujur. Pilih angka yang paling sesuai dengan perilaku Anda saat ini:</strong></p>
+            <div id="legend-container">
+                </div>
+        </div>
+
+        <form id="quiz-form">
+            <div id="questions-container">
+                </div>
+
+            <div class="navigation-controls-horizontal"> 
+                <button type="button" id="prev-btn" class="hidden">Kembali</button>
+                <button type="button" id="next-btn" disabled>Selanjutnya</button>
+            </div>
+
+            <div class="navigation-submit-wrapper">
+                <button type="submit" id="submit-btn" class="hidden">Lihat Hasil Penilaian</button>
+            </div>
+        </form>
+
+        <div id="results" class="hidden">
+            <h2>Laporan Level Kepemimpinan Anda</h2>
+            
+            <div id="level-result"></div>
+            
+            <div id="recommendation"></div>
+
+            <div id="strength-weakness">
+                <h3>Analisis Kepemimpinan Anda:</h3>
+                <p id="strengths-display"></p>
+                <p id="weaknesses-display"></p>
+            </div>
+            
+            <h3>Visualisasi Skor:</h3>
+            <div class="chart-box"><canvas id="scoreChart"></canvas></div> 
+
+            <h3>Rangkuman Skor Rata-rata per Level (1-5)</h3>
+            <table id="score-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Nama Level</th>
+                        <th>Skor Rata-rata</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+
+            <button onclick="location.reload()">Ulangi Tes</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
