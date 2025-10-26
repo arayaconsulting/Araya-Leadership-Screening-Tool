@@ -143,7 +143,7 @@ h1, h2 {
 }
 
 
-/* --- Style Hasil + WATERMARK FINAL FIX --- */
+/* --- Style Hasil + WATERMARK FIX FINAL V3 --- */
 #results {
     padding-top: 20px;
     border-top: 2px dashed #ccc;
@@ -160,7 +160,7 @@ h1, h2 {
 }
 
 
-/* Watermark Base Style (Diulang untuk konsistensi) */
+/* Watermark Base Style */
 .watermark-style-base {
     content: "";
     position: absolute;
@@ -187,6 +187,7 @@ h1, h2 {
     z-index: 2; 
 }
 #recommendation::before {
+    /* COPY BASE WATERMARK STYLE */
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -211,6 +212,7 @@ h1, h2 {
     z-index: 2;
 }
 #strength-weakness::before {
+    /* COPY BASE WATERMARK STYLE */
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -224,7 +226,7 @@ h1, h2 {
 }
 
 
-/* 3. Watermark untuk Visualisasi Skor (GRAFIK) - FIX KRITIS */
+/* 3. Watermark untuk Visualisasi Skor (GRAFIK) */
 .chart-box {
     position: relative;
     margin: 20px 0;
@@ -235,7 +237,6 @@ h1, h2 {
     z-index: 2;
 }
 .chart-box::before {
-    /* COPY BASE WATERMARK STYLE */
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -244,28 +245,26 @@ h1, h2 {
     background-position: center; 
     background-size: 50%; 
     opacity: 0.08; 
-    z-index: 1; 
+    z-index: 3; /* WATERMARK DI DEPAN DIAGRAM */
     pointer-events: none;
 }
-/* FIX KRITIS UNTUK CANVAS: Pastikan elemen canvas tidak menutupi watermark */
 .chart-box canvas {
-    background-color: transparent !important; /* HARUS TRANSPARAN agar watermark terlihat */
+    background-color: transparent !important; 
     position: relative;
-    z-index: 3; 
+    z-index: 2; 
 }
 
 
-/* 4. Rangkuman Skor (TABEL) - FIX WATERMARK */
+/* 4. Rangkuman Skor (TABEL) - FIX GARIS */
 #score-table {
     position: relative;
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* KRITIS: Memastikan border menyatu */
     margin: 20px 0;
     background-color: #fff; 
     z-index: 2;
 }
 #score-table::before {
-    /* COPY BASE WATERMARK STYLE */
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -277,6 +276,23 @@ h1, h2 {
     z-index: 1; 
     pointer-events: none;
 }
+
+/* FIX GARIS DI SINI */
+#score-table th, #score-table td {
+    border: 1px solid #ddd; /* KRITIS: Tambahkan kembali border */
+    padding: 10px;
+    text-align: left;
+    position: relative; /* Memastikan konten TH/TD di atas watermark */
+    z-index: 3; 
+}
+#score-table th {
+    background-color: #007bff;
+    color: white;
+}
+#score-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
 
 /* Final Layering: Konten harus di atas */
 #recommendation, #strength-weakness, .chart-box, #score-table {
@@ -285,16 +301,4 @@ h1, h2 {
 #recommendation *, #strength-weakness *, .chart-box *, #score-table * {
     position: relative;
     z-index: 3;
-}
-#score-table th, #score-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-#score-table th {
-    background-color: #007bff;
-    color: white;
-}
-#score-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
 }
