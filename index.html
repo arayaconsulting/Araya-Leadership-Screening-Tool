@@ -10,40 +10,58 @@
 <body>
     <div class="container">
         
-      <div class="logo-placeholder"><img src="logo-araya.png" alt="Logo Araya Consulting" style="max-width: 200px; height: auto;"></div>
+        <div class="logo-placeholder">
+            <img src="logo-araya.png" alt="Logo Araya Consulting" style="max-width: 200px; height: auto;">
+        </div>
         
         <h1>Tes 5 Level Kepemimpinan</h1>
         <p>Alat ini dirancang untuk mengukur dan mengevaluasi level pengaruh kepemimpinan Anda, sebagai bagian dari asesmen strategis Araya Consulting.</p>
-        
-        <div class="scale-legend-full">
-            <p><strong>Jawab 25 pernyataan di bawah ini dengan jujur. Pilih angka yang paling sesuai dengan perilaku Anda saat ini:</strong></p>
-            <div id="legend-container">
-                </div>
+
+        <div id="name-input-screen">
+            <p style="text-align: center; font-size: 1.1em; margin-top: 30px;">
+                Untuk personalisasi laporan, silakan masukkan nama Anda:
+            </p>
+            <div style="text-align: center; padding: 20px;">
+                <input type="text" id="user-name" placeholder="Nama Lengkap Anda" required style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
+            </div>
+            <button type="button" id="start-test-btn" style="display: block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 10px;">
+                Mulai Tes Kepemimpinan
+            </button>
         </div>
 
-        <form id="quiz-form">
-            <div id="questions-container">
+
+        <div id="quiz-content" class="hidden">
+            <div class="scale-legend-full">
+                <p><strong>Jawab 25 pernyataan di bawah ini dengan jujur. Pilih angka yang paling sesuai dengan perilaku Anda saat ini:</strong></p>
+                <div id="legend-container">
+                    </div>
+            </div>
+
+            <form id="quiz-form">
+                <div id="questions-container">
+                    </div>
+
+                <div class="navigation-controls-horizontal"> 
+                    <button type="button" id="prev-btn" class="hidden">Kembali</button>
+                    <button type="button" id="next-btn" disabled>Selanjutnya</button>
                 </div>
 
-            <div class="navigation-controls-horizontal"> 
-                <button type="button" id="prev-btn" class="hidden">Kembali</button>
-                <button type="button" id="next-btn" disabled>Selanjutnya</button>
-            </div>
-
-            <div class="navigation-submit-wrapper">
-                <button type="submit" id="submit-btn" class="hidden">Lihat Hasil Penilaian</button>
-            </div>
-        </form>
+                <div class="navigation-submit-wrapper">
+                    <button type="submit" id="submit-btn" class="hidden">Lihat Hasil Penilaian</button>
+                </div>
+            </form>
+        </div>
 
         <div id="results" class="hidden">
-            <h2>Laporan Level Kepemimpinan Anda</h2>
+            
+            <h2>Laporan Level Kepemimpinan <span id="report-user-name-header" style="color:#007bff;"></span></h2> 
             
             <div id="level-result"></div>
             
             <div id="recommendation"></div>
-
+            
             <div id="strength-weakness">
-                <h3>Analisis Kepemimpinan Anda:</h3>
+                <h3>Analisis Kepemimpinan <span id="report-user-name-analysis" style="color:#007bff;"></span>:</h3>
                 <p id="strengths-display"></p>
                 <p id="weaknesses-display"></p>
             </div>
