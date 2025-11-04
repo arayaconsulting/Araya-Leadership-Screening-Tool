@@ -438,7 +438,7 @@ function renderChart(finalScores) {
     });
 }
 
-// N. INISIALISASI (PERBAIKAN FINAL EVENT LISTENER)
+// N. INISIALISASI (Perbaikan Tombol Mulai Tes Dihapus dari sini)
 document.addEventListener('DOMContentLoaded', () => {
     // Render legend terlebih dahulu
     renderScaleLegend();
@@ -446,12 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sembunyikan konten kuis awal
     document.getElementById('quiz-content').classList.add('hidden');
 
-    // PERBAIKAN FINAL: Hubungkan tombol Mulai Tes (Pastikan ID terhubung)
-    const startBtn = document.getElementById('start-test-btn');
-    if (startBtn) {
-        startBtn.addEventListener('click', startTest);
-    }
-    
+    // Karena tombol startTest() dipanggil langsung di HTML (onclick="startTest()"), 
+    // kita tidak perlu event listener di sini.
+
     // Hubungkan navigasi kuis
     document.getElementById('next-btn').addEventListener('click', nextQuestion);
     document.getElementById('prev-btn').addEventListener('click', previousQuestion);
