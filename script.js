@@ -1,4 +1,4 @@
-// A. DATA PERTANYAAN LENGKAP (REVISI PERILAKU LEVEL 4 & 5)
+// A. DATA PERTANYAAN LENGKAP (TETAP SAMA)
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", 
       description: "Pada level ini, pengaruh Anda berasal dari posisi formal Anda. Orang-orang mengikuti karena mereka HARUS.", 
@@ -47,6 +47,8 @@ const questionsData = [
     ]}
 ];
 
+// VARIABEL GLOBAL BARU
+let userName = "Anda"; // Default
 let currentQuestionIndex = 0;
 const totalQuestions = 25;
 const allQuestionsFlat = [];
@@ -270,13 +272,44 @@ function getReportContent(level) {
     return { explanation, recommendation };
 }
 
+// J. FUNGSI BARU: MEMULAI TES
+function startTest() {
+    const nameInput = document.getElementById('user-name');
+    const nameValue = nameInput.value.trim();
+
+    if (nameValue === "") {
+        alert("Mohon masukkan nama lengkap Anda untuk memulai tes.");
+        return;
+    }
+
+    userName = nameValue;
+    
+    // Sembunyikan input nama, tampilkan kuis
+    document.getElementById('name-input-screen').classList.add('hidden');
+    document.getElementById('quiz-content').classList.remove('hidden');
+
+    // Lanjutkan rendering pertanyaan
+    initializeQuestions();
+    renderCurrentQuestion();
+}
+
+// K. FUNGSI DISPLAY RESULTS (Dimodifikasi untuk Menyebarkan Nama)
 function displayResults(level, levelName, finalScores) {
     const resultDiv = document.getElementById('results');
     const levelResultDiv = document.getElementById('level-result');
     const recommendationDiv = document.getElementById('recommendation');
-    const formDiv = document.getElementById('quiz-form');
+    const quizContentDiv = document.getElementById('quiz-content'); // Ganti formDiv
+
+    // Dapatkan elemen-elemen untuk menampilkan nama
+    const reportUserNameHeader = document.getElementById('report-user-name-header');
+    const reportUserNameAnalysis = document.getElementById('report-user-name-analysis');
+
 
     const report = getReportContent(level);
+    
+    // Perbarui nama di header laporan dan analisis
+    reportUserNameHeader.textContent = userName;
+    reportUserNameAnalysis.textContent = userName; // Menyebarkan nama ke area Analisis
 
     levelResultDiv.innerHTML = `Level ${level}: ${levelName}`;
     recommendationDiv.innerHTML = `<h3>Penjelasan Level Utama:</h3><p>${report.explanation}</p>
@@ -286,10 +319,61 @@ function displayResults(level, levelName, finalScores) {
     renderChart(finalScores);
     interpretStrengthsWeaknesses(finalScores, level);
 
-    formDiv.classList.add('hidden');
+    // Sembunyikan kuis, tampilkan hasil
+    quizContentDiv.classList.add('hidden');
     resultDiv.classList.remove('hidden');
 }
 
+
+// L. FUNGSI INTERPRETASI KEKUATAN DAN KELEMAHAN (Sama)
+function interpretStrengthsWeaknesses(finalScores, mainLevel) {
+    let strengths = [];
+    let weaknesses = [];
+    
+    for (const group in finalScores) {
+        const score = parseFloat(finalScores[group]);
+        const levelData = questionsData.find(d => d.group === group);
+
+        if (score >= 4.2) { 
+            strengths.push(`Level ${levelData.level}: ${levelData.name} (Skor: ${score})`);
+        } 
+        
+        // LOGIKA PERBAIKAN: Abaikan Level 1 & 2 sebagai kelemahan jika pemimpin sudah di Level 3 ke atas.
+        if (score < 3.0) { 
+            if (mainLevel >= 3 && (levelData.level === 1 || levelData.level === 2)) {
+                // Abaikan L1 & L2 karena skor rendah berarti mereka tidak mengandalkannya (Tanda baik)
+                continue; 
+            }
+            weaknesses.push(`Level ${levelData.level}: ${levelData.name} (Skor: ${score})`);
+        }
+    }
+
+    const strengthsDisplay = document.getElementById('strengths-display');
+    const weaknessesDisplay = document.getElementById('weaknesses-display');
+    
+    if (strengths.length > 0) {
+        strengthsDisplay.innerHTML = `<strong>Kekuatan Anda Terletak Pada:</strong><br><ul style="margin-top:5px; padding-left:20px;"><li>` + strengths.join('</li><li>') + '</li></ul>';
+    } else {
+        weaknessesDisplay.innerHTML = '<strong>Kekuatan Anda:</strong> Anda berada pada jalur pertumbuhan. Belum ada level yang menonjol kuat (Skor di bawah 4.2), yang berarti ada peluang peningkatan di semua bidang.';
+    }
+
+    if (weaknesses.length > 0) {
+        // Logika Khusus untuk Klarifikasi L3 di Level 5
+        const L3Score = parseFloat(finalScores.L3);
+        
+        if (mainLevel >= 4 && L3Score < 3.0 && weaknesses.length === 1 && weaknesses[0].includes('Level 3')) {
+             weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>Level 3: Production (Produksi) (Skor: ${L3Score})</li></ul>
+             <p style="margin-top:10px; font-weight:bold; color: #dc3545;">**Peringatan Penting:** Skor yang rendah di Level Produksi mengindikasikan bahwa **efektivitas pencapaian hasil tim harus segera diperkuat**. Kepemimpinan Level Tinggi (L4/L5) membutuhkan fondasi hasil yang kuat (L3) untuk mempertahankan kredibilitas.</p>`;
+        } else {
+             weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>` + weaknesses.join('</li><li>') + '</li></ul>';
+        }
+    } else {
+        weaknessesDisplay.innerHTML = '<strong>Area Pengembangan:</strong> Dasar kepemimpinan Anda sangat kuat. Fokus pada upaya untuk mempertahankan dan menggandakan pengaruh.';
+    }
+}
+
+
+// M. FUNGSI RENDER TABLE DAN CHART (Sama)
 function renderScoreTable(finalScores) {
     const tableBody = document.querySelector('#score-table tbody');
     tableBody.innerHTML = ''; 
@@ -354,60 +438,18 @@ function renderChart(finalScores) {
     });
 }
 
-// J. FUNGSI UNTUK INTERPRETASI KEKUATAN DAN KELEMAHAN (Perbaikan Logika Maxwell)
-function interpretStrengthsWeaknesses(finalScores, mainLevel) {
-    let strengths = [];
-    let weaknesses = [];
-    
-    for (const group in finalScores) {
-        const score = parseFloat(finalScores[group]);
-        const levelData = questionsData.find(d => d.group === group);
-
-        if (score >= 4.2) { 
-            strengths.push(`Level ${levelData.level}: ${levelData.name} (Skor: ${score})`);
-        } 
-        
-        // LOGIKA PERBAIKAN: Abaikan Level 1 & 2 sebagai kelemahan jika pemimpin sudah di Level 3 ke atas.
-        if (score < 3.0) { 
-            if (mainLevel >= 3 && (levelData.level === 1 || levelData.level === 2)) {
-                // Abaikan L1 & L2 karena skor rendah berarti mereka tidak mengandalkannya (Tanda baik)
-                continue; 
-            }
-            weaknesses.push(`Level ${levelData.level}: ${levelData.name} (Skor: ${score})`);
-        }
-    }
-
-    const strengthsDisplay = document.getElementById('strengths-display');
-    const weaknessesDisplay = document.getElementById('weaknesses-display');
-    
-    if (strengths.length > 0) {
-        strengthsDisplay.innerHTML = `<strong>Kekuatan Anda Terletak Pada:</strong><br><ul style="margin-top:5px; padding-left:20px;"><li>` + strengths.join('</li><li>') + '</li></ul>';
-    } else {
-        strengthsDisplay.innerHTML = '<strong>Kekuatan Anda:</strong> Anda berada pada jalur pertumbuhan. Belum ada level yang menonjol kuat (Skor di bawah 4.2), yang berarti ada peluang peningkatan di semua bidang.';
-    }
-
-    if (weaknesses.length > 0) {
-        // Logika Khusus untuk Klarifikasi L3 di Level 5
-        const L3Score = parseFloat(finalScores.L3);
-        
-        if (mainLevel >= 4 && L3Score < 3.0 && weaknesses.length === 1 && weaknesses[0].includes('Level 3')) {
-             weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>Level 3: Production (Produksi) (Skor: ${L3Score})</li></ul>
-             <p style="margin-top:10px; font-weight:bold; color: #dc3545;">**Peringatan Penting:** Skor yang rendah di Level Produksi mengindikasikan bahwa **efektivitas pencapaian hasil tim harus segera diperkuat**. Kepemimpinan Level Tinggi (L4/L5) membutuhkan fondasi hasil yang kuat (L3) untuk mempertahankan kredibilitas.</p>`;
-        } else {
-             weaknessesDisplay.innerHTML = `<strong>Area yang Perlu Dikembangkan (Kelemahan Dasar):</strong><br><ul style="margin-top:5px; padding-left:20px; color: #dc3545;"><li>` + weaknesses.join('</li><li>') + '</li></ul>';
-        }
-    } else {
-        weaknessesDisplay.innerHTML = '<strong>Area Pengembangan:</strong> Dasar kepemimpinan Anda sangat kuat. Fokus pada upaya untuk mempertahankan dan menggandakan pengaruh.';
-    }
-}
-
-
-// INISIALISASI
+// N. INISIALISASI (Perbaikan Event Listener Tombol Mulai Tes)
 document.addEventListener('DOMContentLoaded', () => {
-    initializeQuestions();
+    // Render legend terlebih dahulu
     renderScaleLegend();
-    renderCurrentQuestion();
     
+    // Sembunyikan konten kuis awal
+    document.getElementById('quiz-content').classList.add('hidden');
+
+    // PERBAIKAN KRITIS: Hubungkan tombol Mulai Tes
+    document.getElementById('start-test-btn').addEventListener('click', startTest); // FIX: Pastikan ini aktif!
+    
+    // Hubungkan navigasi kuis
     document.getElementById('next-btn').addEventListener('click', nextQuestion);
     document.getElementById('prev-btn').addEventListener('click', previousQuestion);
     document.getElementById('quiz-form').addEventListener('submit', calculateResults);
