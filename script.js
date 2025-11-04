@@ -354,7 +354,7 @@ function interpretStrengthsWeaknesses(finalScores, mainLevel) {
     if (strengths.length > 0) {
         strengthsDisplay.innerHTML = `<strong>Kekuatan Anda Terletak Pada:</strong><br><ul style="margin-top:5px; padding-left:20px;"><li>` + strengths.join('</li><li>') + '</li></ul>';
     } else {
-        strengthsDisplay.innerHTML = '<strong>Kekuatan Anda:</strong> Anda berada pada jalur pertumbuhan. Belum ada level yang menonjol kuat (Skor di bawah 4.2), yang berarti ada peluang peningkatan di semua bidang.';
+        weaknessesDisplay.innerHTML = '<strong>Kekuatan Anda:</strong> Anda berada pada jalur pertumbuhan. Belum ada level yang menonjol kuat (Skor di bawah 4.2), yang berarti ada peluang peningkatan di semua bidang.';
     }
 
     if (weaknesses.length > 0) {
@@ -438,7 +438,7 @@ function renderChart(finalScores) {
     });
 }
 
-// N. INISIALISASI (Perbaikan Tombol Mulai Tes Dihapus dari sini)
+// N. INISIALISASI (Perbaikan Event Listener Tombol Mulai Tes)
 document.addEventListener('DOMContentLoaded', () => {
     // Render legend terlebih dahulu
     renderScaleLegend();
@@ -446,9 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sembunyikan konten kuis awal
     document.getElementById('quiz-content').classList.add('hidden');
 
-    // Karena tombol startTest() dipanggil langsung di HTML (onclick="startTest()"), 
-    // kita tidak perlu event listener di sini.
-
+    // PERBAIKAN KRITIS: Hubungkan tombol Mulai Tes
+    document.getElementById('start-test-btn').addEventListener('click', startTest); // FIX: Pastikan ini aktif!
+    
     // Hubungkan navigasi kuis
     document.getElementById('next-btn').addEventListener('click', nextQuestion);
     document.getElementById('prev-btn').addEventListener('click', previousQuestion);
