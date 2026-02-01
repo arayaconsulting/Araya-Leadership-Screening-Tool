@@ -1,8 +1,6 @@
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
     padding: 20px;
 }
 
@@ -11,119 +9,91 @@ body {
     margin: 40px auto;
     background: #fff;
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-}
-
-h1, h2 {
-    color: #0056b3;
-    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .logo-placeholder {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     border-bottom: 3px solid #007bff;
-    background-color: #e6f7ff;
-    padding: 10px 0;
-    border-radius: 5px;
+    background-color: #f0f8ff;
+    padding: 15px 0;
+    border-radius: 8px;
 }
 
-.hidden { display: none; }
+/* Form Input Nama Terpusat */
+#name-input-screen p {
+    text-align: center;
+    font-weight: 500;
+}
 
-/* Tombol */
-#start-test-btn, #next-btn, #prev-btn, #submit-btn, button {
+#user-name {
+    display: block;
+    margin: 20px auto;
     padding: 12px;
-    border: none;
-    border-radius: 5px;
+    width: 80%;
+    max-width: 400px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
     font-size: 16px;
+    text-align: center;
+}
+
+/* Tombol Mulai Tes: Elegant, Pill-Shaped, & Center */
+#start-test-btn {
+    display: block;
+    width: 280px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 50px; /* Desain Elegan */
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+
+#start-test-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+/* Navigasi Kuis */
+.navigation-controls-horizontal {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+#next-btn, #prev-btn, #submit-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
 }
 
-#start-test-btn, #next-btn, #submit-btn {
-    background-color: #28a745;
-    color: white;
-}
+#next-btn, #submit-btn { background-color: #28a745; color: white; }
+#prev-btn { background-color: #6c757d; color: white; }
+#next-btn[disabled] { background-color: #a5d6a7; cursor: not-allowed; }
 
-#prev-btn {
-    background-color: #6c757d;
-    color: white;
-}
-
-button:hover { opacity: 0.9; }
-
-/* Watermark Area */
-.chart-box, #recommendation, #strength-weakness, #score-table {
-    position: relative;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
-
-.chart-box::before, #recommendation::before, #strength-weakness::before, #score-table::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url('logo-araya-wm.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 40%;
-    opacity: 0.08;
-    z-index: 3;
-    pointer-events: none;
-}
-
-/* Tabel Skor */
-#score-table {
-    width: 100%;
-    border-collapse: collapse;
-    z-index: 2;
-}
-
-#score-table th, #score-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-#score-table th { background-color: #007bff; color: white; }
-
-/* LAYOUT SERTIFIKAT A4 PROFESIONAL */
+/* Sertifikat A4 Layout */
 .cert-canvas {
     width: 210mm;
     height: 297mm;
     padding: 25mm;
     background: white;
-    border: 20px solid #0056b3;
-    box-sizing: border-box;
+    border: 15px solid #0056b3;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    position: relative;
-}
-
-.cert-title {
-    font-size: 48px;
-    font-weight: bold;
-    color: #0056b3;
-    margin: 40px 0 10px;
-}
-
-.cert-name {
-    font-size: 38px;
-    font-weight: bold;
-    margin: 40px 0;
-    color: #333;
-    border-bottom: 2px solid #333;
-    padding: 0 20px;
-}
-
-.cert-footer {
-    margin-top: auto;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    box-sizing: border-box;
 }
