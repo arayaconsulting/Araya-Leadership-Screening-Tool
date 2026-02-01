@@ -1,50 +1,45 @@
-/* Container Utama */
-body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f9; padding: 20px; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9; padding: 20px; }
 .container { max-width: 850px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
 
-/* MEMASTIKAN LOGO CENTER */
+/* Logo Header */
 .logo-placeholder { 
-    display: flex; 
-    justify-content: center; /* Center Horizontal */
-    align-items: center; 
-    margin-bottom: 30px; 
-    border-bottom: 3px solid #007bff; 
-    background-color: #f0f8ff; 
-    padding: 20px 0; 
-    border-radius: 8px; 
+    display: flex; justify-content: center; align-items: center; 
+    margin-bottom: 30px; border-bottom: 3px solid #007bff; 
+    background-color: #f0f8ff; padding: 20px 0; border-radius: 8px; 
 }
 .logo-placeholder img { max-width: 250px; height: auto; }
 
 /* Kontrol Visibilitas */
 .hidden { display: none !important; }
 
-/* Tombol Mulai yang Elegan & Center */
+/* Tombol Mulai Elegan & Terpusat */
 #start-test-btn {
-    display: block; 
-    width: 280px; 
-    margin: 25px auto; 
-    padding: 15px;
-    background-color: #28a745; 
-    color: white; 
-    border: none; 
-    border-radius: 50px; /* Pill-shaped */
-    font-size: 18px; 
-    font-weight: bold; 
-    cursor: pointer; 
-    transition: 0.3s;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    display: block; width: 280px; margin: 25px auto; padding: 15px;
+    background-color: #28a745; color: white; border: none; 
+    border-radius: 50px; font-size: 18px; font-weight: bold; 
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
 }
 #start-test-btn:hover { background-color: #218838; transform: translateY(-2px); }
 
-/* Input Nama Center */
-#user-name {
-    display: block;
-    margin: 20px auto;
-    padding: 12px;
-    width: 80%;
-    max-width: 400px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 16px;
+/* LAYOUT LAPORAN PDF A4 PORTRAIT */
+.cert-canvas {
+    width: 210mm; 
+    height: 297mm; 
+    padding: 20mm; 
+    background: white;
+    border: 12px double #0056b3; 
+    display: flex; 
+    flex-direction: column;
+    box-sizing: border-box; 
+    position: relative; 
+    overflow: hidden;
+}
+
+/* Watermark Report Visual */
+.chart-box, #recommendation, #strength-weakness, #score-table { position: relative; }
+.chart-box::before, #recommendation::before, #strength-weakness::before, #score-table::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png'); background-repeat: no-repeat; 
+    background-position: center; background-size: 40%; opacity: 0.08; 
+    z-index: 3; pointer-events: none;
 }
