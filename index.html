@@ -11,16 +11,16 @@
 <body>
     <div class="container">
         <div class="logo-placeholder">
-            <img src="logo-araya.png" alt="Logo Araya Consulting" style="max-width: 200px; height: auto;">
+            <img src="logo-araya.png" alt="Logo Araya Consulting">
         </div>
         
         <h1>Tes 5 Level Kepemimpinan</h1>
-        <p>Alat ini dirancang untuk mengevaluasi level pengaruh kepemimpinan Anda sebagai bagian dari asesmen strategis Araya Consulting.</p>
+        <p style="text-align: center;">Alat ini dirancang untuk mengevaluasi level pengaruh kepemimpinan Anda sebagai bagian dari asesmen strategis Araya Consulting.</p>
 
         <div id="name-input-screen">
             <p style="text-align: center; font-size: 1.1em; margin-top: 30px;">Silakan masukkan nama lengkap Anda untuk memulai:</p>
             <div style="text-align: center; padding: 20px;">
-                <input type="text" id="user-name" placeholder="Nama Lengkap Anda" required style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
+                <input type="text" id="user-name" placeholder="Nama Lengkap Anda" required>
             </div>
             <button type="button" onclick="startTest()" id="start-test-btn">Mulai Tes Kepemimpinan</button>
         </div>
@@ -43,28 +43,37 @@
         </div>
 
         <div id="results" class="hidden">
-            <h2>Laporan Kepemimpinan <span id="report-user-name-header"></span></h2> 
+            <h2>Laporan Kepemimpinan <span id="report-user-name-header" style="color:#007bff;"></span></h2> 
+            
             <div id="level-result"></div>
             <div id="recommendation"></div>
             
             <div id="strength-weakness">
-                <h3>Analisis Kepemimpinan <span id="report-user-name-analysis"></span>:</h3>
+                <h3>Analisis Kepemimpinan <span id="report-user-name-analysis" style="color:#007bff;"></span>:</h3>
                 <p id="strengths-display"></p>
                 <p id="weaknesses-display"></p>
             </div>
             
             <h3>Visualisasi Skor:</h3>
-            <div class="chart-box"><canvas id="scoreChart"></canvas></div> 
+            <div class="chart-box">
+                <canvas id="scoreChart"></canvas>
+            </div> 
 
             <h3>Rangkuman Skor per Level</h3>
             <table id="score-table">
-                <thead><tr><th>Level</th><th>Nama Level</th><th>Skor</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Nama Level</th>
+                        <th>Skor</th>
+                    </tr>
+                </thead>
                 <tbody></tbody>
             </table>
 
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-                <button id="download-cert-btn" style="background-color: #f39c12;">Unduh Sertifikat (A4)</button>
-                <button onclick="location.reload()">Ulangi Tes</button>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                <button id="download-cert-btn" style="background-color: #f39c12; color: white; width: auto; padding: 12px 25px;">Unduh Sertifikat (A4)</button>
+                <button onclick="location.reload()" style="background-color: #6c757d; color: white; width: auto; padding: 12px 25px;">Ulangi Tes</button>
             </div>
         </div>
     </div>
