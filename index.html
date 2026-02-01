@@ -5,47 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tes 5 Level Kepemimpinan - Araya Consulting</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        
         <div class="logo-placeholder">
             <img src="logo-araya.png" alt="Logo Araya Consulting" style="max-width: 200px; height: auto;">
         </div>
         
         <h1>Tes 5 Level Kepemimpinan</h1>
-        <p>Alat ini dirancang untuk mengukur dan mengevaluasi level pengaruh kepemimpinan Anda, sebagai bagian dari asesmen strategis Araya Consulting.</p>
+        <p>Alat ini dirancang untuk mengevaluasi level pengaruh kepemimpinan Anda sebagai bagian dari asesmen strategis Araya Consulting.</p>
 
         <div id="name-input-screen">
-            <p style="text-align: center; font-size: 1.1em; margin-top: 30px;">
-                Untuk personalisasi laporan, silakan masukkan nama Anda:
-            </p>
+            <p style="text-align: center; font-size: 1.1em; margin-top: 30px;">Silakan masukkan nama lengkap Anda untuk memulai:</p>
             <div style="text-align: center; padding: 20px;">
                 <input type="text" id="user-name" placeholder="Nama Lengkap Anda" required style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
             </div>
-            <button type="button" id="start-test-btn" style="display: block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 10px;">
-                Mulai Tes Kepemimpinan
-            </button>
+            <button type="button" onclick="startTest()" id="start-test-btn">Mulai Tes Kepemimpinan</button>
         </div>
-
 
         <div id="quiz-content" class="hidden">
             <div class="scale-legend-full">
-                <p><strong>Jawab 25 pernyataan di bawah ini dengan jujur. Pilih angka yang paling sesuai dengan perilaku Anda saat ini:</strong></p>
-                <div id="legend-container">
-                    </div>
+                <p><strong>Pilih angka yang paling sesuai (1-5) dengan perilaku kepemimpinan Anda:</strong></p>
+                <div id="legend-container"></div>
             </div>
-
             <form id="quiz-form">
-                <div id="questions-container">
-                    </div>
-
+                <div id="questions-container"></div>
                 <div class="navigation-controls-horizontal"> 
                     <button type="button" id="prev-btn" class="hidden">Kembali</button>
                     <button type="button" id="next-btn" disabled>Selanjutnya</button>
                 </div>
-
                 <div class="navigation-submit-wrapper">
                     <button type="submit" id="submit-btn" class="hidden">Lihat Hasil Penilaian</button>
                 </div>
@@ -53,15 +43,12 @@
         </div>
 
         <div id="results" class="hidden">
-            
-            <h2>Laporan Level Kepemimpinan <span id="report-user-name-header" style="color:#007bff;"></span></h2> 
-            
+            <h2>Laporan Kepemimpinan <span id="report-user-name-header"></span></h2> 
             <div id="level-result"></div>
-            
             <div id="recommendation"></div>
             
             <div id="strength-weakness">
-                <h3>Analisis Kepemimpinan <span id="report-user-name-analysis" style="color:#007bff;"></span>:</h3>
+                <h3>Analisis Kepemimpinan <span id="report-user-name-analysis"></span>:</h3>
                 <p id="strengths-display"></p>
                 <p id="weaknesses-display"></p>
             </div>
@@ -69,22 +56,20 @@
             <h3>Visualisasi Skor:</h3>
             <div class="chart-box"><canvas id="scoreChart"></canvas></div> 
 
-            <h3>Rangkuman Skor Rata-rata per Level (1-5)</h3>
+            <h3>Rangkuman Skor per Level</h3>
             <table id="score-table">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>Nama Level</th>
-                        <th>Skor Rata-rata</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
+                <thead><tr><th>Level</th><th>Nama Level</th><th>Skor</th></tr></thead>
+                <tbody></tbody>
             </table>
 
-            <button onclick="location.reload()">Ulangi Tes</button>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button id="download-cert-btn" style="background-color: #f39c12;">Unduh Sertifikat (A4)</button>
+                <button onclick="location.reload()">Ulangi Tes</button>
+            </div>
         </div>
     </div>
+
+    <div id="certificate-wrapper" style="display:none;"></div>
 
     <script src="script.js"></script>
 </body>
