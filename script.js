@@ -94,8 +94,6 @@ function renderCurrentQuestion() {
 
 function saveAnswer(id, val) {
     userAnswers[id] = val;
-    document.getElementById('next-btn').disabled = false;
-    document.getElementById('submit-btn').disabled = false;
 }
 
 function updateNavigation() {
@@ -122,6 +120,34 @@ document.getElementById('quiz-form').onsubmit = (e) => {
     displayResults(mainLvlNum, avgs);
 };
 
+function getReportContent(level) {
+    let explanation = "";
+    let recommendation = "";
+    switch (level) {
+        case 1:
+            explanation = "Anda memimpin berdasarkan otoritas formal. Orang mengikuti karena mereka HARUS.";
+            recommendation = "Fokus ke Level 2: Mulailah mengenal tim secara pribadi dan bangun kepercayaan.";
+            break;
+        case 2:
+            explanation = "Anda memimpin melalui hubungan. Orang mengikuti karena mereka INGIN.";
+            recommendation = "Fokus ke Level 3: Mulailah fokus pada hasil nyata dan pencapaian target tim.";
+            break;
+        case 3:
+            explanation = "Anda memimpin melalui hasil. Orang mengikuti karena prestasi Anda bagi organisasi.";
+            recommendation = "Fokus ke Level 4: Mulailah mendelegasikan dan melatih orang lain untuk menjadi pemimpin.";
+            break;
+        case 4:
+            explanation = "Anda memimpin melalui reproduksi pemimpin. Orang mengikuti karena apa yang Anda lakukan bagi mereka.";
+            recommendation = "Fokus ke Level 5: Teruslah menciptakan pemimpin Level 4 untuk membangun warisan kepemimpinan.";
+            break;
+        case 5:
+            explanation = "Anda memimpin karena jati diri Anda. Pengaruh Anda melampaui posisi formal.";
+            recommendation = "Pertahankan integritas dan gunakan pengaruh Anda untuk menciptakan dampak yang lebih luas.";
+            break;
+    }
+    return { explanation, recommendation };
+}
+
 function displayResults(lvlNum, avgs) {
     document.getElementById('quiz-content').classList.add('hidden');
     document.getElementById('results').classList.remove('hidden');
@@ -129,7 +155,14 @@ function displayResults(lvlNum, avgs) {
     document.getElementById('report-user-name-analysis').textContent = userName;
     
     const lvlName = questionsData[lvlNum-1].name;
+    const report = getReportContent(lvlNum);
+
     document.getElementById('level-result').innerHTML = `<h2 style="color:#007bff">Level Utama: ${lvlName}</h2>`;
+    document.getElementById('recommendation').innerHTML = `
+        <div style="text-align:left; margin-top:20px;">
+            <p><strong>Penjelasan Level Utama:</strong> ${report.explanation}</p>
+            <p><strong>Rekomendasi Tindakan:</strong> ${report.recommendation}</p>
+        </div>`;
     
     let weakList = [];
     Object.keys(avgs).forEach((key, idx) => {
@@ -141,7 +174,7 @@ function displayResults(lvlNum, avgs) {
 
     document.getElementById('weaknesses-display').innerHTML = weakList.length > 0 ? 
         `<b>Area Pengembangan:</b> <ul><li>${weakList.join('</li><li>')}</li></ul>` : 
-        "<b>Area Pengembangan:</b> Dasar kepemimpinan Anda sangat kokoh.";
+        "<b>Area Pengembangan:</b> Fondasi kepemimpinan Anda sudah kokoh.";
     
     renderChart(avgs);
     renderTable(avgs);
@@ -171,7 +204,6 @@ function generatePDF(lvlName) {
     wrapper.style.display = 'block';
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
-    // Desain Sertifikat A4 Araya Consulting
     wrapper.innerHTML = `
         <div class="cert-canvas">
             <img src="logo-araya.png" style="width:180px;">
@@ -193,16 +225,14 @@ function generatePDF(lvlName) {
 
     const options = { 
         margin: 0, 
-        filename: `Sertifikat_Leadership_${userName}.pdf`, 
+        filename: `Leadership_Cert_${userName}.pdf`, 
         html2canvas: { scale: 2 }, 
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
     };
 
-    // Proses generate
     html2pdf().set(options).from(wrapper).save().then(() => {
         wrapper.style.display = 'none';
     }).catch(err => {
-        console.error("Gagal membuat PDF:", err);
         alert("Gagal mengunduh sertifikat. Pastikan file ttd.png sudah diunggah.");
     });
 }
