@@ -1,99 +1,33 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
-}
+/* Container Utama */
+body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f9; padding: 20px; }
+.container { max-width: 850px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
 
-.container {
-    max-width: 850px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
+/* Kontrol Visibilitas: Sangat Penting agar tidak menumpuk */
+.hidden { display: none !important; }
 
-.logo-placeholder {
-    text-align: center;
-    margin-bottom: 30px;
-    border-bottom: 3px solid #007bff;
-    background-color: #f0f8ff;
-    padding: 15px 0;
-    border-radius: 8px;
-}
-
-/* Form Input Nama Terpusat */
-#name-input-screen p {
-    text-align: center;
-    font-weight: 500;
-}
-
-#user-name {
-    display: block;
-    margin: 20px auto;
-    padding: 12px;
-    width: 80%;
-    max-width: 400px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    text-align: center;
-}
-
-/* Tombol Mulai Tes: Elegant, Pill-Shaped, & Center */
+/* Tampilan Elegan Tombol Mulai */
 #start-test-btn {
-    display: block;
-    width: 280px;
-    margin: 20px auto;
-    padding: 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 50px; /* Desain Elegan */
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    display: block; width: 260px; margin: 25px auto; padding: 15px;
+    background-color: #28a745; color: white; border: none; border-radius: 50px;
+    font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s;
 }
 
-#start-test-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
-}
-
-/* Navigasi Kuis */
+/* Navigasi Kuis agar Rapih di Bawah */
 .navigation-controls-horizontal {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
+    display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;
 }
 
-#next-btn, #prev-btn, #submit-btn {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
+#prev-btn, #next-btn, #submit-btn {
+    padding: 12px 25px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer;
 }
-
-#next-btn, #submit-btn { background-color: #28a745; color: white; }
 #prev-btn { background-color: #6c757d; color: white; }
-#next-btn[disabled] { background-color: #a5d6a7; cursor: not-allowed; }
+#next-btn, #submit-btn { background-color: #28a745; color: white; }
+#next-btn[disabled] { background-color: #ccc; cursor: not-allowed; }
 
-/* Sertifikat A4 Layout */
+/* Sertifikat A4 Layout - Tersembunyi dari layar tapi siap cetak */
+#certificate-wrapper { position: absolute; left: -9999px; top: -9999px; }
 .cert-canvas {
-    width: 210mm;
-    height: 297mm;
-    padding: 25mm;
-    background: white;
-    border: 15px solid #0056b3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    box-sizing: border-box;
+    width: 210mm; height: 297mm; padding: 20mm; background: white;
+    border: 15px solid #0056b3; box-sizing: border-box; display: flex;
+    flex-direction: column; align-items: center; text-align: center;
 }
