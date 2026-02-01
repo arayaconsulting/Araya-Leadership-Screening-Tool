@@ -61,7 +61,19 @@ function startTest() {
     document.getElementById('name-input-screen').classList.add('hidden');
     document.getElementById('quiz-content').classList.remove('hidden');
     initializeQuestions();
+    renderScaleLegend();
     renderCurrentQuestion();
+}
+
+function renderScaleLegend() {
+    document.getElementById('legend-container').innerHTML = `
+        <div class="legend-grid">
+            <span><strong>1:</strong> Sngt Tdk Setuju</span>
+            <span><strong>2:</strong> Tdk Setuju</span>
+            <span><strong>3:</strong> Netral</span>
+            <span><strong>4:</strong> Setuju</span>
+            <span><strong>5:</strong> Sngt Setuju</span>
+        </div>`;
 }
 
 function renderCurrentQuestion() {
@@ -70,14 +82,14 @@ function renderCurrentQuestion() {
     container.innerHTML = `
         <div style="text-align:center; margin-bottom:20px;">
             <p style="color:#666;">Pertanyaan ${q.index} dari 25</p>
-            <p style="font-size:18px; font-weight:bold; margin:10px 0;">${q.text}</p>
+            <p style="font-size:20px; font-weight:bold; margin:15px 0;">${q.text}</p>
         </div>
-        <div style="display:flex; justify-content:space-around; background:#f8f9fa; padding:15px; border-radius:10px;">
+        <div style="display:flex; justify-content:space-around; background:#f8f9fa; padding:20px; border-radius:10px;">
             ${[1,2,3,4,5].map(i => `
                 <label style="display:flex; flex-direction:column; align-items:center; cursor:pointer;">
                     <input type="radio" name="${q.id}" value="${i}" ${userAnswers[q.id] == i ? 'checked' : ''} 
-                           onchange="saveAnswer('${q.id}', ${i})" style="width:20px; height:20px;">
-                    <span style="margin-top:5px; font-weight:bold;">${i}</span>
+                           onchange="saveAnswer('${q.id}', ${i})" style="width:25px; height:25px;">
+                    <span style="margin-top:8px; font-weight:bold; font-size:16px;">${i}</span>
                 </label>
             `).join('')}
         </div>`;
@@ -96,22 +108,21 @@ function updateNavigation() {
     document.getElementById('next-btn').classList.toggle('hidden', isLast);
     document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
     document.getElementById('next-btn').disabled = !isAnswered;
-    document.getElementById('submit-btn').disabled = !isAnswered;
 }
 
 document.getElementById('next-btn').onclick = () => { currentQuestionIndex++; renderCurrentQuestion(); };
 document.getElementById('prev-btn').onclick = () => { currentQuestionIndex--; renderCurrentQuestion(); };
 document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); calculateResults(); };
 
-function getReportContent(level) {
-    const content = {
-        1: { exp: "Pengaruh didasarkan pada hak jabatan. Orang mengikuti karena keharusan.", rec: "Segera bangun hubungan di luar otoritas formal Anda." },
-        2: { exp: "Pengaruh didasarkan pada hubungan. Orang mengikuti karena keinginan mereka sendiri.", rec: "Gunakan hubungan baik untuk mendorong produktivitas tim." },
-        3: { exp: "Pengaruh didasarkan pada hasil kerja. Orang mengikuti karena prestasi Anda.", rec: "Mulai identifikasi pemimpin potensial untuk dikembangkan." },
-        4: { exp: "Pengaruh didasarkan pada reproduksi. Orang mengikuti karena apa yang Anda lakukan untuk mereka.", rec: "Fokuslah memberdayakan orang lain agar bisa memimpin tanpa Anda." },
-        5: { exp: "Pengaruh didasarkan pada reputasi dan karakter. Anda menjadi panutan lintas generasi.", rec: "Gunakan pengaruh Anda untuk membangun budaya dan visi jangka panjang." }
+function getDetailedReport(level) {
+    const reportData = {
+        1: { exp: "Pengaruh Anda didasarkan pada posisi formal. Anggota tim mengikuti karena mereka memiliki keharusan administratif.", rec: "Mulailah membangun hubungan personal di luar jabatan untuk mendapatkan kepercayaan sukarela." },
+        2: { exp: "Pengaruh didasarkan pada hubungan dan izin. Orang-orang mengikuti karena mereka ingin bekerja dengan Anda.", rec: "Gunakan keharmonisan hubungan ini untuk mulai menetapkan standar hasil dan pencapaian target." },
+        3: { exp: "Pengaruh didasarkan pada hasil nyata dan produktivitas. Anda memberikan kemenangan bagi organisasi.", rec: "Mulailah mengalihkan fokus dari 'melakukan sendiri' menjadi 'melatih orang lain' agar mereka juga berprestasi." },
+        4: { exp: "Pengaruh didasarkan pada reproduksi pemimpin. Anda telah berhasil mengembangkan kapasitas orang lain secara signifikan.", rec: "Fokuslah memberdayakan pemimpin level 4 lainnya agar sistem kepemimpinan tetap berjalan tanpa kehadiran Anda." },
+        5: { exp: "Pengaruh didasarkan pada jati diri dan integritas jangka panjang. Anda menjadi panutan lintas generasi.", rec: "Gunakan reputasi Anda untuk menciptakan warisan budaya perusahaan dan membimbing pemimpin di berbagai sektor." }
     };
-    return content[level];
+    return reportData[level];
 }
 
 function calculateResults() {
@@ -132,31 +143,18 @@ function displayResults(lvlNum, avgs) {
     document.getElementById('report-user-name-analysis').textContent = userName;
     
     const lvlName = questionsData[lvlNum-1].name;
-    const report = getReportContent(lvlNum);
+    const report = getDetailedReport(lvlNum);
     
-    document.getElementById('level-result').innerHTML = `<h2 style="color:#007bff; margin:20px 0;">Level Utama: ${lvlName}</h2>`;
+    document.getElementById('level-result').innerHTML = `<h2>Level Utama: ${lvlName}</h2>`;
     document.getElementById('recommendation').innerHTML = `
-        <div style="text-align:left; border:1px solid #ddd; padding:15px; border-radius:8px; background:#f0f8ff;">
+        <div style="background:#f0f8ff; border:1px solid #b3e0ff; padding:20px; border-radius:10px; margin:20px 0; text-align:left;">
             <p><strong>Penjelasan Level:</strong> ${report.exp}</p>
             <p><strong>Rekomendasi Strategis:</strong> ${report.rec}</p>
         </div>`;
     
-    let weakList = [];
-    Object.keys(avgs).forEach((key, idx) => {
-        if(parseFloat(avgs[key]) < 3.0) {
-            if(lvlNum >= 3 && (idx === 0 || idx === 1)) return;
-            weakList.push(`${questionsData[idx].name} (${avgs[key]})`);
-        }
-    });
-
-    document.getElementById('strengths-display').innerHTML = `<b>Kekuatan Utama:</b> Level ${lvlNum}`;
-    document.getElementById('weaknesses-display').innerHTML = weakList.length > 0 ? 
-        `<b>Area Pengembangan:</b> <ul><li>${weakList.join('</li><li>')}</li></ul>` : 
-        "<b>Area Pengembangan:</b> Fondasi Anda sangat kokoh.";
-    
     renderChart(avgs);
     renderTable(avgs);
-    document.getElementById('download-cert-btn').onclick = () => generatePDF(lvlName, avgs);
+    document.getElementById('download-cert-btn').onclick = () => generatePDF(lvlName, avgs, report);
 }
 
 function renderChart(avgs) {
@@ -174,62 +172,69 @@ function renderChart(avgs) {
 
 function renderTable(avgs) {
     const tbody = document.querySelector('#score-table tbody');
-    tbody.innerHTML = questionsData.map(d => `<tr><td>Level ${d.level}</td><td>${d.name}</td><td>${avgs[d.group]}</td></tr>`).join('');
+    tbody.innerHTML = questionsData.map(d => `<tr><td style="text-align:center;">Level ${d.level}</td><td>${d.name}</td><td style="text-align:center;">${avgs[d.group]}</td></tr>`).join('');
 }
 
-function generatePDF(lvlName, avgs) {
+function generatePDF(lvlName, avgs, report) {
     const wrapper = document.getElementById('certificate-wrapper');
     wrapper.style.display = 'block';
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
-    const report = getReportContent(allQuestionsFlat.length > 0 ? 1 : 1); // logic check
 
     wrapper.innerHTML = `
         <div class="cert-canvas">
             <div style="text-align:center;"><img src="logo-araya.png" style="width:180px;"></div>
-            <h1 style="font-size:24px; color:#0056b3; margin:20px 0; text-align:center; text-transform:uppercase;">Laporan Hasil Asesmen Kepemimpinan</h1>
-            <p style="text-align:center; font-size:16px;">Nama Peserta: <br><strong style="font-size:24px;">${userName}</strong></p>
+            <h1 style="text-align:center; font-size:24px; text-transform:uppercase; margin:20px 0;">Laporan Hasil Asesmen Kepemimpinan</h1>
+            <p style="text-align:center; font-size:16px;">Nama Peserta: <br><strong style="font-size:26px;">${userName}</strong></p>
             
             <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
 
-            <div style="text-align:center; background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff;">
+            <div style="background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff; text-align:center;">
                 <h2 style="margin:0; color:#0056b3;">Level Utama: ${lvlName}</h2>
             </div>
 
-            <div style="font-size:13px; margin-top:20px; text-align:left;">
-                <h3 style="color:#0056b3; font-size:15px; border-bottom:1px solid #ddd; padding-bottom:5px;">Rangkuman Skor Detail:</h3>
-                <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+            <div class="cert-section" style="margin-top:20px; text-align:left;">
+                <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; font-size:16px; color:#0056b3;">Interpretasi & Rekomendasi</h3>
+                <p style="font-size:13px; line-height:1.6;"><strong>Penjelasan:</strong> ${report.exp}</p>
+                <p style="font-size:13px; line-height:1.6;"><strong>Langkah Strategis:</strong> ${report.rec}</p>
+            </div>
+
+            <div class="cert-section" style="text-align:left;">
+                <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; font-size:16px; color:#0056b3;">Rangkuman Skor Detail</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
                     <thead><tr style="background:#007bff; color:white;">
-                        <th style="padding:8px; border:1px solid #ddd;">Level</th><th style="padding:8px; border:1px solid #ddd;">Nama Level</th><th style="padding:8px; border:1px solid #ddd;">Skor</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Level</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Nama Level</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Skor Rata-rata</th>
                     </tr></thead>
                     <tbody>
-                        ${questionsData.map(d => `<tr><td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td><td style="padding:8px; border:1px solid #ddd;">${d.name}</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td></tr>`).join('')}
+                        ${questionsData.map(d => `<tr>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td>
+                            <td style="padding:8px; border:1px solid #ddd;">${d.name}</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td>
+                        </tr>`).join('')}
                     </tbody>
                 </table>
             </div>
 
-            <div style="margin-top:20px; font-size:13px; text-align:left; background:#f9f9f9; padding:15px; border-radius:10px;">
-                <h3 style="color:#0056b3; font-size:15px; margin-top:0;">Analisis Strategis:</h3>
-                <p>${document.getElementById('recommendation').innerText}</p>
-                <p>${document.getElementById('weaknesses-display').innerText}</p>
-            </div>
-
-            <div class="cert-footer" style="margin-top:auto; width:100%; display:flex; justify-content:space-between; align-items:flex-end;">
+            <div class="cert-footer">
                 <div style="text-align:left;">
                     <p style="font-size:14px;">Tuban, ${dateStr}</p>
-                    <div style="position:relative; height:70px;">
-                        <img src="ttd.png" style="width:120px; position:absolute; bottom:5px; left:10px; z-index:10;">
+                    <div style="position:relative; height:80px;">
+                        <img src="ttd.png" style="width:130px; position:absolute; bottom:5px; left:10px; z-index:10;">
                     </div>
-                    <div style="border-top:1px solid #000; width:220px; padding-top:5px;"><strong>Founder Araya Consulting</strong></div>
+                    <div style="border-top:1px solid #000; width:220px; padding-top:5px;">
+                        <strong>Founder Araya Consulting</strong>
+                    </div>
                 </div>
-                <div style="text-align:right;"><img src="logo-araya-wm.png" style="width:80px; opacity:0.3;"></div>
+                <div style="text-align:right;">
+                    <img src="logo-araya-wm.png" style="width:80px; opacity:0.3;">
+                </div>
             </div>
-        </div>
-    `;
+        </div>`;
 
     const opt = { 
         margin: 0, 
-        filename: `Laporan_Leadership_${userName}.pdf`, 
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: `Laporan_Kepemimpinan_${userName}.pdf`, 
         html2canvas: { scale: 2, useCORS: true }, 
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
     };
