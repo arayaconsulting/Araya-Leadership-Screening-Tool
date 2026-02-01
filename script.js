@@ -116,11 +116,11 @@ document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); cal
 
 function getDetailedReport(level) {
     const reportData = {
-        1: { exp: "Pengaruh Anda didasarkan pada posisi formal. Anggota tim mengikuti karena mereka memiliki keharusan administratif.", rec: "Mulailah membangun hubungan personal di luar jabatan untuk mendapatkan kepercayaan sukarela." },
-        2: { exp: "Pengaruh didasarkan pada hubungan dan izin. Orang-orang mengikuti karena mereka ingin bekerja dengan Anda.", rec: "Gunakan keharmonisan hubungan ini untuk mulai menetapkan standar hasil dan pencapaian target." },
-        3: { exp: "Pengaruh didasarkan pada hasil nyata dan produktivitas. Anda memberikan kemenangan bagi organisasi.", rec: "Mulailah mengalihkan fokus dari 'melakukan sendiri' menjadi 'melatih orang lain' agar mereka juga berprestasi." },
-        4: { exp: "Pengaruh didasarkan pada reproduksi pemimpin. Anda telah berhasil mengembangkan kapasitas orang lain secara signifikan.", rec: "Fokuslah memberdayakan pemimpin level 4 lainnya agar sistem kepemimpinan tetap berjalan tanpa kehadiran Anda." },
-        5: { exp: "Pengaruh didasarkan pada jati diri dan integritas jangka panjang. Anda menjadi panutan lintas generasi.", rec: "Gunakan reputasi Anda untuk menciptakan warisan budaya perusahaan dan membimbing pemimpin di berbagai sektor." }
+        1: { exp: "Pengaruh didasarkan pada otoritas jabatan. Orang mengikuti karena keharusan.", rec: "Mulailah membangun hubungan personal untuk mendapatkan kepercayaan sukarela." },
+        2: { exp: "Pengaruh didasarkan pada hubungan dan izin. Orang ingin bekerja dengan Anda.", rec: "Gunakan keharmonisan ini untuk menetapkan standar pencapaian target." },
+        3: { exp: "Pengaruh didasarkan pada produktivitas. Anda memberikan hasil nyata bagi organisasi.", rec: "Fokuslah melatih orang lain agar mereka juga berprestasi seperti Anda." },
+        4: { exp: "Pengaruh didasarkan pada reproduksi pemimpin. Anda berhasil mengembangkan orang lain.", rec: "Berdayakan pemimpin level 4 lainnya agar sistem berjalan berkelanjutan." },
+        5: { exp: "Pengaruh didasarkan pada jati diri dan integritas. Anda menjadi panutan lintas bidang.", rec: "Teruslah membimbing dan ciptakan warisan budaya kepemimpinan jangka panjang." }
     };
     return reportData[level];
 }
@@ -160,19 +160,27 @@ function displayResults(lvlNum, avgs) {
 function renderChart(avgs) {
     const ctx = document.getElementById('scoreChart').getContext('2d');
     if(myChart) myChart.destroy();
+    
+    const barColors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'];
+
     myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
-            datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#007bff' }]
+            labels: ['L1: Position', 'L2: Permission', 'L3: Production', 'L4: Development', 'L5: Pinnacle'],
+            datasets: [{ 
+                label: 'Skor Anda', 
+                data: Object.values(avgs), 
+                backgroundColor: barColors,
+                borderRadius: 5
+            }]
         },
-        options: { scales: { y: { min: 0, max: 5 } } }
+        options: { scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } }
     });
 }
 
 function renderTable(avgs) {
     const tbody = document.querySelector('#score-table tbody');
-    tbody.innerHTML = questionsData.map(d => `<tr><td style="text-align:center;">Level ${d.level}</td><td>${d.name}</td><td style="text-align:center;">${avgs[d.group]}</td></tr>`).join('');
+    tbody.innerHTML = questionsData.map(d => `<tr><td style="text-align:center;">Level ${d.level}</td><td>${d.name}</td><td style="text-align:center; font-weight:bold;">${avgs[d.group]}</td></tr>`).join('');
 }
 
 function generatePDF(lvlName, avgs, report) {
@@ -182,59 +190,49 @@ function generatePDF(lvlName, avgs, report) {
 
     wrapper.innerHTML = `
         <div class="cert-canvas">
-            <div style="text-align:center;"><img src="logo-araya.png" style="width:180px;"></div>
-            <h1 style="text-align:center; font-size:24px; text-transform:uppercase; margin:20px 0;">Laporan Hasil Asesmen Kepemimpinan</h1>
-            <p style="text-align:center; font-size:16px;">Nama Peserta: <br><strong style="font-size:26px;">${userName}</strong></p>
+            <div style="text-align:center;"><img src="logo-araya.png" style="width:160px; margin-bottom:10px;"></div>
+            <h1 style="text-align:center; font-size:20px; text-transform:uppercase; margin:10px 0; color:#0056b3;">Laporan Hasil Asesmen Kepemimpinan</h1>
+            <p style="text-align:center; font-size:14px; margin:5px 0;">Nama Peserta: <strong>${userName}</strong></p>
             
-            <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
+            <div style="border-top:2px solid #0056b3; margin:10px 0;"></div>
 
-            <div style="background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff; text-align:center;">
-                <h2 style="margin:0; color:#0056b3;">Level Utama: ${lvlName}</h2>
+            <div style="background:#f0f8ff; padding:12px; border-radius:8px; border:1px solid #b3e0ff; text-align:center; margin-bottom:10px;">
+                <h2 style="margin:0; font-size:18px; color:#0056b3;">Level Utama: ${lvlName}</h2>
             </div>
 
-            <div class="cert-section" style="margin-top:20px; text-align:left;">
-                <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; font-size:16px; color:#0056b3;">Interpretasi & Rekomendasi</h3>
-                <p style="font-size:13px; line-height:1.6;"><strong>Penjelasan:</strong> ${report.exp}</p>
-                <p style="font-size:13px; line-height:1.6;"><strong>Langkah Strategis:</strong> ${report.rec}</p>
+            <div style="font-size:12px; text-align:left; margin-bottom:15px;">
+                <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; font-size:14px; color:#0056b3;">Interpretasi & Rekomendasi</h3>
+                <p><strong>Penjelasan:</strong> ${report.exp}</p>
+                <p><strong>Langkah Strategis:</strong> ${report.rec}</p>
             </div>
 
-            <div class="cert-section" style="text-align:left;">
-                <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; font-size:16px; color:#0056b3;">Rangkuman Skor Detail</h3>
-                <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
+            <div style="text-align:left;">
+                <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; font-size:14px; color:#0056b3;">Rangkuman Skor Detail</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:5px;">
                     <thead><tr style="background:#007bff; color:white;">
-                        <th style="padding:8px; border:1px solid #ddd;">Level</th>
-                        <th style="padding:8px; border:1px solid #ddd;">Nama Level</th>
-                        <th style="padding:8px; border:1px solid #ddd;">Skor Rata-rata</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Level</th><th style="padding:8px; border:1px solid #ddd;">Nama Level</th><th style="padding:8px; border:1px solid #ddd;">Skor</th>
                     </tr></thead>
                     <tbody>
-                        ${questionsData.map(d => `<tr>
-                            <td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">${d.name}</td>
-                            <td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td>
-                        </tr>`).join('')}
+                        ${questionsData.map(d => `<tr><td style="padding:6px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td><td style="padding:6px; border:1px solid #ddd;">${d.name}</td><td style="padding:6px; border:1px solid #ddd; text-align:center; font-weight:bold;">${avgs[d.group]}</td></tr>`).join('')}
                     </tbody>
                 </table>
             </div>
 
-            <div class="cert-footer">
-                <div style="text-align:left;">
-                    <p style="font-size:14px;">Tuban, ${dateStr}</p>
-                    <div style="position:relative; height:80px;">
-                        <img src="ttd.png" style="width:130px; position:absolute; bottom:5px; left:10px; z-index:10;">
+            <div class="cert-footer" style="margin-top:auto;">
+                <div style="text-align:left; width:100%; display:flex; justify-content:space-between; align-items:flex-end;">
+                    <div>
+                        <p style="font-size:13px;">Tuban, ${dateStr}</p>
+                        <div style="position:relative; height:60px;"><img src="ttd.png" style="width:110px; position:absolute; bottom:0; left:5px; z-index:10;"></div>
+                        <div style="border-top:1px solid #000; width:200px; padding-top:5px; font-size:13px;"><strong>Founder Araya Consulting</strong></div>
                     </div>
-                    <div style="border-top:1px solid #000; width:220px; padding-top:5px;">
-                        <strong>Founder Araya Consulting</strong>
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <img src="logo-araya-wm.png" style="width:80px; opacity:0.3;">
+                    <img src="logo-araya-wm.png" style="width:80px; opacity:0.2;">
                 </div>
             </div>
         </div>`;
 
     const opt = { 
-        margin: 0, 
-        filename: `Laporan_Kepemimpinan_${userName}.pdf`, 
+        margin: 0, filename: `Laporan_Leadership_${userName}.pdf`, 
+        image: { type: 'jpeg', quality: 0.98 }, 
         html2canvas: { scale: 2, useCORS: true }, 
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
     };
