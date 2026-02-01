@@ -1,31 +1,29 @@
-body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f9; color: #333; line-height: 1.6; padding: 20px; }
-.container { max-width: 850px; margin: 20px auto; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+/* Container & Layout Dasar */
+body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f9; padding: 20px; }
+.container { max-width: 850px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-/* Tabel Skor Profesional */
-#score-table { width: 100%; border-collapse: collapse; margin-top: 25px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-#score-table th { background-color: #007bff; color: white; padding: 15px; text-align: left; text-transform: uppercase; font-size: 13px; }
-#score-table td { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 15px; }
-#score-table tr:hover { background-color: #f1f8ff; }
+/* KONTROL VISIBILITAS: Memastikan halaman benar-benar terpisah */
+.hidden { display: none !important; }
 
-/* Logo & Judul Terpusat */
+/* Tampilan Tes (Sudah Ok, Dikembalikan ke Versi Sebelumnya) */
 .logo-placeholder { display: flex; justify-content: center; margin-bottom: 30px; padding: 20px; background: #f0f8ff; border-radius: 10px; border-bottom: 4px solid #0056b3; }
 .logo-placeholder img { max-width: 250px; height: auto; }
-h1, h2, h3 { text-align: center; color: #0056b3; }
+h1, h2 { text-align: center; color: #0056b3; }
 
-/* LAYOUT LAPORAN PDF A4 PORTRAIT SATU HALAMAN */
+/* Tombol Mulai & Navigasi Terpusat */
+#start-test-btn { display: block; width: 280px; margin: 30px auto; padding: 15px; background: #28a745; color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; }
+.navigation-controls-horizontal { display: flex; justify-content: space-between; margin-top: 30px; }
+#prev-btn, #next-btn, #submit-btn { padding: 12px 30px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+
+/* Tabel Hasil yang Rapi */
+#score-table { width: 100%; border-collapse: collapse; margin-top: 25px; }
+#score-table th { background-color: #007bff; color: white; padding: 12px; text-align: left; }
+#score-table td { padding: 10px; border-bottom: 1px solid #eee; }
+
+/* LAYOUT SERTIFIKAT: Kunci Portrait A4 */
+#certificate-wrapper { position: absolute; left: -9999px; top: -9999px; } /* Sembunyikan dari layar utama */
 .cert-canvas { 
-    width: 210mm; height: 297mm; padding: 15mm; 
-    background: white; border: 12px double #0056b3; 
-    display: flex; flex-direction: column; 
-    box-sizing: border-box; position: relative; 
-    color: #333; overflow: hidden; 
-}
-
-/* Watermark Visual */
-.chart-box, #recommendation, #strength-weakness, #score-table { position: relative; }
-.chart-box::before, #recommendation::before, #strength-weakness::before, #score-table::before {
-    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url('logo-araya-wm.png'); background-repeat: no-repeat; 
-    background-position: center; background-size: 40%; opacity: 0.08; 
-    z-index: 3; pointer-events: none;
+    width: 210mm; height: 297mm; padding: 20mm; background: white; 
+    border: 15px solid #0056b3; box-sizing: border-box; display: flex; 
+    flex-direction: column; position: relative; color: #333;
 }
