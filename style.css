@@ -1,34 +1,129 @@
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; padding: 20px; }
-.container { max-width: 850px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); }
-h1, h2 { color: #0056b3; text-align: center; }
-.logo-placeholder { text-align: center; margin-bottom: 25px; border-bottom: 3px solid #007bff; background-color: #e6f7ff; padding: 10px 0; border-radius: 5px; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 850px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+h1, h2 {
+    color: #0056b3;
+    text-align: center;
+}
+
+.logo-placeholder {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 3px solid #007bff;
+    background-color: #e6f7ff;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+
 .hidden { display: none; }
 
 /* Tombol */
-#start-test-btn, #next-btn, #prev-btn, #submit-btn, button { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-#start-test-btn, #next-btn, #submit-btn { background-color: #28a745; color: white; width: 100%; }
-#prev-btn { background-color: #6c757d; color: white; width: 48%; }
-#next-btn { width: 48%; }
-#next-btn[disabled], #submit-btn[disabled] { background-color: #90ee90; cursor: not-allowed; }
-.navigation-controls-horizontal { display: flex; justify-content: space-between; margin-top: 20px; }
-
-/* Watermark Report */
-.chart-box, #recommendation, #strength-weakness, #score-table { position: relative; }
-.chart-box::before, #recommendation::before, #strength-weakness::before, #score-table::before {
-    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url('logo-araya-wm.png'); background-repeat: no-repeat; background-position: center; 
-    background-size: 40%; opacity: 0.08; z-index: 3; pointer-events: none;
+#start-test-btn, #next-btn, #prev-btn, #submit-btn, button {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
 }
-#score-table { width: 100%; border-collapse: collapse; z-index: 2; }
-#score-table th, #score-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+
+#start-test-btn, #next-btn, #submit-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#prev-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+button:hover { opacity: 0.9; }
+
+/* Watermark Area */
+.chart-box, #recommendation, #strength-weakness, #score-table {
+    position: relative;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.chart-box::before, #recommendation::before, #strength-weakness::before, #score-table::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+    opacity: 0.08;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Tabel Skor */
+#score-table {
+    width: 100%;
+    border-collapse: collapse;
+    z-index: 2;
+}
+
+#score-table th, #score-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
 #score-table th { background-color: #007bff; color: white; }
 
-/* LAYOUT SERTIFIKAT A4 */
+/* LAYOUT SERTIFIKAT A4 PROFESIONAL */
 .cert-canvas {
-    width: 210mm; height: 297mm; padding: 25mm; background: white;
-    border: 20px solid #0056b3; box-sizing: border-box; display: flex;
-    flex-direction: column; align-items: center; text-align: center;
+    width: 210mm;
+    height: 297mm;
+    padding: 25mm;
+    background: white;
+    border: 20px solid #0056b3;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
 }
-.cert-title { font-size: 48px; font-weight: bold; color: #0056b3; margin: 40px 0 10px; }
-.cert-name { font-size: 38px; font-weight: bold; margin: 40px 0; color: #333; border-bottom: 2px solid #333; padding: 0 20px; }
-.cert-footer { margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; }
+
+.cert-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #0056b3;
+    margin: 40px 0 10px;
+}
+
+.cert-name {
+    font-size: 38px;
+    font-weight: bold;
+    margin: 40px 0;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding: 0 20px;
+}
+
+.cert-footer {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
