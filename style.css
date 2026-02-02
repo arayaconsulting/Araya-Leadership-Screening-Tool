@@ -5,34 +5,33 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f9; co
 /* Kontrol Layar */
 .hidden { display: none !important; }
 
-/* Header & Input Terpusat */
+/* Header & Input Nama Besar */
 .logo-placeholder { display: flex; justify-content: center; margin-bottom: 30px; padding: 20px; background: #f0f8ff; border-radius: 10px; border-bottom: 4px solid #0056b3; }
 .logo-placeholder img { max-width: 250px; height: auto; }
 h1, h2 { text-align: center; color: #0056b3; }
 #user-name { display: block; margin: 25px auto; padding: 15px; width: 85%; max-width: 500px; border: 2px solid #ddd; border-radius: 10px; text-align: center; font-size: 18px; }
 
-/* Efek Watermark untuk Laporan Hasil */
+/* Tombol Mulai */
+#start-test-btn { display: block; width: 300px; margin: 30px auto; padding: 18px; background: #28a745; color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; }
+
+/* Legenda Angka (Dikuci agar tetap tampil) */
+.scale-legend-full { background: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; border-radius: 10px; margin-bottom: 25px; text-align: center; font-weight: bold; }
+
+/* Navigasi Proporsional */
+.navigation-controls-horizontal { display: flex; justify-content: space-between; margin-top: 40px; }
+#prev-btn, #next-btn, #submit-btn { padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; border: none; }
+#prev-btn { background: #6c757d; color: white; }
+#next-btn, #submit-btn { background: #28a745; color: white; }
+#next-btn:disabled { background: #ccc !important; cursor: not-allowed; }
+
+/* Watermark Laporan */
 #results { position: relative; z-index: 1; overflow: hidden; }
 #results::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
-    background-image: url('logo-araya-wm.png'); /* Pastikan file ini ada di folder GitHub */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    opacity: 0.05; /* Sangat transparan agar teks tetap terbaca */
-    z-index: -1;
-    pointer-events: none;
+    content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 80%; height: 80%; background-image: url('logo-araya-wm.png');
+    background-repeat: no-repeat; background-position: center; background-size: contain;
+    opacity: 0.05; z-index: -1; pointer-events: none;
 }
-
-/* Tombol Aksi */
-#start-test-btn { display: block; width: 300px; margin: 30px auto; padding: 18px; background: #28a745; color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; }
-#prev-btn, #next-btn, #submit-btn { padding: 15px 35px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; border: none; }
 
 /* Layout Sertifikat Portrait A4 */
 #certificate-wrapper { position: absolute; left: -9999px; top: -9999px; } 
