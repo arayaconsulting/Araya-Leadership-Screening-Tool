@@ -1,4 +1,4 @@
-// Data pertanyaan tetap (OK dan Lancar)
+// Data Pertanyaan Leadership Maxwell
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", questions: ["1. Saya mengandalkan otoritas jabatan saya untuk memastikan anggota tim mengikuti arahan.","2. Anggota tim saya cenderung menunggu perintah sebelum memulai pekerjaan baru.","3. Saya percaya hak istimewa kepemimpinan datang secara otomatis dengan posisi.","4. Anggota tim hanya bekerja sesuai deskripsi pekerjaan minimal mereka.","5. Orang-orang mengikuti saya karena mereka harus, bukan karena mereka ingin."]},
     { level: 2, name: "Permission (Izin)", group: "L2", questions: ["6. Saya meluangkan waktu untuk mengenal anggota tim saya secara pribadi, di luar pekerjaan.","7. Saya membangun kepercayaan dengan tim saya melalui komunikasi yang terbuka dan jujur.","8. Saya secara aktif mendengarkan dan menghargai masukan tim, bahkan jika berbeda dengan pandangan saya.","9. Saya berfokus untuk menciptakan lingkungan kerja yang positif dan kolaboratif.","10. Anggota tim saya bersedia memberikan usaha ekstra untuk saya karena hubungan pribadi kami."]},
@@ -13,7 +13,83 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
-// Fungsi Navigasi & Kuis (Sudah OK)
+// Transisi Halaman yang Bersih
+function startTest() {
+    const input = document.getElementById('user-name');
+    if (input.value.trim() === "") return alert("Mohon masukkan nama lengkap Anda.");
+    userName = input.value;
+    document.getElementById('name-input-screen').classList.add('hidden');
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('quiz-content').classList.remove('hidden');
+    initializeQuestions();
+    renderCurrentQuestion();
+}
+
+function renderCurrentQuestion() {
+    const container = document.getElementById('questions-container');
+    const q = allQuestionsFlat[currentQuestionIndex];
+    container.innerHTML = `
+        <div class="scale-legend-full">1: Sngt Tdk Setuju | 2: Tdk Setuju | 3: Netral | 4: Setuju | 5: Sngt Setuju</div>
+        <div style="margin-bottom:20px;">
+            <p style="color:#666;">Pertanyaan ${q.index} dari 25</p>
+            <p style="font-size:18px; font-weight:bold; margin:10px 0;">${q.text}</p>
+        </div>
+        <div style="display:flex; justify-content:space-around; background:#f8f9fa; padding:15px; border-radius:10px;">
+            ${[1,2,3,4,5].map(i => `<label style="cursor:pointer; text-align:center;"><input type="radio" name="${q.id}" value="${i}" ${userAnswers[q.id]==i?'checked':''} onchange="saveAnswer('${q.id}', ${i})"><br><b>${i}</b></label>`).join('')}
+        </div>`;
+    updateNavigation();
+}
+
+function saveAnswer(id, val) { 
+    userAnswers[id] = val; 
+    updateNavigation(); 
+}
+
+function updateNavigation() {
+    const isAnswered = userAnswers[allQuestionsFlat[currentQuestionIndex].id] !== 0;
+    document.getElementById('prev-btn').classList.toggle('hidden', currentQuestionIndex === 0);
+    const isLast = currentQuestionIndex === 24;
+    document.getElementById('next-btn').classList.toggle('hidden', isLast);
+    document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
+    document.getElementById('next-btn').disabled = !isAnswered;
+}
+
+// Fungsi Cetak PDF Portrait A4 (Fix Gambar Kosong)
+function generatePDF(lvlName, avgs, report) {
+    const wrapper = document.getElementById('certificate-wrapper');
+    const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+    
+    wrapper.innerHTML = `
+        <div class="cert-canvas">
+            <div style="text-align:center;"><img src="logo-araya.png" style="width:160px;"></div>
+            <h1 style="text-align:center; font-size:24px; color:#0056b3; margin:20px 0;">LAPORAN HASIL ASESMEN KEPEMIMPINAN</h1>
+            <p style="text-align:center;">Diberikan kepada: <br><strong style="font-size:24px;">${userName}</strong></p>
+            <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
+            <div style="background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff; text-align:center;"><h2 style="margin:0; color:#0056b3;">Level Utama: ${lvlName}</h2></div>
+            <div style="margin-top:20px; font-size:14px; text-align:left;">
+                <p><strong>Penjelasan:</strong> ${report.exp}</p>
+                <p><strong>Rekomendasi:</strong> ${report.rec}</p>
+                <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:12px;">
+                    <thead><tr style="background:#007bff; color:white;"><th style="padding:8px; border:1px solid #ddd;">Level</th><th style="padding:8px; border:1px solid #ddd;">Nama Level</th><th style="padding:8px; border:1px solid #ddd;">Skor</th></tr></thead>
+                    <tbody>${questionsData.map(d => `<tr><td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td><td style="padding:8px; border:1px solid #ddd;">${d.name}</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td></tr>`).join('')}</tbody>
+                </table>
+            </div>
+            <div style="margin-top:auto; width:100%; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div style="text-align:left;"><p>Tuban, ${dateStr}</p><div style="position:relative; height:70px;"><img src="ttd.png" style="width:120px; position:absolute; bottom:5px; left:10px; z-index:10;"></div><div style="border-top:1px solid #000; width:220px; padding-top:5px;"><strong>Founder Araya Consulting</strong></div></div>
+                <img src="logo-araya-wm.png" style="width:90px; opacity:0.1;">
+            </div>
+        </div>`;
+
+    const opt = { 
+        margin: 0, filename: `Laporan_${userName}.pdf`, 
+        image: { type: 'jpeg', quality: 0.98 }, 
+        html2canvas: { scale: 2, useCORS: true }, 
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+    };
+    html2pdf().set(opt).from(wrapper).save();
+}
+
+// Inisialisasi Fungsi Bantu Lainnya
 function initializeQuestions() {
     allQuestionsFlat.length = 0;
     let globalIndex = 0;
@@ -25,141 +101,6 @@ function initializeQuestions() {
         });
     });
 }
-
-function startTest() {
-    const input = document.getElementById('user-name');
-    if (input.value.trim() === "") return alert("Mohon masukkan nama lengkap Anda.");
-    userName = input.value;
-    document.getElementById('name-input-screen').classList.add('hidden');
-    document.getElementById('quiz-content').classList.remove('hidden');
-    initializeQuestions();
-    renderCurrentQuestion();
-}
-
-function renderCurrentQuestion() {
-    const container = document.getElementById('questions-container');
-    const q = allQuestionsFlat[currentQuestionIndex];
-    container.innerHTML = `
-        <div class="scale-legend-full">1: Sngt Tdk Setuju | 2: Tdk Setuju | 3: Netral | 4: Setuju | 5: Sngt Setuju</div>
-        <div style="text-align:center; margin-bottom:20px;">
-            <p style="color:#666;">Pertanyaan ${q.index} dari 25</p>
-            <p style="font-size:18px; font-weight:bold; margin:10px 0;">${q.text}</p>
-        </div>
-        <div style="display:flex; justify-content:space-around; background:#f8f9fa; padding:15px; border-radius:10px;">
-            ${[1,2,3,4,5].map(i => `<label style="cursor:pointer; text-align:center;"><input type="radio" name="${q.id}" value="${i}" ${userAnswers[q.id]==i?'checked':''} onchange="saveAnswer('${q.id}', ${i})"><br><b>${i}</b></label>`).join('')}
-        </div>`;
-    updateNavigation();
-}
-
-function saveAnswer(id, val) { userAnswers[id] = val; updateNavigation(); }
-function updateNavigation() {
-    const isAnswered = userAnswers[allQuestionsFlat[currentQuestionIndex].id] !== 0;
-    document.getElementById('prev-btn').classList.toggle('hidden', currentQuestionIndex === 0);
-    const isLast = currentQuestionIndex === 24;
-    document.getElementById('next-btn').classList.toggle('hidden', isLast);
-    document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
-    document.getElementById('next-btn').disabled = !isAnswered;
-}
-
 document.getElementById('next-btn').onclick = () => { currentQuestionIndex++; renderCurrentQuestion(); };
 document.getElementById('prev-btn').onclick = () => { currentQuestionIndex--; renderCurrentQuestion(); };
 document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); calculateResults(); };
-
-// FUNGSI LAPORAN & DESKRIPSI (DIPERBAIKI)
-function getDetailedReport(level) {
-    const reportData = {
-        1: { exp: "Pengaruh didasarkan pada otoritas jabatan. Orang mengikuti karena keharusan.", rec: "Mulailah membangun hubungan personal untuk mendapatkan kepercayaan sukarela." },
-        2: { exp: "Pengaruh didasarkan pada hubungan. Orang ingin bekerja dengan Anda secara sukarela.", rec: "Gunakan keharmonisan ini untuk mulai menetapkan standar hasil tim." },
-        3: { exp: "Pengaruh didasarkan pada produktivitas dan hasil nyata bagi organisasi.", rec: "Mulailah melatih dan membimbing orang lain agar mereka juga berprestasi." },
-        4: { exp: "Pengaruh didasarkan pada pengembangan orang lain. Anda mencetak pemimpin baru.", rec: "Berdayakan pemimpin di bawah Anda agar sistem berjalan berkelanjutan." },
-        5: { exp: "Pengaruh didasarkan pada jati diri dan reputasi panjang. Anda adalah panutan.", rec: "Teruslah membimbing dan ciptakan warisan budaya kepemimpinan strategis." }
-    };
-    return reportData[level];
-}
-
-function calculateResults() {
-    const avgs = {};
-    questionsData.forEach(lvl => {
-        const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + userAnswers[q.id], 0);
-        avgs[lvl.group] = (sum / 5).toFixed(1);
-    });
-    let mainLvlNum = 1;
-    for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
-    displayResults(mainLvlNum, avgs);
-}
-
-function displayResults(lvlNum, avgs) {
-    document.getElementById('quiz-content').classList.add('hidden');
-    document.getElementById('results').classList.remove('hidden');
-    document.getElementById('report-user-name-header').textContent = userName;
-    
-    const lvlName = questionsData[lvlNum-1].name;
-    const report = getDetailedReport(lvlNum);
-    
-    document.getElementById('level-result').innerHTML = `<h2 style="color:#007bff">Level Utama: ${lvlName}</h2>`;
-    document.getElementById('recommendation').innerHTML = `
-        <div style="background:#f0f8ff; border:1px solid #b3e0ff; padding:20px; border-radius:10px; margin:20px 0; text-align:left;">
-            <p><strong>Penjelasan Level:</strong> ${report.exp}</p>
-            <p><strong>Rekomendasi Strategis:</strong> ${report.rec}</p>
-        </div>`;
-    
-    renderChart(avgs);
-    renderTable(avgs);
-    document.getElementById('download-cert-btn').onclick = () => generatePDF(lvlName, avgs, report);
-}
-
-// FUNGSI CHART WARNA-WARNI
-function renderChart(avgs) {
-    const ctx = document.getElementById('scoreChart').getContext('2d');
-    if(myChart) myChart.destroy();
-    const barColors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'];
-    myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['L1: Position', 'L2: Permission', 'L3: Production', 'L4: People Dev', 'L5: Pinnacle'],
-            datasets: [{ label: 'Skor Anda', data: Object.values(avgs), backgroundColor: barColors, borderRadius: 5 }]
-        },
-        options: { scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } }
-    });
-}
-
-function renderTable(avgs) {
-    const tbody = document.querySelector('#score-table tbody');
-    tbody.innerHTML = questionsData.map(d => `<tr><td>Level ${d.level}</td><td>${d.name}</td><td style="font-weight:bold; text-align:center;">${avgs[d.group]}</td></tr>`).join('');
-}
-
-// FUNGSI GENERATE PDF (FIX HALAMAN KOSONG)
-function generatePDF(lvlName, avgs, report) {
-    const wrapper = document.getElementById('certificate-wrapper');
-    const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
-    
-    wrapper.innerHTML = `
-        <div class="cert-canvas">
-            <div style="text-align:center;"><img src="logo-araya.png" style="width:160px;"></div>
-            <h1 style="text-align:center; font-size:24px; color:#0056b3; margin:20px 0;">LAPORAN HASIL ASESMEN KEPEMIMPINAN</h1>
-            <p style="text-align:center;">Nama Peserta: <br><strong style="font-size:24px;">${userName}</strong></p>
-            <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
-            <div style="background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff; text-align:center;"><h2 style="margin:0; color:#0056b3;">Level Utama: ${lvlName}</h2></div>
-            <div style="margin-top:20px; font-size:14px; text-align:left;">
-                <p><strong>Penjelasan:</strong> ${report.exp}</p>
-                <p><strong>Rekomendasi:</strong> ${report.rec}</p>
-                <h3 style="color:#0056b3; font-size:16px;">Rangkuman Skor Detail:</h3>
-                <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:12px;">
-                    <thead><tr style="background:#007bff; color:white;"><th style="padding:8px; border:1px solid #ddd;">Level</th><th style="padding:8px; border:1px solid #ddd;">Nama Level Kepemimpinan</th><th style="padding:8px; border:1px solid #ddd;">Skor</th></tr></thead>
-                    <tbody>${questionsData.map(d => `<tr><td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td><td style="padding:8px; border:1px solid #ddd;">${d.name}</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td></tr>`).join('')}</tbody>
-                </table>
-            </div>
-            <div style="margin-top:auto; width:100%; display:flex; justify-content:space-between; align-items:flex-end;">
-                <div style="text-align:left;"><p>Tuban, ${dateStr}</p><div style="position:relative; height:70px;"><img src="ttd.png" style="width:120px; position:absolute; bottom:5px; left:10px; z-index:10;"></div><div style="border-top:1px solid #000; width:220px; padding-top:5px;"><strong>Founder Araya Consulting</strong></div></div>
-                <img src="logo-araya-wm.png" style="width:90px; opacity:0.1;">
-            </div>
-        </div>`;
-
-    const opt = { 
-        margin: 0, filename: `Laporan_Kepemimpinan_${userName}.pdf`, 
-        image: { type: 'jpeg', quality: 0.98 }, 
-        html2canvas: { scale: 2, useCORS: true }, // Sangat penting agar gambar muncul
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-    };
-    html2pdf().set(opt).from(wrapper).save();
-}
