@@ -2,26 +2,39 @@
 body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f9; color: #333; line-height: 1.6; padding: 20px; }
 .container { max-width: 850px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-/* KONTROL VISIBILITAS MUTLAK: Mencegah Layar Menumpuk */
+/* Kontrol Layar */
 .hidden { display: none !important; }
 
-/* Desain Header & Input Terpusat */
+/* Header & Input Terpusat */
 .logo-placeholder { display: flex; justify-content: center; margin-bottom: 30px; padding: 20px; background: #f0f8ff; border-radius: 10px; border-bottom: 4px solid #0056b3; }
 .logo-placeholder img { max-width: 250px; height: auto; }
 h1, h2 { text-align: center; color: #0056b3; }
 #user-name { display: block; margin: 25px auto; padding: 15px; width: 85%; max-width: 500px; border: 2px solid #ddd; border-radius: 10px; text-align: center; font-size: 18px; }
 
+/* Efek Watermark untuk Laporan Hasil */
+#results { position: relative; z-index: 1; overflow: hidden; }
+#results::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-image: url('logo-araya-wm.png'); /* Pastikan file ini ada di folder GitHub */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.05; /* Sangat transparan agar teks tetap terbaca */
+    z-index: -1;
+    pointer-events: none;
+}
+
 /* Tombol Aksi */
 #start-test-btn { display: block; width: 300px; margin: 30px auto; padding: 18px; background: #28a745; color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; }
-.navigation-controls-horizontal { display: flex; justify-content: space-between; margin-top: 40px; }
 #prev-btn, #next-btn, #submit-btn { padding: 15px 35px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; border: none; }
 
-/* TABEL SKOR PROFESIONAL */
-#score-table { width: 100%; border-collapse: collapse; margin-top: 25px; }
-#score-table th { background-color: #007bff; color: white; padding: 15px; text-align: left; }
-#score-table td { padding: 12px 15px; border-bottom: 1px solid #eee; }
-
-/* LAYOUT SERTIFIKAT: PAKSA PORTRAIT A4 */
+/* Layout Sertifikat Portrait A4 */
 #certificate-wrapper { position: absolute; left: -9999px; top: -9999px; } 
 .cert-canvas { 
     width: 210mm; height: 297mm; padding: 20mm; background: white; 
