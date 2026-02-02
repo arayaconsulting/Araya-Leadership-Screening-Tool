@@ -12,6 +12,18 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
+function initializeQuestions() {
+    allQuestionsFlat.length = 0;
+    let globalIndex = 0;
+    questionsData.forEach(lvl => {
+        lvl.questions.forEach(txt => {
+            globalIndex++;
+            allQuestionsFlat.push({ index: globalIndex, id: `Q${globalIndex}`, text: txt, levelGroup: lvl.group });
+            userAnswers[`Q${globalIndex}`] = 0;
+        });
+    });
+}
+
 function startTest() {
     const input = document.getElementById('user-name');
     if (input.value.trim() === "") return alert("Mohon masukkan nama lengkap Anda.");
@@ -26,15 +38,36 @@ function renderCurrentQuestion() {
     const container = document.getElementById('questions-container');
     const q = allQuestionsFlat[currentQuestionIndex];
     container.innerHTML = `
+        <div class="scale-legend-full">1: Sngt Tdk Setuju | 2: Tdk Setuju | 3: Netral | 4: Setuju | 5: Sngt Setuju</div>
         <div style="text-align:center; margin-bottom:20px;">
             <p style="color:#666;">Pertanyaan ${q.index} dari 25</p>
-            <p style="font-size:18px; font-weight:bold; margin:15px 0;">${q.text}</p>
+            <p style="font-size:18px; font-weight:bold; margin:10px 0;">${q.text}</p>
         </div>
         <div style="display:flex; justify-content:space-around; background:#f8f9fa; padding:15px; border-radius:10px;">
             ${[1,2,3,4,5].map(i => `<label style="cursor:pointer; text-align:center;"><input type="radio" name="${q.id}" value="${i}" ${userAnswers[q.id]==i?'checked':''} onchange="saveAnswer('${q.id}', ${i})"><br><b>${i}</b></label>`).join('')}
         </div>`;
     updateNavigation();
 }
+
+function saveAnswer(id, val) { 
+    userAnswers[id] = val; 
+    updateNavigation(); 
+}
+
+function updateNavigation() {
+    const isAnswered = userAnswers[allQuestionsFlat[currentQuestionIndex].id] !== 0;
+    document.getElementById('prev-btn').classList.toggle('hidden', currentQuestionIndex === 0);
+    const isLast = currentQuestionIndex === 24;
+    document.getElementById('next-btn').classList.toggle('hidden', isLast);
+    document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
+    
+    // AKTIFKAN TOMBOL JIKA SUDAH DIJAWAB
+    document.getElementById('next-btn').disabled = !isAnswered;
+}
+
+document.getElementById('next-btn').onclick = () => { currentQuestionIndex++; renderCurrentQuestion(); };
+document.getElementById('prev-btn').onclick = () => { currentQuestionIndex--; renderCurrentQuestion(); };
+document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); calculateResults(); };
 
 function calculateResults() {
     const avgs = {};
@@ -47,7 +80,19 @@ function calculateResults() {
     displayResults(mainLvlNum, avgs);
 }
 
-// FUNGSI CETAK: Penting untuk memperbaiki halaman kosong
+function displayResults(lvlNum, avgs) {
+    document.getElementById('quiz-content').classList.add('hidden');
+    document.getElementById('results').classList.remove('hidden');
+    document.getElementById('report-user-name-header').textContent = userName;
+    
+    const lvlName = questionsData[lvlNum-1].name;
+    document.getElementById('level-result').innerHTML = `<h2 style="color:#007bff">Level Utama: ${lvlName}</h2>`;
+    
+    renderChart(avgs);
+    renderTable(avgs);
+    document.getElementById('download-cert-btn').onclick = () => generatePDF(lvlName, avgs);
+}
+
 function generatePDF(lvlName, avgs) {
     const wrapper = document.getElementById('certificate-wrapper');
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
@@ -72,26 +117,28 @@ function generatePDF(lvlName, avgs) {
         </div>`;
 
     const opt = { 
-        margin: 0, 
-        filename: `Laporan_Kepemimpinan_${userName}.pdf`, 
+        margin: 0, filename: `Laporan_Kepemimpinan_${userName}.pdf`, 
         image: { type: 'jpeg', quality: 0.98 }, 
-        html2canvas: { scale: 2, useCORS: true, logging: true }, // useCORS: true sangat penting agar gambar tidak kosong
+        html2canvas: { scale: 2, useCORS: true }, 
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
     };
     html2pdf().set(opt).from(wrapper).save();
 }
 
-// Inisialisasi & Fungsi bantu lainnya tetap sama
-function saveAnswer(id, val) { userAnswers[id] = val; updateNavigation(); }
-function initializeQuestions() {
-    allQuestionsFlat.length = 0;
-    let globalIndex = 0;
-    questionsData.forEach(lvl => {
-        lvl.questions.forEach(txt => {
-            globalIndex++;
-            allQuestionsFlat.push({ index: globalIndex, id: `Q${globalIndex}`, text: txt, levelGroup: lvl.group });
-            userAnswers[`Q${globalIndex}`] = 0;
-        });
+function renderChart(avgs) {
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    if(myChart) myChart.destroy();
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
+            datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#007bff' }]
+        },
+        options: { scales: { y: { min: 0, max: 5 } } }
     });
 }
-// ... (Lanjutkan sisa fungsi navigasi standar Anda)
+
+function renderTable(avgs) {
+    const tbody = document.querySelector('#score-table tbody');
+    tbody.innerHTML = questionsData.map(d => `<tr><td>Level ${d.level}</td><td>${d.name}</td><td>${avgs[d.group]}</td></tr>`).join('');
+}
