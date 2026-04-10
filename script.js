@@ -13,16 +13,27 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
-// Transisi Halaman yang Bersih
+// Inisialisasi & Mulai Tes
 function startTest() {
     const input = document.getElementById('user-name');
     if (input.value.trim() === "") return alert("Mohon masukkan nama lengkap Anda.");
     userName = input.value;
     document.getElementById('name-input-screen').classList.add('hidden');
-    document.getElementById('results').classList.add('hidden');
     document.getElementById('quiz-content').classList.remove('hidden');
     initializeQuestions();
     renderCurrentQuestion();
+}
+
+function initializeQuestions() {
+    allQuestionsFlat.length = 0;
+    let globalIndex = 0;
+    questionsData.forEach(lvl => {
+        lvl.questions.forEach(txt => {
+            globalIndex++;
+            allQuestionsFlat.push({ index: globalIndex, id: `Q${globalIndex}`, text: txt, levelGroup: lvl.group });
+            userAnswers[`Q${globalIndex}`] = 0;
+        });
+    });
 }
 
 function renderCurrentQuestion() {
@@ -54,8 +65,62 @@ function updateNavigation() {
     document.getElementById('next-btn').disabled = !isAnswered;
 }
 
-// Fungsi Cetak PDF Portrait A4 (Fix Gambar Kosong)
-function generatePDF(lvlName, avgs, report) {
+document.getElementById('next-btn').onclick = () => { currentQuestionIndex++; renderCurrentQuestion(); };
+document.getElementById('prev-btn').onclick = () => { currentQuestionIndex--; renderCurrentQuestion(); };
+
+// PERBAIKAN: Fungsi Submit untuk Pindah Layar
+document.getElementById('quiz-form').onsubmit = (e) => {
+    e.preventDefault();
+    calculateResults();
+};
+
+function calculateResults() {
+    const avgs = {};
+    questionsData.forEach(lvl => {
+        const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + userAnswers[q.id], 0);
+        avgs[lvl.group] = (sum / 5).toFixed(1);
+    });
+    let mainLvlNum = 1;
+    for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
+    
+    // SEMBUNYIKAN KUIS & TAMPILKAN HASIL
+    document.getElementById('quiz-content').classList.add('hidden');
+    displayResults(mainLvlNum, avgs);
+}
+
+function displayResults(lvlNum, avgs) {
+    document.getElementById('results').classList.remove('hidden');
+    document.getElementById('report-user-name-header').textContent = userName;
+    
+    const lvlName = questionsData[lvlNum-1].name;
+    document.getElementById('level-result').innerHTML = `<h2 style="color:#007bff; margin:20px 0;">Level Utama: ${lvlName}</h2>`;
+    
+    renderChart(avgs);
+    renderTable(avgs);
+    document.getElementById('download-cert-btn').onclick = () => generatePDF(lvlName, avgs);
+}
+
+function renderChart(avgs) {
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    if(myChart) myChart.destroy();
+    // Warna-warni pada grafik batang
+    const barColors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'];
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
+            datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: barColors }]
+        },
+        options: { scales: { y: { min: 0, max: 5 } } }
+    });
+}
+
+function renderTable(avgs) {
+    const tbody = document.querySelector('#score-table tbody');
+    tbody.innerHTML = questionsData.map(d => `<tr><td>Level ${d.level}</td><td>${d.name}</td><td>${avgs[d.group]}</td></tr>`).join('');
+}
+
+function generatePDF(lvlName, avgs) {
     const wrapper = document.getElementById('certificate-wrapper');
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
@@ -63,12 +128,10 @@ function generatePDF(lvlName, avgs, report) {
         <div class="cert-canvas">
             <div style="text-align:center;"><img src="logo-araya.png" style="width:160px;"></div>
             <h1 style="text-align:center; font-size:24px; color:#0056b3; margin:20px 0;">LAPORAN HASIL ASESMEN KEPEMIMPINAN</h1>
-            <p style="text-align:center;">Diberikan kepada: <br><strong style="font-size:24px;">${userName}</strong></p>
+            <p style="text-align:center;">Nama Peserta: <br><strong style="font-size:24px;">${userName}</strong></p>
             <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
             <div style="background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff; text-align:center;"><h2 style="margin:0; color:#0056b3;">Level Utama: ${lvlName}</h2></div>
             <div style="margin-top:20px; font-size:14px; text-align:left;">
-                <p><strong>Penjelasan:</strong> ${report.exp}</p>
-                <p><strong>Rekomendasi:</strong> ${report.rec}</p>
                 <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:12px;">
                     <thead><tr style="background:#007bff; color:white;"><th style="padding:8px; border:1px solid #ddd;">Level</th><th style="padding:8px; border:1px solid #ddd;">Nama Level</th><th style="padding:8px; border:1px solid #ddd;">Skor</th></tr></thead>
                     <tbody>${questionsData.map(d => `<tr><td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td><td style="padding:8px; border:1px solid #ddd;">${d.name}</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td></tr>`).join('')}</tbody>
@@ -80,27 +143,6 @@ function generatePDF(lvlName, avgs, report) {
             </div>
         </div>`;
 
-    const opt = { 
-        margin: 0, filename: `Laporan_${userName}.pdf`, 
-        image: { type: 'jpeg', quality: 0.98 }, 
-        html2canvas: { scale: 2, useCORS: true }, 
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-    };
+    const opt = { margin: 0, filename: `Laporan_${userName}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
     html2pdf().set(opt).from(wrapper).save();
 }
-
-// Inisialisasi Fungsi Bantu Lainnya
-function initializeQuestions() {
-    allQuestionsFlat.length = 0;
-    let globalIndex = 0;
-    questionsData.forEach(lvl => {
-        lvl.questions.forEach(txt => {
-            globalIndex++;
-            allQuestionsFlat.push({ index: globalIndex, id: `Q${globalIndex}`, text: txt, levelGroup: lvl.group });
-            userAnswers[`Q${globalIndex}`] = 0;
-        });
-    });
-}
-document.getElementById('next-btn').onclick = () => { currentQuestionIndex++; renderCurrentQuestion(); };
-document.getElementById('prev-btn').onclick = () => { currentQuestionIndex--; renderCurrentQuestion(); };
-document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); calculateResults(); };
