@@ -82,7 +82,6 @@ window.calculateResults = function() {
         sumTotal += parseFloat(avgs[lvl.group]);
     });
 
-    // LOGIKA SEQUENTIAL (MAXWELL)
     let finalLevel = 1; 
     const threshold = 4.0; 
     for (let i = 1; i <= 5; i++) {
@@ -113,14 +112,12 @@ function displayResults(lvlNum, avgs) {
             </p>
         </div>`;
 
-    // FIX: TEKS FOTO NOMOR TIGA (Centang Hijau)
     document.getElementById('persuasive-call-to-action').innerHTML = `
         <div style="text-align:center; margin-bottom:15px; font-size:14px; color:#444; line-height:1.6;">
             Dapatkan <b>Laporan PDF Lengkap</b> yang berisi: <br>
             ✅ Analisis mendalam karakter Anda <br>
             ✅ Action Plan 90 Hari untuk naik level
         </div>`;
-
     renderChart(avgs);
     window.currentAvgs = avgs;
     window.currentLvlNum = lvlNum;
@@ -159,9 +156,9 @@ function generatePDF(lvlNum, avgs) {
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
     wrapper.style.display = 'block';
-    // FIX: Force Pixel-Perfect (800x1130) agar menempel ke atas dan memenuhi kertas
+    
     wrapper.innerHTML = `
-        <div id="pdf-container" style="width:800px; height:1130px; padding:0; margin:0 auto; background:#fff; border:18px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; color: #1a1a1a; overflow: hidden; display: flex; flex-direction: column;">
+        <div id="pdf-container" style="width:794px; height:1122px; background:#fff; border:18px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; color: #1a1a1a; overflow: hidden; display: flex; flex-direction: column; margin: 0 !important;">
             
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.02; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.2);">
                 ${Array(12).fill('<img src="logo-araya.png" style="width:140px; margin:40px;">').join('')}
@@ -235,25 +232,25 @@ function generatePDF(lvlNum, avgs) {
 
     setTimeout(() => {
         const element = document.getElementById('pdf-container');
-        window.scrollTo(0,0); // Reset scroll sebelum render
-
         const opt = {
             margin: 0,
             filename: 'Laporan_Leadership_' + userData.name + '.pdf',
             image: { type: 'jpeg', quality: 1 },
             html2canvas: { 
-                scale: 2, 
+                scale: 3, 
                 useCORS: true, 
-                scrollY: 0, 
+                scrollY: -window.scrollY, 
+                x: 0,
+                y: 0,
                 scrollX: 0,
-                windowWidth: 800,
-                windowHeight: 1130
+                windowWidth: document.documentElement.offsetWidth,
+                windowHeight: document.documentElement.offsetHeight
             },
-            jsPDF: { unit: 'px', format: [800, 1130], orientation: 'portrait' }
+            jsPDF: { unit: 'px', format: [794, 1122], orientation: 'portrait' }
         };
 
         html2pdf().from(element).set(opt).save().then(() => { 
             wrapper.style.display = 'none'; 
         });
-    }, 1500);
+    }, 1000);
 }
