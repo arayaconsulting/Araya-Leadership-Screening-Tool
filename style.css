@@ -5,30 +5,170 @@
     --text: #333;
 }
 
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
-.container { max-width: 500px; margin: 20px auto; background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+/* Base Styles */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    padding: 10px; 
+}
+
+.container { 
+    max-width: 500px; 
+    margin: 20px auto; 
+    background: #fff; 
+    padding: 25px; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+}
+
 .hidden { display: none; }
-.logo-placeholder { text-align: center; margin-bottom: 20px; }
+
+.logo-placeholder { 
+    text-align: center; 
+    margin-bottom: 20px; 
+}
+
 .logo-placeholder img { width: 150px; }
 
-h2 { color: var(--primary); text-align: center; margin-top: 0; }
-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+h2 { 
+    color: var(--primary); 
+    text-align: center; 
+    margin-top: 0; 
+}
 
-#primary-btn, #next-btn, .unlock-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+input { 
+    width: 100%; 
+    padding: 12px; 
+    margin: 10px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+    font-size: 16px; 
+}
+
+/* Buttons */
+#primary-btn, #next-btn, .unlock-btn { 
+    width: 100%; 
+    padding: 15px; 
+    background: var(--primary); 
+    color: #fff; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    font-weight: bold; 
+    transition: 0.3s; 
+}
+
 #primary-btn:hover { background: #004494; }
 
-.wa-btn { width: 100%; padding: 15px; background: #25d366; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
+.wa-btn { 
+    width: 100%; 
+    padding: 15px; 
+    background: #25d366; 
+    color: #fff; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    font-weight: bold; 
+    margin-bottom: 10px; 
+}
 
-.options-grid { display: flex; justify-content: space-between; margin: 20px 0; }
-.opt-label { cursor: pointer; text-align: center; flex: 1; }
+/* Quiz Options */
+.options-grid { 
+    display: flex; 
+    justify-content: space-between; 
+    margin: 20px 0; 
+}
+
+.opt-label { 
+    cursor: pointer; 
+    text-align: center; 
+    flex: 1; 
+}
+
 .opt-label input { display: none; }
-.opt-circle { width: 40px; height: 40px; line-height: 40px; border-radius: 50%; border: 2px solid #ddd; margin: 0 auto; transition: 0.3s; }
-.opt-label input:checked + .opt-circle { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.1); }
 
-.nav-btns { display: flex; gap: 10px; margin-top: 20px; }
-#prev-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #eee; cursor: pointer; }
+.opt-circle { 
+    width: 40px; 
+    height: 40px; 
+    line-height: 40px; 
+    border-radius: 50%; 
+    border: 2px solid #ddd; 
+    margin: 0 auto; 
+    transition: 0.3s; 
+}
 
-.activation-box { margin-top: 25px; padding: 20px; border: 2px dashed #007bff; border-radius: 12px; background: #f0f7ff; }
-.reload-btn { width: 100%; margin-top: 15px; padding: 10px; background: #6c757d; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+.opt-label input:checked + .opt-circle { 
+    background: var(--primary); 
+    color: #fff; 
+    border-color: var(--primary); 
+    transform: scale(1.1); 
+}
 
-.chart-container { margin: 20px 0; height: 250px; }
+.nav-btns { 
+    display: flex; 
+    gap: 10px; 
+    margin-top: 20px; 
+}
+
+#prev-btn { 
+    flex: 1; 
+    padding: 12px; 
+    border-radius: 8px; 
+    border: 1px solid #ccc; 
+    background: #eee; 
+    cursor: pointer; 
+}
+
+/* Result & Activation Box */
+.activation-box { 
+    margin-top: 25px; 
+    padding: 20px; 
+    border: 2px dashed #007bff; 
+    border-radius: 12px; 
+    background: #f0f7ff; 
+}
+
+.reload-btn { 
+    width: 100%; 
+    margin-top: 15px; 
+    padding: 10px; 
+    background: #6c757d; 
+    color: #fff; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+}
+
+.chart-container { 
+    margin: 20px 0; 
+    height: 250px; 
+}
+
+/* ============================================================
+   FIX AREA: SERTIFIKAT PDF (MENGHILANGKAN RUANG KOSONG)
+   ============================================================ */
+
+/* Pastikan wrapper sertifikat tidak mewarisi margin/padding dari body atau container */
+#certificate-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px; /* Sesuai konfigurasi windowWidth di script.js */
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: -9999;
+    background: white;
+}
+
+#pdf-container {
+    margin: 0 !important;
+    padding: 40px !important; /* Padding internal agar isi sertifikat tidak menempel border */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
