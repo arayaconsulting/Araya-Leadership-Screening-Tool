@@ -146,18 +146,18 @@ function renderChart(avgs) {
             labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
             datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#007bff' }]
         },
-        options: { scales: { y: { min: 0, max: 5 } } }
+        options: { scales: { r: { min: 0, max: 5 } } }
     });
 }
 
-// FUNGSI GENERATE PDF - MENGIKUTI LOGIKA DISC (PASTI UNDUH)
+// FUNGSI GENERATE PDF - ADAPTASI ENGINE DISC (HTML2CANVAS + JSPDF)
 async function generatePDF(lvlNum, avgs) {
     const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     const reportID = `LEAD-${Math.floor(Date.now()/1000)}`;
     const wrapper = document.getElementById('certificate-wrapper');
 
-    // Tampilkan secara fisik sejenak agar bisa dipotret (seperti metode DISC)
+    // Tampilkan elemen secara fisik sejenak (Metode DISC)
     wrapper.style.display = 'block';
     wrapper.style.position = 'absolute';
     wrapper.style.left = '0';
@@ -221,7 +221,7 @@ async function generatePDF(lvlNum, avgs) {
             </div>
         </div>`;
 
-    // Beri waktu browser memproses gambar sebelum dipotret (Logika DISC)
+    // Pastikan gambar tanda tangan & logo dimuat (Logika DISC)
     await new Promise(r => setTimeout(r, 1500));
 
     try {
@@ -232,17 +232,17 @@ async function generatePDF(lvlNum, avgs) {
         });
         
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // 'p' for portrait
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4'); 
         
         // Ukuran A4 standar 210 x 297 mm
         pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
         pdf.save(`Laporan_Leadership_${userData.name.replace(/\s+/g, '_')}.pdf`);
         
-        // Sembunyikan kembali wrapper fisik
         wrapper.style.display = 'none';
         
     } catch (err) {
-        alert("Gagal mengunduh laporan. Silakan coba kembali atau gunakan iPad.");
+        alert("Gagal mengunduh laporan. Silakan coba kembali.");
         console.error(err);
         wrapper.style.display = 'none';
     }
