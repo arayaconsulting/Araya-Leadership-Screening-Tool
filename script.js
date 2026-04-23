@@ -7,55 +7,15 @@ const questionsData = [
     { level: 2, name: "Permission (Izin)", group: "L2", questions: ["6. Saya meluangkan waktu untuk mengenal anggota tim saya secara pribadi, di luar pekerjaan.","7. Saya membangun kepercayaan dengan tim melalui komunikasi yang terbuka dan jujur.","8. Saya secara aktif mendengarkan dan menghargai masukan tim, meskipun berbeda dengan pandangan saya.","9. Saya berfokus untuk menciptakan lingkungan kerja yang positif dan kolaboratif.","10. Anggota tim saya bersedia memberikan usaha ekstra karena hubungan baik kami."]},
     { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsisten memimpin tim saya untuk mencapai target dan hasil nyata.","12. Saya bertanggung jawab penuh atas hasil kerja tim, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh keberhasilan yang diraih.","14. Saya menetapkan standar kinerja yang tinggi dengan memberikan teladan hasil kerja nyata.","15. Kredibilitas saya di organisasi didasarkan pada prestasi yang saya capai."]},
     { level: 4, name: "People Development", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar berkembang.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit baru.","18. Saya berinvestasi dalam pengembangan orang meskipun mereka mungkin akan pindah ke posisi lain.","19. Saya mendelegasikan tanggung jawab signifikan agar anggota tim tumbuh dalam kapasitas pemimpin.","20. Saya aktif mencari dan merekrut individu yang memiliki potensi besar untuk masa depan."]},
-    { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemimpin di luar tim sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat organisasi.","23. Keputusan dan tindakan saya didasarkan pada prinsip yang diyakini oleh organisasi.","24. Saya telah menciptakan budaya kepemimpinan yang tetap efektif meskipun saya tidak hadir.","25. Saya dikenal luas sebagai panutan yang inspiratif dengan integritas tinggi."]}
+    { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemimpin di luar tim sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat organisasi.","23. Keputusan dan tindakan saya sesuai prinsip yang diyakini oleh organisasi.","24. Saya telah menciptakan budaya kepemimpinan yang tetap efektif meskipun saya tidak hadir.","25. Saya dikenal luas sebagai panutan yang inspiratif dengan integritas tinggi."]}
 ];
 
 const reportDetails = {
-    1: { 
-        title: "Level 1: Position (Jabatan)", 
-        desc: "Kepemimpinan didasarkan pada otoritas formal. Anggota tim mengikuti karena kewajiban kontrak kerja.",
-        insight: "Level awal yang berisiko jika bertahan terlalu lama; tim cenderung hanya bekerja dengan standar minimal.",
-        kekuatan: "Struktur otoritas jelas dan disiplin terhadap aturan dasar organisasi.",
-        kelemahan: "Kurangnya loyalitas emosional; inovasi sulit muncul karena staf takut melakukan kesalahan.",
-        komunikasi: "Searah (Top-Down). Fokus pada instruksi dan kepatuhan prosedur.",
-        rec: "Luangkan waktu mengenal staf secara personal. Berhenti mengandalkan jabatan untuk menggerakkan orang." 
-    },
-    2: { 
-        title: "Level 2: Permission (Hubungan)", 
-        desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).",
-        insight: "Anda telah menciptakan lingkungan kerja yang menyenangkan dan kepercayaan mulai tumbuh kuat.",
-        kekuatan: "Budaya kerja harmonis, empati tinggi, dan komunikasi dua arah yang lancar.",
-        kelemahal: "Seringkali sungkan menegur staf yang berkinerja buruk demi menjaga perasaan.",
-        komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.",
-        rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat produktivitas tim." 
-    },
-    3: { 
-        title: "Level 3: Production (Hasil)", 
-        desc: "Anda memimpin melalui hasil nyata. Reputasi didasarkan pada prestasi bersama tim.",
-        insight: "Fokus pada kemenangan bersama melenyapkan masalah kecil. Anda adalah eksekutor handal.",
-        kekuatan: "Kredibilitas tinggi, goal-oriented, dan mampu menciptakan momentum sukses.",
-        kelemahan: "Risiko burnout pada tim jika terus mengejar target tanpa memperhatikan kapasitas manusia.",
-        komunikasi: "To-the-point dan fokus pada solusi. Menginspirasi melalui teladan hasil kerja.",
-        rec: "Delegasikan tanggung jawab penting agar tim merasa memiliki proyek, bukan sekadar pembantu." 
-    },
-    4: { 
-        title: "Level 4: People Development", 
-        desc: "Fokus Anda adalah mencetak pemimpin baru. Anda dikenal sebagai mentor yang handal.",
-        insight: "Kesuksesan diukur dari seberapa hebat orang yang Anda didik. Anda adalah seorang multiplier.",
-        kekuatan: "Identifikasi potensi tersembunyi, pemberdayaan luar biasa, dan loyalitas jangka panjang.",
-        kelemahan: "Terkadang sulit melepaskan kader terbaik untuk naik ke posisi yang lebih tinggi di unit lain.",
-        komunikasi: "Coaching & Mentoring. Banyak bertanya untuk memicu pemikiran strategis staf.",
-        rec: "Berikan otonomi penuh pada kader. Biarkan mereka mengambil keputusan strategis secara mandiri." 
-    },
-    5: { 
-        title: "Level 5: Pinnacle (Puncak)", 
-        desc: "Memimpin melalui reputasi dan integritas yang teruji waktu. Anda adalah simbol organisasi.",
-        insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai yang Anda wakili.",
-        kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, dan mampu membangun legacy.",
-        kelemahan: "Jarak komunikasi dengan level terbawah bisa menjauh tanpa sistem aspirasi yang baik.",
-        komunikasi: "Inspiratif dan filosofis. Berfokus pada nilai inti dan warisan (legacy) organisasi.",
-        rec: "Fokus pada strategi tingkat tinggi dan kaderisasi level direksi. Gunakan pengaruh untuk skala luas." 
-    }
+    1: { title: "Level 1: Position (Jabatan)", desc: "Kepemimpinan didasarkan pada otoritas formal. Anggota tim mengikuti karena kewajiban kontrak kerja.", insight: "Level awal yang berisiko jika bertahan lama; tim cenderung bekerja dengan standar minimal.", kekuatan: "Struktur otoritas jelas, disiplin terhadap aturan dasar organisasi.", kelemahan: "Kurangnya loyalitas emosional; inovasi sulit muncul karena staf takut salah.", komunikasi: "Searah (Top-Down). Fokus pada instruksi dan kepatuhan prosedur.", rec: "Luangkan waktu mengenal staf secara personal. Berhenti mengandalkan jabatan." },
+    2: { title: "Level 2: Permission (Hubungan)", desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).", insight: "Lingkungan kerja menyenangkan dan kepercayaan mulai tumbuh kuat.", kekuatan: "Budaya harmonis, empati tinggi, komunikasi dua arah lancar.", kelemahan: "Seringkali sungkan menegur staf yang buruk demi menjaga perasaan.", komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.", rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat hasil." },
+    3: { title: "Level 3: Production (Hasil)", desc: "Anda memimpin melalui hasil nyata. Reputasi didasarkan pada prestasi bersama tim.", insight: "Fokus pada kemenangan melenyapkan masalah kecil. Anda adalah eksekutor handal.", kekuatan: "Kredibilitas tinggi, goal-oriented, mampu menciptakan momentum sukses.", kelemahan: "Risiko burnout jika terus mengejar target tanpa memperhatikan manusia.", komunikasi: "To-the-point dan fokus pada solusi. Menginspirasi melalui teladan hasil.", rec: "Delegasikan tanggung jawab penting agar tim merasa memiliki proyek." },
+    4: { title: "Level 4: People Development", desc: "Fokus Anda adalah mencetak pemimpin baru. Anda dikenal sebagai mentor handal.", insight: "Kesuksesan diukur dari seberapa hebat orang yang Anda didik. Anda multiplier.", kekuatan: "Identifikasi potensi, pemberdayaan luar biasa, loyalitas jangka panjang.", kelemahan: "Sulit melepaskan kader terbaik untuk naik ke posisi lebih tinggi di unit lain.", komunikasi: "Coaching & Mentoring. Banyak bertanya untuk memicu pemikiran strategis.", rec: "Berikan otonomi penuh pada kader. Biarkan mereka mengambil keputusan strategis." },
+    5: { title: "Level 5: Pinnacle (Puncak)", desc: "Memimpin melalui reputasi dan integritas teruji waktu. Anda adalah simbol organisasi.", insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai Anda.", kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, membangun legacy.", kelemahan: "Jarak komunikasi dengan frontliner bisa menjauh tanpa sistem aspirasi.", komunikasi: "Inspiratif dan filosofis. Fokus pada nilai inti dan warisan (legacy).", rec: "Fokus pada strategi tingkat tinggi dan kaderisasi direksi. Gunakan pengaruh skala luas." }
 };
 
 let userData = { name: "", phone: "" };
@@ -92,6 +52,10 @@ function renderQuestion() {
                     <div class="opt-circle">${v}</div>
                 </label>
             `).join('')}
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:#999; margin-top:-10px; padding:0 10px;">
+            <span>Sangat Tidak Setuju</span>
+            <span>Sangat Setuju</span>
         </div>`;
     updateNav();
 }
@@ -121,7 +85,6 @@ window.calculateResults = function() {
     let mainLvlNum = 1;
     for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
     const lvlName = questionsData[mainLvlNum-1].name;
-    const finalAvg = (sumTotal / 5).toFixed(1);
 
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(mainLvlNum, avgs);
@@ -130,7 +93,7 @@ window.calculateResults = function() {
         method: 'POST', 
         mode: 'no-cors', 
         cache: 'no-cache',
-        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: finalAvg }) 
+        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: (sumTotal/5).toFixed(1) }) 
     });
 };
 
@@ -182,7 +145,7 @@ function renderChart(avgs) {
             labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
             datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#007bff' }]
         },
-        options: { scales: { y: { min: 0, max: 5 } } }
+        options: { scales: { r: { min: 0, max: 5 } } }
     });
 }
 
@@ -190,50 +153,83 @@ function generatePDF(lvlNum, avgs) {
     const wrapper = document.getElementById('certificate-wrapper');
     const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+    
     wrapper.style.display = 'block';
     wrapper.innerHTML = `
-        <div style="padding:30px; border:15px solid #0056b3; font-family:sans-serif; min-height:1050px; color:#333; position:relative; background:#fff;">
-            <div style="text-align:right;"><img src="logo-araya.png" width="140"></div>
-            <h1 style="text-align:center; color:#0056b3; font-size:26px; margin-top:0;">LEADERSHIP ANALYSIS REPORT</h1>
-            <p style="text-align:center; font-size:16px;">Diberikan kepada: <br><b style="font-size:28px; color:#000;">${userData.name}</b></p>
-            <div style="background:#0056b3; color:#fff; padding:10px; text-align:center; font-weight:bold; margin:20px 0;">HASIL UTAMA: ${info.title.toUpperCase()}</div>
-            <div style="display:flex; gap:20px; margin-bottom:20px;">
-                <div style="flex:1; background:#f9f9f9; padding:15px; border-radius:8px; border-left:5px solid #0056b3;">
-                    <h4 style="margin-top:0; color:#0056b3;">Leadership Insight</h4>
-                    <p style="font-size:13px;">${info.desc}</p>
-                    <p style="font-size:13px; font-style:italic; border-top:1px solid #ddd; pt:10px;">${info.insight}</p>
-                </div>
-                <div style="flex:1; background:#fff8e1; padding:15px; border-radius:8px; border-left:5px solid #ffc107;">
-                    <h4 style="margin-top:0; color:#856404;">Komunikasi & Kolaborasi</h4>
-                    <p style="font-size:13px;">${info.komunikasi}</p>
+        <div style="width:1120px; height:790px; padding:40px; background:#fff; border:20px solid #0056b3; box-sizing:border-box; position:relative; font-family:'Arial', sans-serif; overflow:hidden;">
+            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-30deg); font-size:150px; color:rgba(0,86,179,0.03); font-weight:bold; z-index:0; white-space:nowrap;">ARAYA CONSULTING</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1;">
+                <img src="logo-araya.png" style="width:180px;">
+                <div style="text-align:right;">
+                    <h1 style="margin:0; color:#0056b3; font-size:35px;">CERTIFICATE OF LEADERSHIP ANALYSIS</h1>
+                    <p style="margin:0; color:#666;">ID: LEAD-${Math.floor(Date.now()/1000)}</p>
                 </div>
             </div>
-            <div style="display:flex; gap:20px;">
-                <div style="flex:1;">
-                    <h4 style="color:#0056b3; margin-bottom:5px;">Kekuatan & Kelemahan</h4>
-                    <p style="font-size:12px;"><b>(+):</b> ${info.kekuatan}</p>
-                    <p style="font-size:12px;"><b>(-):</b> ${info.kelemahan}</p>
+            <div style="text-align:center; margin-top:40px; position:relative; z-index:1;">
+                <p style="font-size:20px; margin:0;">Sertifikat ini diberikan kepada:</p>
+                <h2 style="font-size:45px; margin:10px 0; color:#000; border-bottom:2px solid #eee; display:inline-block; padding:0 50px;">${userData.name}</h2>
+                <p style="font-size:22px; color:#0056b3; font-weight:bold; margin-top:10px;">HASIL UTAMA: ${info.title.toUpperCase()}</p>
+            </div>
+            <div style="display:flex; gap:30px; margin-top:30px; position:relative; z-index:1;">
+                <div style="flex:1.2;">
+                    <div style="background:#f9f9f9; padding:20px; border-left:8px solid #0056b3; margin-bottom:20px;">
+                        <h4 style="margin:0 0 10px 0; color:#0056b3; font-size:18px;">Business & Leadership Insight</h4>
+                        <p style="font-size:14px; line-height:1.6; margin:0;"><b>Gaya Kepemimpinan:</b> ${info.desc}</p>
+                        <p style="font-size:14px; line-height:1.6; margin-top:10px;"><b>Gaya Kerja & Kolaborasi:</b> ${info.komunikasi}</p>
+                    </div>
+                    <div style="display:flex; gap:15px;">
+                        <div style="flex:1; background:#fff5f5; padding:15px; border-radius:10px;">
+                            <h4 style="margin:0 0 5px 0; color:#d9534f;">Kekuatan & Kelemahan</h4>
+                            <p style="font-size:12px; margin:0;"><b>(+):</b> ${info.kekuatan}</p>
+                            <p style="font-size:12px; margin-top:5px;"><b>(-):</b> ${info.kelemahan}</p>
+                        </div>
+                        <div style="flex:1; background:#fff9db; padding:15px; border-radius:10px;">
+                            <h4 style="margin:0 0 5px 0; color:#856404;">Rekomendasi Strategis</h4>
+                            <p style="font-size:12px; margin:0;">${info.rec}</p>
+                        </div>
+                    </div>
                 </div>
-                <div style="flex:1;">
-                    <h4 style="color:#d9534f; margin-bottom:5px;">Rekomendasi Strategis 90 Hari</h4>
-                    <p style="font-size:12px; border:1px dashed #d9534f; padding:10px;">${info.rec}</p>
+                <div style="flex:0.8; text-align:center; background:#fff; padding:10px; border:1px solid #eee; border-radius:15px;">
+                    <h4 style="margin:0 0 10px 0; color:#333;">Spektrum Kepemimpinan</h4>
+                    <canvas id="pdfRadarChart" width="300" height="300"></canvas>
                 </div>
             </div>
-            <table border="1" style="width:100%; border-collapse:collapse; margin-top:30px; font-size:13px;">
-                <tr style="background:#f2f2f2;"><th style="padding:8px;">Dimensi</th><th style="text-align:center;">Skor</th></tr>
-                ${questionsData.map(d => `<tr><td style="padding:6px;">${d.name}</td><td style="text-align:center;"><b>${avgs[d.group]}</b></td></tr>`).join('')}
-            </table>
-            <div style="margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end;">
-                <div style="font-size:13px;">
-                    <p>Tuban, ${dateStr}</p>
-                    <img src="ttd.png" width="120"><br>
-                    <b>Ali Mahfud</b><br>Founder Araya Consulting
+            <div style="margin-top:40px; display:flex; justify-content:space-between; align-items:flex-end; position:relative; z-index:1;">
+                <div style="color:#666; font-size:14px;">
+                    <p>Tanggal: ${dateStr}</p>
+                    <p><b>Araya Consulting - Your Growth Partner</b></p>
                 </div>
-                <div style="text-align:right; font-size:11px; color:#999;">ID: LEAD-${Math.floor(Date.now()/1000)}<br>Araya Consulting - Your Growth Partner</div>
+                <div style="text-align:center;">
+                    <img src="ttd.png" style="width:140px; margin-bottom:-10px;">
+                    <p style="margin:0; font-weight:bold; font-size:18px; border-top:1px solid #000; padding-top:5px;">Ali Mahfud</p>
+                    <p style="margin:0; font-size:14px; color:#666;">Founder Araya Consulting</p>
+                </div>
             </div>
         </div>`;
-    html2pdf().from(wrapper).set({
-        margin: 0, filename: `Laporan_Leadership_${userData.name}.pdf`,
-        html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    }).save().then(() => { wrapper.style.display = 'none'; });
+
+    const ctx = document.getElementById('pdfRadarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['L1: Position', 'L2: Permission', 'L3: Production', 'L4: People Dev', 'L5: Pinnacle'],
+            datasets: [{
+                label: 'Skor Kompetensi',
+                data: Object.values(avgs),
+                backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                borderColor: '#0056b3',
+                pointBackgroundColor: '#0056b3',
+                borderWidth: 2
+            }]
+        },
+        options: { scales: { r: { min: 0, max: 5, ticks: { display: false } } }, plugins: { legend: { display: false } } }
+    });
+
+    setTimeout(() => {
+        html2pdf().from(wrapper).set({
+            margin: 0,
+            filename: `Laporan_Leadership_Premium_${userData.name}.pdf`,
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'px', format: [1120, 790], orientation: 'landscape' }
+        }).save().then(() => { wrapper.style.display = 'none'; });
+    }, 1000);
 }
