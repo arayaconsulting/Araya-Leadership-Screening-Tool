@@ -11,11 +11,51 @@ const questionsData = [
 ];
 
 const reportDetails = {
-    1: { title: "Level 1: Position", desc: "Kepemimpinan Anda didasarkan pada jabatan formal. Tim bekerja karena keharusan.", rec: "Bangunlah hubungan personal dan empati untuk mendapatkan kepercayaan tim." },
-    2: { title: "Level 2: Permission", desc: "Anda memimpin melalui hubungan baik. Orang mengikuti karena mereka ingin bekerja dengan Anda.", rec: "Gunakan hubungan baik untuk mulai menetapkan standar hasil tim." },
-    3: { title: "Level 3: Production", desc: "Anda memimpin melalui hasil nyata. Reputasi Anda didasarkan pada prestasi tim.", rec: "Mulai fokus mementori orang lain agar mereka juga berprestasi." },
-    4: { title: "Level 4: People Development", desc: "Anda fokus mencetak pemimpin baru. Anda dikenal sebagai mentor yang handal.", rec: "Pastikan sistem kepemimpinan tetap berjalan mandiri meskipun tanpa kehadiran Anda." },
-    5: { title: "Level 5: Pinnacle", desc: "Anda memimpin melalui reputasi dan jati diri. Anda adalah panutan lintas generasi.", rec: "Ciptakan warisan budaya kepemimpinan jangka panjang di organisasi." }
+    1: { 
+        title: "Level 1: Position (Jabatan)", 
+        desc: "Kepemimpinan didasarkan pada otoritas formal. Anggota tim mengikuti karena kewajiban kontrak kerja.",
+        insight: "Level awal yang berisiko jika bertahan terlalu lama; tim cenderung hanya bekerja dengan standar minimal.",
+        kekuatan: "Struktur otoritas jelas dan disiplin terhadap aturan dasar organisasi.",
+        kelemahan: "Kurangnya loyalitas emosional; inovasi sulit muncul karena staf takut melakukan kesalahan.",
+        komunikasi: "Searah (Top-Down). Fokus pada instruksi dan kepatuhan prosedur.",
+        rec: "Luangkan waktu mengenal staf secara personal. Berhenti mengandalkan jabatan untuk menggerakkan orang." 
+    },
+    2: { 
+        title: "Level 2: Permission (Hubungan)", 
+        desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).",
+        insight: "Anda telah menciptakan lingkungan kerja yang menyenangkan dan kepercayaan mulai tumbuh kuat.",
+        kekuatan: "Budaya kerja harmonis, empati tinggi, dan komunikasi dua arah yang lancar.",
+        kelemahal: "Seringkali sungkan menegur staf yang berkinerja buruk demi menjaga perasaan.",
+        komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.",
+        rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat produktivitas tim." 
+    },
+    3: { 
+        title: "Level 3: Production (Hasil)", 
+        desc: "Anda memimpin melalui hasil nyata. Reputasi didasarkan pada prestasi bersama tim.",
+        insight: "Fokus pada kemenangan bersama melenyapkan masalah kecil. Anda adalah eksekutor handal.",
+        kekuatan: "Kredibilitas tinggi, goal-oriented, dan mampu menciptakan momentum sukses.",
+        kelemahan: "Risiko burnout pada tim jika terus mengejar target tanpa memperhatikan kapasitas manusia.",
+        komunikasi: "To-the-point dan fokus pada solusi. Menginspirasi melalui teladan hasil kerja.",
+        rec: "Delegasikan tanggung jawab penting agar tim merasa memiliki proyek, bukan sekadar pembantu." 
+    },
+    4: { 
+        title: "Level 4: People Development", 
+        desc: "Fokus Anda adalah mencetak pemimpin baru. Anda dikenal sebagai mentor yang handal.",
+        insight: "Kesuksesan diukur dari seberapa hebat orang yang Anda didik. Anda adalah seorang multiplier.",
+        kekuatan: "Identifikasi potensi tersembunyi, pemberdayaan luar biasa, dan loyalitas jangka panjang.",
+        kelemahan: "Terkadang sulit melepaskan kader terbaik untuk naik ke posisi yang lebih tinggi di unit lain.",
+        komunikasi: "Coaching & Mentoring. Banyak bertanya untuk memicu pemikiran strategis staf.",
+        rec: "Berikan otonomi penuh pada kader. Biarkan mereka mengambil keputusan strategis secara mandiri." 
+    },
+    5: { 
+        title: "Level 5: Pinnacle (Puncak)", 
+        desc: "Memimpin melalui reputasi dan integritas yang teruji waktu. Anda adalah simbol organisasi.",
+        insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai yang Anda wakili.",
+        kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, dan mampu membangun legacy.",
+        kelemahan: "Jarak komunikasi dengan level terbawah bisa menjauh tanpa sistem aspirasi yang baik.",
+        komunikasi: "Inspiratif dan filosofis. Berfokus pada nilai inti dan warisan (legacy) organisasi.",
+        rec: "Fokus pada strategi tingkat tinggi dan kaderisasi level direksi. Gunakan pengaruh untuk skala luas." 
+    }
 };
 
 let userData = { name: "", phone: "" };
@@ -73,23 +113,19 @@ document.getElementById('prev-btn').onclick = () => { currentQ--; renderQuestion
 window.calculateResults = function() {
     const avgs = {};
     let sumTotal = 0;
-
     questionsData.forEach(lvl => {
         const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
         avgs[lvl.group] = (sum / 5).toFixed(1);
         sumTotal += parseFloat(avgs[lvl.group]);
     });
-
     let mainLvlNum = 1;
     for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
     const lvlName = questionsData[mainLvlNum-1].name;
     const finalAvg = (sumTotal / 5).toFixed(1);
 
-    // 1. PINDAH HALAMAN LANGSUNG
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(mainLvlNum, avgs);
 
-    // 2. KIRIM DATA KE DATABASE
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
@@ -101,7 +137,6 @@ window.calculateResults = function() {
 function displayResults(lvlNum, avgs) {
     document.getElementById('results').classList.remove('hidden');
     const lvlName = questionsData[lvlNum-1].name;
-    
     document.getElementById('level-result-summary').innerHTML = `
         <div style="text-align:center; padding:20px; background:#f0f7ff; border-radius:12px; border:1px solid #007bff; margin-bottom:20px;">
             <h3 style="margin-top:0; color:#0056b3;">Hasil Analisis Kepemimpinan</h3>
@@ -110,14 +145,12 @@ function displayResults(lvlNum, avgs) {
                 Bapak/Ibu <b>${userData.name}</b>, skor Anda menunjukkan potensi besar. Namun, untuk menjadi pemimpin level strategis, Anda butuh peta jalan yang jelas.
             </p>
         </div>`;
-
     document.getElementById('persuasive-call-to-action').innerHTML = `
         <p style="font-size:14px; color:#444; margin-bottom:15px; text-align:center;">
             Dapatkan <b>Laporan PDF Lengkap</b> yang berisi: <br>
             ✅ Analisis mendalam karakter Anda <br>
             ✅ Action Plan 90 Hari untuk naik level
         </p>`;
-    
     renderChart(avgs);
     window.currentAvgs = avgs;
     window.currentLvlNum = lvlNum;
@@ -131,12 +164,13 @@ window.requestAccess = function() {
 window.unlockCertificate = function() {
     const code = document.getElementById('access-code').value.toUpperCase();
     if(code.includes("AY") || code.includes("ARAYA")) {
-        document.querySelector('.activation-box').classList.add('hidden');
-        document.getElementById('cert-area').classList.remove('hidden');
-        document.getElementById('download-btn').onclick = () => generatePDF(window.currentLvlNum, window.currentAvgs);
-    } else {
-        alert("Kode Aktivasi Salah.");
-    }
+        document.getElementById('persuasive-call-to-action').innerHTML = "<b>Kode Valid! Menyiapkan Laporan Eksklusif...</b>";
+        setTimeout(() => {
+            generatePDF(window.currentLvlNum, window.currentAvgs);
+            document.querySelector('.activation-box').classList.add('hidden');
+            document.getElementById('cert-area').classList.remove('hidden');
+        }, 1500);
+    } else { alert("Kode Aktivasi Salah."); }
 };
 
 function renderChart(avgs) {
@@ -155,31 +189,51 @@ function renderChart(avgs) {
 function generatePDF(lvlNum, avgs) {
     const wrapper = document.getElementById('certificate-wrapper');
     const info = reportDetails[lvlNum];
+    const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     wrapper.style.display = 'block';
     wrapper.innerHTML = `
-        <div style="padding:40px; border:10px solid #0056b3; font-family:sans-serif; min-height:1000px; color:#333;">
-            <center><img src="logo-araya.png" width="150"></center>
-            <h1 style="text-align:center; color:#0056b3;">LAPORAN ANALISIS KEPEMIMPINAN</h1>
-            <p style="text-align:center">Diberikan kepada: <b>${userData.name}</b></p>
-            <hr>
-            <h3>Hasil: ${info.title}</h3>
-            <p><b>Interpretasi:</b> ${info.desc}</p>
-            <p><b>Rekomendasi 90 Hari:</b> ${info.rec}</p>
-            <table border="1" style="width:100%; border-collapse:collapse; margin-top:20px;">
-                <tr style="background:#0056b3; color:white;"><th style="padding:10px;">Level</th><th>Skor</th></tr>
-                ${questionsData.map(d => `<tr><td style="padding:10px;">${d.name}</td><td align="center"><b>${avgs[d.group]}</b></td></tr>`).join('')}
+        <div style="padding:30px; border:15px solid #0056b3; font-family:sans-serif; min-height:1050px; color:#333; position:relative; background:#fff;">
+            <div style="text-align:right;"><img src="logo-araya.png" width="140"></div>
+            <h1 style="text-align:center; color:#0056b3; font-size:26px; margin-top:0;">LEADERSHIP ANALYSIS REPORT</h1>
+            <p style="text-align:center; font-size:16px;">Diberikan kepada: <br><b style="font-size:28px; color:#000;">${userData.name}</b></p>
+            <div style="background:#0056b3; color:#fff; padding:10px; text-align:center; font-weight:bold; margin:20px 0;">HASIL UTAMA: ${info.title.toUpperCase()}</div>
+            <div style="display:flex; gap:20px; margin-bottom:20px;">
+                <div style="flex:1; background:#f9f9f9; padding:15px; border-radius:8px; border-left:5px solid #0056b3;">
+                    <h4 style="margin-top:0; color:#0056b3;">Leadership Insight</h4>
+                    <p style="font-size:13px;">${info.desc}</p>
+                    <p style="font-size:13px; font-style:italic; border-top:1px solid #ddd; pt:10px;">${info.insight}</p>
+                </div>
+                <div style="flex:1; background:#fff8e1; padding:15px; border-radius:8px; border-left:5px solid #ffc107;">
+                    <h4 style="margin-top:0; color:#856404;">Komunikasi & Kolaborasi</h4>
+                    <p style="font-size:13px;">${info.komunikasi}</p>
+                </div>
+            </div>
+            <div style="display:flex; gap:20px;">
+                <div style="flex:1;">
+                    <h4 style="color:#0056b3; margin-bottom:5px;">Kekuatan & Kelemahan</h4>
+                    <p style="font-size:12px;"><b>(+):</b> ${info.kekuatan}</p>
+                    <p style="font-size:12px;"><b>(-):</b> ${info.kelemahan}</p>
+                </div>
+                <div style="flex:1;">
+                    <h4 style="color:#d9534f; margin-bottom:5px;">Rekomendasi Strategis 90 Hari</h4>
+                    <p style="font-size:12px; border:1px dashed #d9534f; padding:10px;">${info.rec}</p>
+                </div>
+            </div>
+            <table border="1" style="width:100%; border-collapse:collapse; margin-top:30px; font-size:13px;">
+                <tr style="background:#f2f2f2;"><th style="padding:8px;">Dimensi</th><th style="text-align:center;">Skor</th></tr>
+                ${questionsData.map(d => `<tr><td style="padding:6px;">${d.name}</td><td style="text-align:center;"><b>${avgs[d.group]}</b></td></tr>`).join('')}
             </table>
-            <div style="margin-top:50px;">
-                <p>Tuban, ${new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</p>
-                <img src="ttd.png" width="120"><br>
-                <b>Ali Mahfud</b><br>Founder Araya Consulting
+            <div style="margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div style="font-size:13px;">
+                    <p>Tuban, ${dateStr}</p>
+                    <img src="ttd.png" width="120"><br>
+                    <b>Ali Mahfud</b><br>Founder Araya Consulting
+                </div>
+                <div style="text-align:right; font-size:11px; color:#999;">ID: LEAD-${Math.floor(Date.now()/1000)}<br>Araya Consulting - Your Growth Partner</div>
             </div>
         </div>`;
-    
     html2pdf().from(wrapper).set({
-        margin: 0,
-        filename: `Laporan_Leadership_${userData.name}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        margin: 0, filename: `Laporan_Leadership_${userData.name}.pdf`,
+        html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     }).save().then(() => { wrapper.style.display = 'none'; });
 }
