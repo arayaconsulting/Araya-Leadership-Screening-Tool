@@ -156,7 +156,6 @@ function generatePDF(lvlNum, avgs) {
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     const reportID = `LEAD-${Math.floor(Date.now()/1000)}`;
 
-    // 1. BUAT KONTAINER TERISOLASI (Agar tidak berantakan karena tampilan layar HP)
     const element = document.createElement('div');
     element.style.width = '794px'; 
     element.style.padding = '0';
@@ -173,7 +172,7 @@ function generatePDF(lvlNum, avgs) {
             <div style="position:relative; z-index:1; flex-grow:1; display:flex; flex-direction:column;">
                 <div style="text-align:center; margin-bottom:20px;">
                     <img src="logo-araya.png" style="width:170px; margin: 0 auto 10px auto; display:block;">
-                    <h2 style="margin:0; font-size:22px; letter-spacing:1px; border-bottom:3px solid #333; display:inline-block; padding-bottom:5px;">LAPORAN ANALISIS KEPEMIMPINAN</h2>
+                    <h2 style="margin:0; font-size:22px; letter-spacing:1px; border-bottom:3px solid #333; display: inline-block; padding-bottom:5px;">LAPORAN ANALISIS KEPEMIMPINAN</h2>
                     <p style="margin:15px 0 5px 0; font-size:16px;">Diberikan kepada:</p>
                     <h1 style="margin:0; font-size:36px; font-weight:bold; color:#000; text-transform:uppercase;">${userData.name}</h1>
                     <div style="background:#1e293b; color:#fff; display:inline-block; padding:10px 40px; border-radius:8px; margin-top:20px; font-size:18px; font-weight:bold;">
@@ -226,11 +225,13 @@ function generatePDF(lvlNum, avgs) {
                         <p style="margin:2px 0;">Tanggal: <b>${dateStr}</b></p>
                         <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
                     </div>
-                    <div style="text-align:center;">
+                    <div style="text-align:center; min-width: 200px;">
                         <p style="margin:0; font-size:14px; color:#333;">Disahkan secara digital,</p>
-                        <img src="ttd.png" style="width:140px; margin: 5px auto; display:block;">
-                        <p style="margin:0; font-weight:bold; font-size:18px; border-top:2px solid #000; display:inline-block; padding: 0 15px;">ALI MAHFUD</p>
-                        <p style="margin:2px 0 0 0; font-size:12px; color:#666; font-weight:bold;">Founder Araya Consulting</p>
+                        <div style="height: 80px; display: flex; align-items: center; justify-content: center;">
+                            <img src="ttd.png" id="ttd-image" style="width:140px; filter: contrast(1.2);">
+                        </div>
+                        <p style="margin:0; font-weight:bold; font-size:18px; border-bottom:2px solid #000; display:inline-block; padding: 0 15px; line-height: 1.2;">ALI MAHFUD</p>
+                        <p style="margin:5px 0 0 0; font-size:12px; color:#666; font-weight:bold; text-transform: uppercase;">Founder Araya Consulting</p>
                     </div>
                 </div>
             </div>
@@ -250,5 +251,25 @@ function generatePDF(lvlNum, avgs) {
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    html2pdf().from(element).set(opt).save();
+    const images = element.getElementsByTagName('img');
+    let loadedCount = 0;
+    const totalImages = images.length;
+
+    const checkAndSave = () => {
+        loadedCount++;
+        if (loadedCount >= totalImages) {
+            setTimeout(() => {
+                html2pdf().from(element).set(opt).save();
+            }, 500);
+        }
+    };
+
+    for (let i = 0; i < totalImages; i++) {
+        if (images[i].complete) {
+            checkAndSave();
+        } else {
+            images[i].onload = checkAndSave;
+            images[i].onerror = checkAndSave;
+        }
+    }
 }
