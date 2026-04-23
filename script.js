@@ -15,7 +15,7 @@ const reportDetails = {
     2: { title: "Level 2: Permission (Hubungan)", desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).", insight: "Lingkungan kerja menyenangkan dan kepercayaan mulai tumbuh kuat.", kekuatan: "Budaya harmonis, empati tinggi, komunikasi dua arah lancar.", kelemahan: "Seringkali sungkan menegur staf yang buruk demi menjaga perasaan.", komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.", rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat hasil." },
     3: { title: "Level 3: Production (Hasil)", desc: "Anda memimpin melalui hasil nyata. Reputasi didasarkan pada prestasi bersama tim.", insight: "Fokus pada kemenangan melenyapkan masalah kecil. Anda adalah eksekutor handal.", kekuatan: "Kredibilitas tinggi, goal-oriented, mampu menciptakan momentum sukses.", kelemahan: "Risiko burnout jika terus mengejar target tanpa memperhatikan manusia.", komunikasi: "To-the-point dan fokus pada solusi. Menginspirasi melalui teladan hasil.", rec: "Delegasikan tanggung jawab penting agar tim merasa memiliki proyek." },
     4: { title: "Level 4: People Development", desc: "Fokus Anda adalah mencetak pemimpin baru. Anda dikenal sebagai mentor handal.", insight: "Kesuksesan diukur dari seberapa hebat orang yang Anda didik. Anda multiplier.", kekuatan: "Identifikasi potensi, pemberdayaan luar biasa, loyalitas jangka panjang.", kelemahan: "Sulit melepaskan kader terbaik untuk naik ke posisi lebih tinggi di unit lain.", komunikasi: "Coaching & Mentoring. Banyak bertanya untuk memicu pemikiran strategis.", rec: "Berikan otonomi penuh pada kader. Biarkan mereka mengambil keputusan strategis." },
-    5: { title: "Level 5: Pinnacle (Puncak)", desc: "Memimpin melalui reputasi dan integritas teruji waktu. Anda adalah simbol organisasi.", insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai Anda.", kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, membangun legacy.", kelemahan: "Jarak komunikasi dengan frontliner bisa menjauh tanpa sistem aspirasi.", komunikasi: "Inspiratif dan filosofis. Fokus pada nilai inti dan warisan (legacy).", rec: "Fokus pada strategi tingkat tinggi dan kaderisasi direksi. Gunakan pengaruh skala luas." }
+    5: { title: "Level 5: Pinnacle (Puncak)", desc: "Memimpin melalui reputasi dan integritas teruji waktu. Anda adalah simbol organisasi.", insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai Anda.", kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, membangun legacy.", kelemahan: "Harus menjaga jarak komunikasi agar sistem aspirasi tetap objektif.", komunikasi: "Inspiratif dan filosofis. Fokus pada nilai inti dan warisan (legacy).", rec: "Fokus pada strategi tingkat tinggi dan kaderisasi direksi. Gunakan pengaruh skala luas." }
 };
 
 let userData = { name: "", phone: "" };
@@ -150,15 +150,19 @@ function renderChart(avgs) {
     });
 }
 
-function generatePDF(lvlNum, avgs) {
+// FUNGSI GENERATE PDF - MENGIKUTI LOGIKA DISC (PASTI UNDUH)
+async function generatePDF(lvlNum, avgs) {
     const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     const reportID = `LEAD-${Math.floor(Date.now()/1000)}`;
     const wrapper = document.getElementById('certificate-wrapper');
 
-    // MENGUNCI ELEMEN FISIK AGAR MUNCUL SEJENAK DI LAYAR (Paling aman untuk HP)
+    // Tampilkan secara fisik sejenak agar bisa dipotret (seperti metode DISC)
     wrapper.style.display = 'block';
-    wrapper.style.opacity = '1';
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = '0';
+    wrapper.style.top = '0';
+    wrapper.style.zIndex = '9999';
 
     wrapper.innerHTML = `
         <div id="pdf-container" style="width:794px; height:1120px; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; color:#1a1a1a; padding:40px; display:flex; flex-direction:column; background: white; margin: 0 auto;">
@@ -210,37 +214,36 @@ function generatePDF(lvlNum, avgs) {
                         <div style="height: 80px; display: flex; align-items: center; justify-content: center;">
                             <img src="ttd.png" style="width:140px;">
                         </div>
-                        <p style="margin:0; font-weight:bold; font-size:18px; border-bottom:2px solid #000; display:inline-block; padding: 0 10px;">ALI MAHFUD</p>
-                        <p style="margin:5px 0 0 0; font-size:12px; color:#666; font-weight:bold;">FOUNDER ARAYA CONSULTING</p>
+                        <p style="margin:0; font-weight:bold; font-size:18px; border-bottom:2px solid #000; display:inline-block; padding: 0 10px; line-height: 1.2;">ALI MAHFUD</p>
+                        <p style="margin:5px 0 0 0; font-size:12px; color:#666; font-weight:bold; text-transform: uppercase;">Founder Araya Consulting</p>
                     </div>
                 </div>
             </div>
         </div>`;
 
-    const opt = {
-        margin: 0,
-        filename: `Laporan_Leadership_${userData.name}.pdf`,
-        image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    // Beri waktu browser memproses gambar sebelum dipotret (Logika DISC)
+    await new Promise(r => setTimeout(r, 1500));
 
-    // LOGIKA PENJAGA: Menunggu gambar dimuat agar tidak putih polos
-    const images = wrapper.getElementsByTagName('img');
-    let loaded = 0;
-    const finalize = () => {
-        loaded++;
-        if(loaded >= images.length) {
-            setTimeout(() => {
-                html2pdf().from(wrapper).set(opt).save().then(() => {
-                    wrapper.style.display = 'none'; // Sembunyikan kembali
-                });
-            }, 1000);
-        }
-    };
-
-    for(let img of images) {
-        if(img.complete) finalize();
-        else { img.onload = finalize; img.onerror = finalize; }
+    try {
+        const canvas = await html2canvas(document.getElementById('pdf-container'), { 
+            scale: 2, 
+            useCORS: true,
+            logging: false
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // 'p' for portrait
+        
+        // Ukuran A4 standar 210 x 297 mm
+        pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+        pdf.save(`Laporan_Leadership_${userData.name.replace(/\s+/g, '_')}.pdf`);
+        
+        // Sembunyikan kembali wrapper fisik
+        wrapper.style.display = 'none';
+        
+    } catch (err) {
+        alert("Gagal mengunduh laporan. Silakan coba kembali atau gunakan iPad.");
+        console.error(err);
+        wrapper.style.display = 'none';
     }
 }
