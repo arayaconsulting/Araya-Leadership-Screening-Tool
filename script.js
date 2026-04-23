@@ -24,6 +24,7 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
+// Inisialisasi Data
 allQuestionsFlat.length = 0;
 questionsData.forEach(lvl => {
     lvl.questions.forEach((txt, i) => {
@@ -81,18 +82,31 @@ window.calculateResults = function() {
         avgs[lvl.group] = (sum / 5).toFixed(1);
         sumTotal += parseFloat(avgs[lvl.group]);
     });
-    let mainLvlNum = 1;
-    for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
-    const lvlName = questionsData[mainLvlNum-1].name;
+
+    // LOGIKA SAINTIFIK MAXWELL: Verifikasi Berjenjang
+    let finalLevel = 1; 
+    const threshold = 4.0; // Minimal skor rata-rata untuk dianggap kokoh
+
+    for (let i = 1; i <= 5; i++) {
+        if (parseFloat(avgs[`L${i}`]) >= threshold) {
+            finalLevel = i;
+        } else {
+            // Jika di level ini tidak kokoh, maka level kepemimpinannya berhenti di level sebelumnya
+            break; 
+        }
+    }
+
+    const lvlName = questionsData[finalLevel-1].name;
+    const finalAvg = (sumTotal / 5).toFixed(1);
 
     document.getElementById('quiz-content').classList.add('hidden');
-    displayResults(mainLvlNum, avgs);
+    displayResults(finalLevel, avgs);
 
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
         cache: 'no-cache',
-        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: (sumTotal/5).toFixed(1) }) 
+        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: finalAvg }) 
     });
 };
 
@@ -154,10 +168,8 @@ function generatePDF(lvlNum, avgs) {
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
     wrapper.style.display = 'block';
-    // Menggunakan dimensi container yang lebih ramping dan terfokus untuk satu halaman
     wrapper.innerHTML = `
-        <div id="pdf-container" style="width:1050px; padding:30px; background:#fff; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:'Arial', sans-serif; color: #1a1a1a;">
-            
+        <div id="pdf-container" style="width:1000px; padding:35px; background:#fff; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:'Arial', sans-serif; color: #1a1a1a;">
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.04; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.1);">
                 ${Array(9).fill('<img src="logo-araya.png" style="width:160px; margin:40px;">').join('')}
             </div>
@@ -174,16 +186,13 @@ function generatePDF(lvlNum, avgs) {
             </div>
 
             <div style="display:flex; gap:40px; padding:0 20px; position:relative; z-index:1; margin-bottom: 20px;">
-                
                 <div style="flex:1;">
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Leadership Insight:</h4>
                     <p style="font-size:14px; line-height:1.6; margin:0 0 15px 0; text-align:justify; color: #333;">
                         ${info.desc} ${info.insight}
                     </p>
-
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Gaya Komunikasi:</h4>
                     <p style="font-size:14px; line-height:1.6; margin-bottom:15px; color: #333;">${info.komunikasi}</p>
-
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Dinamika Skor:</h4>
                     <table style="width:100%; font-size:13px; margin-top:5px; border-collapse: collapse;">
                         <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:5px 0;">Position (Level 1)</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
@@ -193,16 +202,12 @@ function generatePDF(lvlNum, avgs) {
                         <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:5px 0;">Pinnacle (Level 5)</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
                     </table>
                 </div>
-
                 <div style="width:3px; background: #eee; align-self: stretch;"></div>
-
                 <div style="flex:1;">
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#28a745; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Kekuatan Utama (+):</h4>
                     <p style="font-size:14px; line-height:1.6; margin-bottom:15px; color: #333;">${info.kekuatan}</p>
-
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#dc3545; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Area Pengembangan (-):</h4>
                     <p style="font-size:14px; line-height:1.6; margin-bottom:15px; color: #333;">${info.kelemahan}</p>
-
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#d9534f; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Strategi 90 Hari:</h4>
                     <div style="background:#fffcf5; padding:15px; border-radius:10px; border:1px solid #ffeeba; margin-top:5px;">
                         <p style="font-size:14px; line-height:1.6; margin:0; font-style:italic; color: #856404;">
@@ -230,7 +235,7 @@ function generatePDF(lvlNum, avgs) {
     setTimeout(() => {
         const element = document.getElementById('pdf-container');
         html2pdf().from(element).set({
-            margin: [0, 0, 0, 0], // Tanpa margin html2pdf agar tidak terbagi halaman
+            margin: [5, 5, 5, 5],
             filename: `Laporan_Leadership_${userData.name}.pdf`,
             html2canvas: { scale: 2, useCORS: true, letterRendering: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
