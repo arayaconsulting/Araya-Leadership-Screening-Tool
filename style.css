@@ -1,30 +1,34 @@
-/* Mobile-First & Tablet Friendly */
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f9; margin: 0; padding: 15px; display: flex; justify-content: center; }
-.container { width: 100%; max-width: 500px; background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); text-align: center; }
+:root {
+    --primary: #0056b3;
+    --secondary: #ffc107;
+    --bg: #f4f7f6;
+    --text: #333;
+}
 
-.logo-placeholder img { width: 100%; max-width: 220px; height: auto; margin-bottom: 20px; }
-.hidden { display: none !important; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
+.container { max-width: 500px; margin: 20px auto; background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.hidden { display: none; }
+.logo-placeholder { text-align: center; margin-bottom: 20px; }
+.logo-placeholder img { width: 150px; }
 
-h2, h3 { color: #0056b3; margin-bottom: 15px; }
-input { width: 100%; padding: 15px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; }
-input:focus { border-color: #007bff; }
+h2 { color: var(--primary); text-align: center; margin-top: 0; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
 
-button { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 16px; }
-#primary-btn, #next-btn, #submit-btn, .unlock-btn, .download-btn { background: #28a745; color: white; }
-#prev-btn, .reload-btn { background: #6c757d; color: white; }
-.wa-btn { background: #25d366; color: white; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+#primary-btn, #next-btn, .unlock-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+#primary-btn:hover { background: #004494; }
 
-/* Kuis Options (DISC Style) */
-.options-grid { display: flex; justify-content: space-between; margin: 25px 0; }
-.opt-label { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 18%; }
-.opt-circle { width: 45px; height: 45px; border: 2px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.2s; }
-input[type="radio"] { display: none; }
-input[type="radio"]:checked + .opt-circle { background: #007bff; color: white; border-color: #007bff; transform: scale(1.15); }
+.wa-btn { width: 100%; padding: 15px; background: #25d366; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
 
-/* Paywall Box */
-.activation-box { background: #fff8e1; padding: 20px; border-radius: 15px; margin-top: 25px; border: 1px solid #ffe082; }
-.input-group { border-top: 1px solid #ffe082; margin-top: 15px; padding-top: 10px; }
+.options-grid { display: flex; justify-content: space-between; margin: 20px 0; }
+.opt-label { cursor: pointer; text-align: center; flex: 1; }
+.opt-label input { display: none; }
+.opt-circle { width: 40px; height: 40px; line-height: 40px; border-radius: 50%; border: 2px solid #ddd; margin: 0 auto; transition: 0.3s; }
+.opt-label input:checked + .opt-circle { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.1); }
 
-/* Sertifikat Layout (Portrait A4) */
-.cert-canvas { width: 210mm; height: 297mm; padding: 20mm; background: white; border: 15px solid #0056b3; box-sizing: border-box; display: flex; flex-direction: column; position: relative; color: #333; text-align: left; }
+.nav-btns { display: flex; gap: 10px; margin-top: 20px; }
+#prev-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #eee; cursor: pointer; }
+
+.activation-box { margin-top: 25px; padding: 20px; border: 2px dashed #007bff; border-radius: 12px; background: #f0f7ff; }
+.reload-btn { width: 100%; margin-top: 15px; padding: 10px; background: #6c757d; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+
+.chart-container { margin: 20px 0; height: 250px; }
