@@ -5,7 +5,7 @@ const WHATSAPP_NUMBER = "6285232526003";
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", questions: ["1. Saya mengandalkan otoritas jabatan saya untuk memastikan anggota tim mengikuti arahan.","2. Anggota tim saya cenderung menunggu perintah sebelum memulai pekerjaan baru.","3. Saya percaya hak istimewa kepemimpinan datang secara otomatis dengan posisi.","4. Anggota tim hanya bekerja sesuai deskripsi pekerjaan minimal mereka.","5. Orang-orang mengikuti saya karena mereka harus, bukan karena mereka ingin."]},
     { level: 2, name: "Permission (Izin)", group: "L2", questions: ["6. Saya meluangkan waktu untuk mengenal anggota tim saya secara pribadi, di luar pekerjaan.","7. Saya membangun kepercayaan dengan tim melalui komunikasi yang terbuka dan jujur.","8. Saya secara aktif mendengarkan dan menghargai masukan tim, meskipun berbeda dengan pandangan saya.","9. Saya berfokus untuk menciptakan lingkungan kerja yang positif dan kolaboratif.","10. Anggota tim saya bersedia memberikan usaha ekstra karena hubungan baik kami."]},
-    { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsisten memimpin tim saya untuk mencapai target dan hasil nyata.","12. Saya bertanggung jawab penuh atas hasil kerja tim, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh keberhasilan yang diraih.","14. Saya menetapkan standar kinerja yang tinggi dengan memberikan teladan hasil kerja nyata.","15. Kredibilitas saya di organisasi didasarkan pada prestasi yang saya capai."]},
+    { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsisten memimpin tim saya untuk mencapai target dan hasil nyata.","12. Saya bertanggung jawab penuh atas hasil kerja tim, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh keberhasilan yang diraih.","14. Saya menetapkan standar kinerja yang tinggi dengan memberikan teladan hasil kerja nyata.","15. Kredibilitas saya di organisasi didasarkan pada pencapaian yang saya capai."]},
     { level: 4, name: "People Development", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar berkembang.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit baru.","18. Saya berinvestasi dalam pengembangan orang meskipun mereka mungkin akan pindah ke posisi lain.","19. Saya mendelegasikan tanggung jawab signifikan agar anggota tim tumbuh dalam kapasitas pemimpin.","20. Saya aktif mencari dan merekrut individu yang memiliki potensi besar untuk masa depan."]},
     { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemimpin di luar tim sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat organisasi.","23. Keputusan dan tindakan saya sesuai prinsip yang diyakini oleh organisasi.","24. Saya telah menciptakan budaya kepemimpinan yang tetap efektif meskipun saya tidak hadir.","25. Saya dikenal luas sebagai panutan yang inspiratif dengan integritas tinggi."]}
 ];
@@ -155,112 +155,127 @@ function generatePDF(lvlNum, avgs) {
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
     wrapper.style.display = 'block';
+    // Gunakan Background Image Pattern untuk Watermark agar stabil
     wrapper.innerHTML = `
-        <div id="pdf-container" style="width:1120px; height:790px; padding:30px; background:#fff; border:20px solid #0056b3; box-sizing:border-box; position:relative; font-family:'Arial', sans-serif; overflow:hidden; color: #1a1a1a;">
+        <div id="pdf-container" style="width:1100px; height:780px; padding:30px; background-color:#fff; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:'Arial', sans-serif; overflow:hidden; color: #1a1a1a; background-image: url('logo-araya.png'); background-repeat: repeat; background-size: 150px; background-position: center; background-attachment: local; opacity: 1;">
             
-            <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.04; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.4);">
-                ${Array(15).fill('<img src="logo-araya.png" style="width:150px; margin:40px;">').join('')}
-            </div>
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.95); z-index:0;"></div>
 
             <div style="text-align:center; position:relative; z-index:1; margin-bottom: 20px;">
-                <img src="logo-araya.png" style="width:170px; margin-bottom: 10px;">
+                <img src="logo-araya.png" style="width:160px; margin-bottom: 10px;">
                 <h2 style="margin:0; font-size:26px; letter-spacing:2px; border-bottom: 3px solid #333; display: inline-block; padding-bottom: 5px;">SERTIFIKAT ANALISIS LEADERSHIP</h2>
                 <p style="margin:15px 0 5px 0; font-size:18px;">Diberikan kepada:</p>
-                <h1 style="margin:0; font-size:42px; font-weight:bold; color:#000; text-transform: uppercase;">${userData.name}</h1>
+                <h1 style="margin:0; font-size:40px; font-weight:bold; color:#000; text-transform: uppercase;">${userData.name}</h1>
                 
                 <div style="background:#1e293b; color:#fff; display:inline-block; padding:10px 50px; border-radius:8px; margin-top:20px; font-size:22px; font-weight:bold; letter-spacing:1px;">
                     ${info.title.toUpperCase()}
                 </div>
             </div>
 
-            <div style="display:flex; gap:40px; padding:0 30px; position:relative; z-index:1; margin-top: 20px;">
+            <div style="display:flex; gap:40px; padding:0 30px; position:relative; z-index:1; margin-top: 10px;">
                 
-                <div style="width: 450px;">
+                <div style="width: 440px;">
                     <h4 style="margin:0 0 8px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #ddd;">Radar Kompetensi:</h4>
-                    <div style="background:#fff; padding:15px; border:1px solid #eee; border-radius:15px; text-align:center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-                        <canvas id="pdfRadarChart" width="380" height="380"></canvas>
+                    <div style="background:#fff; padding:10px; border:1px solid #eee; border-radius:15px; text-align:center; margin-bottom: 20px;">
+                        <canvas id="pdfRadarChart" width="350" height="350"></canvas>
                     </div>
 
                     <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #ddd;">Intisari Karakter:</h4>
-                    <p style="font-size:14px; line-height:1.6; margin:0; text-align:justify; color: #444;">
+                    <p style="font-size:13px; line-height:1.5; margin:0; text-align:justify; color: #333;">
                         ${info.desc} ${info.insight}
                     </p>
                 </div>
 
-                <div style="width:2px; background: linear-gradient(to bottom, transparent, #ddd, transparent); height:480px;"></div>
+                <div style="width:2px; background: #ddd; height:460px;"></div>
 
                 <div style="flex:1;">
                     <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #ddd;">Gaya Komunikasi:</h4>
-                    <p style="font-size:14px; line-height:1.6; margin-bottom:15px; color: #444;">${info.komunikasi}</p>
+                    <p style="font-size:13px; line-height:1.5; margin-bottom:12px; color: #333;">${info.komunikasi}</p>
 
                     <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #ddd;">Kekuatan Utama:</h4>
-                    <p style="font-size:14px; line-height:1.6; margin-bottom:15px; color: #444;">${info.kekuatan}</p>
+                    <p style="font-size:13px; line-height:1.5; margin-bottom:12px; color: #333;">${info.kekuatan}</p>
 
                     <h4 style="margin:0 0 5px 0; font-size:16px; color:#d9534f; text-transform:uppercase; border-bottom:1px solid #ddd;">Rekomendasi Strategis 90 Hari:</h4>
-                    <div style="background:#fff9f9; padding:15px; border-radius:10px; border:1px dashed #d9534f; margin-bottom: 20px;">
-                        <p style="font-size:14px; line-height:1.6; margin:0; font-style:italic; color: #c9302c;">
+                    <div style="background:#fff9f9; padding:12px; border-radius:10px; border:1px dashed #d9534f; margin-bottom: 15px;">
+                        <p style="font-size:13px; line-height:1.5; margin:0; font-style:italic; color: #c9302c;">
                             ${info.rec}
                         </p>
                     </div>
 
                     <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #ddd;">Dinamika Kepemimpinan:</h4>
-                    <table style="width:100%; font-size:13px; margin-top:10px; border-collapse: collapse;">
-                        <tr><td style="padding:4px 0;">Position (L1)</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
-                        <tr><td style="padding:4px 0;">Permission (L2)</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
-                        <tr><td style="padding:4px 0;">Production (L3)</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
-                        <tr><td style="padding:4px 0;">People Dev (L4)</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
-                        <tr><td style="padding:4px 0;">Pinnacle (L5)</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
+                    <table style="width:100%; font-size:12px; margin-top:8px; border-collapse: collapse;">
+                        <tr><td style="padding:3px 0; border-bottom:1px solid #f0f0f0;">Position (L1)</td><td style="text-align:right; border-bottom:1px solid #f0f0f0;"><b>${avgs.L1}</b></td></tr>
+                        <tr><td style="padding:3px 0; border-bottom:1px solid #f0f0f0;">Permission (L2)</td><td style="text-align:right; border-bottom:1px solid #f0f0f0;"><b>${avgs.L2}</b></td></tr>
+                        <tr><td style="padding:3px 0; border-bottom:1px solid #f0f0f0;">Production (L3)</td><td style="text-align:right; border-bottom:1px solid #f0f0f0;"><b>${avgs.L3}</b></td></tr>
+                        <tr><td style="padding:3px 0; border-bottom:1px solid #f0f0f0;">People Dev (L4)</td><td style="text-align:right; border-bottom:1px solid #f0f0f0;"><b>${avgs.L4}</b></td></tr>
+                        <tr><td style="padding:3px 0; border-bottom:1px solid #f0f0f0;">Pinnacle (L5)</td><td style="text-align:right; border-bottom:1px solid #f0f0f0;"><b>${avgs.L5}</b></td></tr>
                     </table>
                 </div>
             </div>
 
-            <div style="position:absolute; bottom:40px; width:100%; left:0; padding:0 60px; box-sizing:border-box; display:flex; justify-content:space-between; align-items:flex-end; z-index:1;">
-                <div style="font-size:14px; color:#666;">
+            <div style="position:absolute; bottom:30px; width:100%; left:0; padding:0 60px; box-sizing:border-box; display:flex; justify-content:space-between; align-items:flex-end; z-index:1;">
+                <div style="font-size:13px; color:#666;">
                     <p style="margin:0;">ID Mindprint: <b>LEAD-${Math.floor(Date.now()/1000)}</b></p>
-                    <p style="margin:3px 0;">Tanggal Analisis: <b>${dateStr}</b></p>
+                    <p style="margin:2px 0;">Tanggal Analisis: <b>${dateStr}</b></p>
                     <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
                 </div>
                 <div style="text-align:center;">
-                    <p style="margin:0; font-size:15px; color:#333;">Disahkan secara digital oleh,</p>
-                    <img src="ttd.png" style="width:150px; margin: 5px 0;">
-                    <p style="margin:0; font-weight:bold; font-size:20px; border-bottom:2px solid #000; display:inline-block; padding: 0 10px;">ALI MAHFUD</p>
-                    <p style="margin:5px 0 0 0; font-size:14px; color:#666; font-weight:bold;">Founder Araya Consulting</p>
+                    <p style="margin:0; font-size:14px; color:#333;">Disahkan secara digital oleh,</p>
+                    <img src="ttd.png" style="width:140px; margin: 3px 0;">
+                    <p style="margin:0; font-weight:bold; font-size:18px; border-bottom:2px solid #000; display:inline-block; padding: 0 5px;">ALI MAHFUD</p>
+                    <p style="margin:3px 0 0 0; font-size:13px; color:#666; font-weight:bold;">Founder Araya Consulting</p>
                 </div>
             </div>
         </div>`;
 
-    // RENDER RADAR CHART PREMIUM
-    const ctx = document.getElementById('pdfRadarChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['Position', 'Permission', 'Production', 'People Dev', 'Pinnacle'],
-            datasets: [{
-                data: Object.values(avgs),
-                backgroundColor: 'rgba(0, 86, 179, 0.2)',
-                borderColor: '#0056b3',
-                pointBackgroundColor: '#0056b3',
-                pointRadius: 5,
-                borderWidth: 3
-            }]
-        },
-        options: { 
-            responsive: false,
-            scales: { r: { min: 0, max: 5, ticks: { display: false }, grid: { color: '#eee' }, angleLines: { color: '#eee' }, pointLabels: { font: { size: 12, weight: 'bold' } } } },
-            plugins: { legend: { display: false } }
-        }
-    });
+    // Pastikan Chart.js dimuat sebelum rendering radar
+    if (typeof Chart !== 'undefined') {
+        const ctx = document.getElementById('pdfRadarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Position', 'Permission', 'Production', 'People Dev', 'Pinnacle'],
+                datasets: [{
+                    data: Object.values(avgs),
+                    backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                    borderColor: '#0056b3',
+                    pointBackgroundColor: '#0056b3',
+                    pointRadius: 4,
+                    borderWidth: 2
+                }]
+            },
+            options: { 
+                responsive: false,
+                scales: { r: { min: 0, max: 5, ticks: { display: false }, grid: { color: '#eee' }, angleLines: { color: '#eee' }, pointLabels: { font: { size: 10, weight: 'bold' } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
 
-    // PROSES GENERATE PDF DENGAN SCALE TINGGI
+    // Eksekusi PDF setelah delay agar render chart selesai sempurna
     setTimeout(() => {
         const element = document.getElementById('pdf-container');
-        html2pdf().from(element).set({
+        const opt = {
             margin: 0,
-            filename: `Laporan_Leadership_${userData.name}.pdf`,
-            html2canvas: { scale: 2.0, useCORS: true, logging: false, letterRendering: true },
-            jsPDF: { unit: 'px', format: [1120, 790], orientation: 'landscape' }
-        }).save().then(() => { 
-            wrapper.style.display = 'none'; 
-        });
-    }, 1500);
+            filename: 'Laporan_Leadership_Premium_' + userData.name + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                logging: false, 
+                letterRendering: true,
+                allowTaint: false
+            },
+            jsPDF: { unit: 'px', format: [1100, 780], orientation: 'landscape' }
+        };
+
+        if (typeof html2pdf !== 'undefined') {
+            html2pdf().from(element).set(opt).save().then(() => { 
+                wrapper.style.display = 'none'; 
+            }).catch(err => {
+                console.error("PDF Generate Error:", err);
+                alert("Gagal mengunduh PDF. Pastikan koneksi stabil.");
+            });
+        }
+    }, 1800);
 }
