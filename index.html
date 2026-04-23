@@ -15,8 +15,8 @@
         </div>
 
         <div id="registration-screen">
-            <h2>Leadership Assessment</h2>
-            <p>Isi data untuk memulai pemetaan:</p>
+            <h2>Leadership Strategic Assessment</h2>
+            <p>Silakan isi data diri untuk memulai:</p>
             <input type="text" id="user-name" placeholder="Nama Lengkap">
             <input type="tel" id="user-phone" placeholder="Nomor WhatsApp">
             <button type="button" onclick="startTest()" id="primary-btn">Mulai Tes Sekarang</button>
@@ -27,7 +27,7 @@
             <div id="questions-container"></div>
             <div class="nav-btns">
                 <button type="button" id="prev-btn" class="hidden">Kembali</button>
-                <button type="button" id="next-btn" disabled>Selanjutnya</button>
+                <button type="button" id="next-btn">Selanjutnya</button>
                 <button type="button" id="submit-btn" class="hidden" onclick="calculateResults()">Lihat Hasil Penilaian</button>
             </div>
         </div>
@@ -39,17 +39,17 @@
             </div>
             
             <div class="activation-box">
-                <p>Ingin mendapatkan laporan lengkap & sertifikat premium?</p>
-                <button onclick="requestAccess()" class="wa-btn">Beli Kode via WhatsApp</button>
+                <div id="persuasive-text"></div>
+                <button type="button" onclick="requestAccess()" class="wa-btn">Beli Kode via WhatsApp</button>
                 <div class="input-group">
                     <input type="text" id="access-code" placeholder="Masukkan Kode Aktivasi">
-                    <button onclick="unlockCertificate()" class="unlock-btn">Buka Akses Sertifikat</button>
+                    <button type="button" onclick="unlockCertificate()" class="unlock-btn">Buka Akses Sertifikat</button>
                 </div>
             </div>
 
             <div id="cert-area" class="hidden">
                 <button id="download-btn" class="download-btn">Download Sertifikat (PDF)</button>
-                <button onclick="location.reload()" class="reload-btn">Tes Ulang</button>
+                <button type="button" onclick="location.reload()" class="reload-btn">Tes Ulang</button>
             </div>
         </div>
     </div>
