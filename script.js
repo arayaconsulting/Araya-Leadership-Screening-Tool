@@ -68,15 +68,44 @@ window.saveAnswer = function(id, val) {
 
 function updateNav() {
     const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
-    document.getElementById('next-btn').disabled = !answered;
-    document.getElementById('prev-btn').classList.toggle('hidden', currentQ === 0);
-    const last = currentQ === 24;
-    document.getElementById('next-btn').classList.toggle('hidden', last);
-    document.getElementById('submit-btn').classList.toggle('hidden', !last);
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    nextBtn.disabled = !answered;
+    
+    // Logika tombol Kembali
+    if (currentQ === 0) {
+        prevBtn.classList.add('hidden');
+    } else {
+        prevBtn.classList.remove('hidden');
+    }
+
+    // Logika tombol Selanjutnya vs Lihat Hasil
+    if (currentQ === allQuestionsFlat.length - 1) {
+        nextBtn.classList.add('hidden');
+        submitBtn.classList.remove('hidden');
+        submitBtn.disabled = !answered;
+    } else {
+        nextBtn.classList.remove('hidden');
+        submitBtn.classList.add('hidden');
+    }
 }
 
-document.getElementById('next-btn').onclick = () => { currentQ++; renderQuestion(); };
-document.getElementById('prev-btn').onclick = () => { currentQ--; renderQuestion(); };
+// Handler Klik Navigasi
+document.getElementById('next-btn').onclick = () => { 
+    if (currentQ < allQuestionsFlat.length - 1) {
+        currentQ++; 
+        renderQuestion(); 
+    }
+};
+
+document.getElementById('prev-btn').onclick = () => { 
+    if (currentQ > 0) {
+        currentQ--; 
+        renderQuestion(); 
+    }
+};
 
 window.calculateResults = function() {
     const avgs = {};
@@ -98,10 +127,15 @@ window.calculateResults = function() {
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
-        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: finalAvg }) 
+        body: JSON.stringify({ 
+            name: userData.name, 
+            phone: userData.phone, 
+            levelName: lvlName, 
+            avgScore: finalAvg 
+        }) 
     });
 
-    // Pindah ke halaman Hasil & Aktivasi
+    // Pindah ke halaman Hasil
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(mainLvlNum, avgs);
 }
@@ -133,6 +167,7 @@ function displayResults(lvlNum, avgs) {
 
     window.unlockCertificate = function() {
         const codeInput = document.getElementById('access-code').value;
+        // Kode akan terbuka jika mengandung teks 'ARAYA' (sesuai database Bapak)
         if(codeInput.toUpperCase().includes("ARAYA")) {
             document.querySelector('.activation-box').classList.add('hidden');
             document.getElementById('cert-area').classList.remove('hidden');
