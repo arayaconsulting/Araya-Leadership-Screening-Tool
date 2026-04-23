@@ -154,20 +154,19 @@ function generatePDF(lvlNum, avgs) {
     const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     const reportID = `LEAD-${Math.floor(Date.now()/1000)}`;
+    const wrapper = document.getElementById('certificate-wrapper');
 
-    const element = document.createElement('div');
-    element.id = 'temp-pdf-element';
-    element.style.position = 'fixed';
-    element.style.left = '-9999px'; 
-    element.style.top = '0';
-    element.style.width = '794px'; 
-    element.style.backgroundColor = '#fff';
+    // MENGUNCI ELEMEN FISIK AGAR MUNCUL SEJENAK DI LAYAR (Paling aman untuk HP)
+    wrapper.style.display = 'block';
+    wrapper.style.opacity = '1';
 
-    element.innerHTML = `
-        <div style="width:794px; height:1120px; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; color:#1a1a1a; padding:40px; display:flex; flex-direction:column; background: white;">
+    wrapper.innerHTML = `
+        <div id="pdf-container" style="width:794px; height:1120px; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; color:#1a1a1a; padding:40px; display:flex; flex-direction:column; background: white; margin: 0 auto;">
+            
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.02; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.1);">
                 ${Array(12).fill('<img src="logo-araya.png" style="width:140px; margin:40px;">').join('')}
             </div>
+
             <div style="position:relative; z-index:1; flex-grow:1; display:flex; flex-direction:column;">
                 <div style="text-align:center; margin-bottom:20px;">
                     <img src="logo-araya.png" style="width:170px; margin: 0 auto 10px auto; display:block;">
@@ -178,13 +177,17 @@ function generatePDF(lvlNum, avgs) {
                         HASIL UTAMA: ${info.title.toUpperCase()}
                     </div>
                 </div>
+
                 <div style="margin-bottom:15px;"><h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #eee;">Leadership Insight:</h4><p style="font-size:14px; line-height:1.6; margin:0; text-align:justify;">${info.desc} ${info.insight}</p></div>
                 <div style="margin-bottom:15px;"><h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #eee;">Gaya Komunikasi:</h4><p style="font-size:14px; line-height:1.6; margin:0;">${info.komunikasi}</p></div>
+                
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:15px;">
                     <div><h4 style="margin:0 0 5px 0; font-size:16px; color:#28a745; text-transform:uppercase; border-bottom:1px solid #eee;">Kekuatan Utama (+):</h4><p style="font-size:13px; line-height:1.5;">${info.kekuatan}</p></div>
                     <div><h4 style="margin:0 0 5px 0; font-size:16px; color:#dc3545; text-transform:uppercase; border-bottom:1px solid #eee;">Area Pengembangan (-):</h4><p style="font-size:13px; line-height:1.5;">${info.kelemahan}</p></div>
                 </div>
+
                 <div style="margin-bottom:20px;"><h4 style="margin:0 0 5px 0; font-size:16px; color:#d9534f; text-transform:uppercase; border-bottom:1px solid #eee;">Strategi Pengembangan 90 Hari:</h4><div style="background:#fffcf5; padding:15px; border-radius:10px; border:1px solid #ffeeba;"><p style="font-size:14px; line-height:1.6; margin:0; font-style:italic; color:#856404;">${info.rec}</p></div></div>
+
                 <div style="flex-grow:1;">
                     <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #eee;">Dinamika Skor Kepemimpinan:</h4>
                     <table style="width:100%; font-size:14px; margin-top:10px; border-collapse:collapse;">
@@ -195,45 +198,49 @@ function generatePDF(lvlNum, avgs) {
                         <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:6px 0;">Level 5: Pinnacle</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
                     </table>
                 </div>
+
                 <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; padding-top:20px;">
-                    <div style="font-size:12px; color:#666;"><p style="margin:0;">ID Laporan: <b>${reportID}</b></p><p style="margin:2px 0;">Tanggal: <b>${dateStr}</b></p><p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p></div>
+                    <div style="font-size:12px; color:#666;">
+                        <p style="margin:0;">ID Laporan: <b>${reportID}</b></p>
+                        <p style="margin:2px 0;">Tanggal: <b>${dateStr}</b></p>
+                        <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
+                    </div>
                     <div style="text-align:center; min-width: 200px;">
                         <p style="margin:0; font-size:14px; color:#333;">Disahkan secara digital,</p>
-                        <div style="height: 80px; display: flex; align-items: center; justify-content: center;"><img src="ttd.png" style="width:140px;"></div>
-                        <p style="margin:0; font-weight:bold; font-size:18px; border-bottom:2px solid #000; display:inline-block; padding: 0 15px; line-height: 1.2;">ALI MAHFUD</p>
-                        <p style="margin:5px 0 0 0; font-size:12px; color:#666; font-weight:bold; text-transform: uppercase;">Founder Araya Consulting</p>
+                        <div style="height: 80px; display: flex; align-items: center; justify-content: center;">
+                            <img src="ttd.png" style="width:140px;">
+                        </div>
+                        <p style="margin:0; font-weight:bold; font-size:18px; border-bottom:2px solid #000; display:inline-block; padding: 0 10px;">ALI MAHFUD</p>
+                        <p style="margin:5px 0 0 0; font-size:12px; color:#666; font-weight:bold;">FOUNDER ARAYA CONSULTING</p>
                     </div>
                 </div>
             </div>
         </div>`;
 
-    document.body.appendChild(element);
-
     const opt = {
         margin: 0,
         filename: `Laporan_Leadership_${userData.name}.pdf`,
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0, scrollX: 0 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    const images = element.getElementsByTagName('img');
-    let loadedCount = 0;
-    const totalImages = images.length;
-
-    const finalizeAndSave = () => {
-        loadedCount++;
-        if (loadedCount >= totalImages) {
+    // LOGIKA PENJAGA: Menunggu gambar dimuat agar tidak putih polos
+    const images = wrapper.getElementsByTagName('img');
+    let loaded = 0;
+    const finalize = () => {
+        loaded++;
+        if(loaded >= images.length) {
             setTimeout(() => {
-                html2pdf().from(element).set(opt).save().then(() => {
-                    document.body.removeChild(element);
+                html2pdf().from(wrapper).set(opt).save().then(() => {
+                    wrapper.style.display = 'none'; // Sembunyikan kembali
                 });
-            }, 800);
+            }, 1000);
         }
     };
 
-    for (let i = 0; i < totalImages; i++) {
-        if (images[i].complete) finalizeAndSave();
-        else { images[i].onload = finalizeAndSave; images[i].onerror = finalizeAndSave; }
+    for(let img of images) {
+        if(img.complete) finalize();
+        else { img.onload = finalize; img.onerror = finalize; }
     }
 }
