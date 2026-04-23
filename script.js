@@ -1,4 +1,4 @@
-// CONFIGURATION - Leadership Strategic Assessment
+// CONFIGURATION - Araya Leadership Assessment
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzw-wO7nvdSRyVm87qWoJh7rSLTFf5IiBwbmV6JMOuVz-hXY49tbJWY_uIvk89kbDNujw/exec"; 
 const WHATSAPP_NUMBER = "6285232526003"; 
 
@@ -11,10 +11,10 @@ const questionsData = [
 ];
 
 const reportDetails = {
-    1: { title: "Level 1: Position", desc: "Kepemimpinan Anda didasarkan pada otoritas jabatan. Tim bekerja karena keharusan.", rec: "Bangunlah hubungan personal dan empati untuk mendapatkan kepercayaan sukarela dari tim." },
+    1: { title: "Level 1: Position", desc: "Kepemimpinan Anda didasarkan pada otoritas jabatan formal. Tim bekerja karena keharusan.", rec: "Bangunlah hubungan personal dan empati untuk mendapatkan kepercayaan sukarela dari tim." },
     2: { title: "Level 2: Permission", desc: "Anda memimpin melalui hubungan baik. Tim merasa nyaman dan senang bekerja dengan Anda.", rec: "Gunakan hubungan baik untuk mulai menetapkan standar hasil tim." },
     3: { title: "Level 3: Production", desc: "Anda memimpin melalui hasil nyata. Reputasi Anda didasarkan pada prestasi tim.", rec: "Mulailah mendelegasikan tanggung jawab besar untuk mengembangkan calon pemimpin baru." },
-    4: { title: "Level 4: People Development", desc: "Anda fokus pada pemberdayaan. Anda dikenal sebagai mentor yang mencetak pemimpin.", rec: "Pastikan sistem kepemimpinan tetap berjalan mandiri meskipun tanpa kehadiran Anda." },
+    4: { title: "Level 4: People Development", desc: "Anda fokus pada pemberdayaan. Anda dikenal sebagai mentor yang mencetak pemimpin baru.", rec: "Pastikan sistem kepemimpinan tetap berjalan mandiri meskipun tanpa kehadiran Anda secara fisik." },
     5: { title: "Level 5: Pinnacle", desc: "Anda memimpin melalui jati diri dan integritas. Anda menjadi panutan lintas generasi.", rec: "Teruslah membangun warisan budaya kerja dan membimbing pemimpin di tingkat strategis." }
 };
 
@@ -24,6 +24,7 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
+// Inisialisasi Data Pertanyaan
 allQuestionsFlat.length = 0;
 questionsData.forEach(lvl => {
     lvl.questions.forEach((txt, i) => {
@@ -93,23 +94,16 @@ window.calculateResults = function() {
     const lvlName = questionsData[mainLvlNum-1].name;
     const finalAvg = (sumTotal / 5).toFixed(1);
 
-    // KIRIM DATA & TRANSISI HALAMAN OTOMATIS
+    // Kirim data ke Spreadsheet (Background)
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
-        body: JSON.stringify({ 
-            name: userData.name, 
-            phone: userData.phone, 
-            levelName: lvlName, 
-            avgScore: finalAvg 
-        }) 
-    }).then(() => {
-        document.getElementById('quiz-content').classList.add('hidden');
-        displayResults(mainLvlNum, avgs);
-    }).catch(() => {
-        document.getElementById('quiz-content').classList.add('hidden');
-        displayResults(mainLvlNum, avgs);
+        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: finalAvg }) 
     });
+
+    // Pindah ke halaman Hasil & Aktivasi
+    document.getElementById('quiz-content').classList.add('hidden');
+    displayResults(mainLvlNum, avgs);
 }
 
 function displayResults(lvlNum, avgs) {
@@ -118,27 +112,33 @@ function displayResults(lvlNum, avgs) {
     const lvlName = questionsData[lvlNum-1].name;
     
     document.getElementById('level-result-summary').innerHTML = `
-        <div style="text-align:center; margin-bottom:20px;">
-            <h2 style="margin-bottom:10px;">Hasil: ${lvlName}</h2>
-            <p>Analisis selesai. Silakan hubungi Mas Ali Mahfud untuk mendapatkan Kode Aktivasi sertifikat premium Anda.</p>
+        <div style="text-align:center; margin-bottom:25px; padding:15px; background:#f0f7ff; border-radius:12px;">
+            <h2 style="color:#0056b3; margin-bottom:10px;">Level Pengaruh: ${lvlName}</h2>
+            <p style="font-size:15px; color:#444; line-height:1.5;">
+                Analisis awal selesai. Namun, angka di atas hanyalah indikator permukaan. 
+                <br><br>
+                Dapatkan <b>Laporan Strategis Lengkap</b> untuk mengetahui:
+                <br>✅ Deskripsi Karakter Kepemimpinan Anda secara mendalam.
+                <br>✅ Analisis Kekuatan & Celah pengembangan diri.
+                <br>✅ <b>Action Plan 90 Hari</b> untuk naik ke level pengaruh berikutnya.
+            </p>
         </div>`;
     
     renderChart(avgs);
     
     window.requestAccess = function() {
-        const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya baru saja menyelesaikan Tes Leadership. Saya ingin memesan Kode Aktivasi untuk mengunduh Sertifikat Analisis Lengkap.\n\nNo WA: ${userData.phone}`;
+        const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya telah menyelesaikan Leadership Assessment.\n\nSaya ingin memesan **Kode Aktivasi** untuk mengunduh Laporan Analisis Lengkap dan Sertifikat Resmi Araya Consulting.\n\nNo WA: ${userData.phone}`;
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
     };
 
     window.unlockCertificate = function() {
         const codeInput = document.getElementById('access-code').value;
-        // Kode ini akan menerima kode apa pun yang berawalan ARAYA (Sesuai auto-generate Apps Script)
-        if(codeInput.includes("ARAYA")) {
+        if(codeInput.toUpperCase().includes("ARAYA")) {
             document.querySelector('.activation-box').classList.add('hidden');
             document.getElementById('cert-area').classList.remove('hidden');
             document.getElementById('download-btn').onclick = () => generatePDF(lvlNum, avgs);
         } else {
-            alert("Kode Aktivasi Salah atau Tidak Dikenali.");
+            alert("Kode Aktivasi tidak valid.");
         }
     };
 }
@@ -170,11 +170,11 @@ function generatePDF(lvlNum, avgs) {
             <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
             <h2 style="color:#0056b3; margin-bottom:5px;">${info.title}</h2>
             <div style="margin:20px 0; background:#f9f9f9; padding:20px; border-radius:10px;">
-                <p><strong>Deskripsi Profil:</strong> ${info.desc}</p>
-                <p><strong>Rekomendasi 90 Hari:</strong> ${info.rec}</p>
+                <p><strong>Interpretasi Karakter:</strong> ${info.desc}</p>
+                <p><strong>Rekomendasi Strategis:</strong> ${info.rec}</p>
             </div>
             <table style="width:100%; border-collapse:collapse; margin-top:20px;">
-                <tr style="background:#0056b3; color:white;"><th style="padding:10px; border:1px solid #ddd;">Level</th><th style="padding:10px; border:1px solid #ddd;">Skor Rata-rata</th></tr>
+                <tr style="background:#0056b3; color:white;"><th style="padding:10px; border:1px solid #ddd;">Dimensi Kepemimpinan</th><th style="padding:10px; border:1px solid #ddd;">Skor Rata-rata</th></tr>
                 ${questionsData.map(d => `<tr><td style="border:1px solid #ddd; padding:10px;">${d.name}</td><td style="border:1px solid #ddd; padding:10px; text-align:center; font-weight:bold;">${avgs[d.group]}</td></tr>`).join('')}
             </table>
             <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end;">
