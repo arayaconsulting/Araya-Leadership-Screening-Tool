@@ -1,148 +1,194 @@
-// Data Pertanyaan Leadership Maxwell
+// CONFIGURATION - Araya Leadership Assessment
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzw-wO7nvdSRyVm87qWoJh7rSLTFf5IiBwbmV6JMOuVz-hXY49tbJWY_uIvk89kbDNujw/exec"; 
+const WHATSAPP_NUMBER = "6285232526003"; 
+const ACCESS_CODE_VALID = "ARAYA2026"; 
+
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", questions: ["1. Saya mengandalkan otoritas jabatan saya untuk memastikan anggota tim mengikuti arahan.","2. Anggota tim saya cenderung menunggu perintah sebelum memulai pekerjaan baru.","3. Saya percaya hak istimewa kepemimpinan datang secara otomatis dengan posisi.","4. Anggota tim hanya bekerja sesuai deskripsi pekerjaan minimal mereka.","5. Orang-orang mengikuti saya karena mereka harus, bukan karena mereka ingin."]},
     { level: 2, name: "Permission (Izin)", group: "L2", questions: ["6. Saya meluangkan waktu untuk mengenal anggota tim saya secara pribadi, di luar pekerjaan.","7. Saya membangun kepercayaan dengan tim saya melalui komunikasi yang terbuka dan jujur.","8. Saya secara aktif mendengarkan dan menghargai masukan tim, bahkan jika berbeda dengan pandangan saya.","9. Saya berfokus untuk menciptakan lingkungan kerja yang positif dan kolaboratif.","10. Anggota tim saya bersedia memberikan usaha ekstra untuk saya karena hubungan pribadi kami."]},
     { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsisten memimpin tim saya untuk mencapai target dan hasil yang nyata.","12. Saya bertanggung jawab penuh atas hasil, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh kesuksesan yang kami raih.","14. Saya menetapkan standar kinerja yang tinggi dan memberikan contoh yang baik.","15. Kredibilitas saya di organisasi didasarkan pada pencapaian, bukan hanya posisi saya."]},
-    { level: 4, name: "People Development (Pengembangan Orang)", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar bisa menggantikan peran saya.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit/proyek baru.","18. Saya berinvestasi dalam pengembangan orang bahkan jika itu berarti mereka akan pindah ke posisi yang lebih baik di luar tim saya.","19. Saya mendelegasikan tanggung jawab yang signifikan kepada anggota tim agar mereka tumbuh dan mengambil inisiatif kepemimpinan.","20. Saya aktif merekrut individu yang memiliki potensi besar, bukan hanya yang dapat memenuhi tugas saat ini."]},
+    { level: 4, name: "People Development", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar bisa menggantikan peran saya.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit/proyek baru.","18. Saya berinvestasi dalam pengembangan orang bahkan jika itu berarti mereka akan pindah ke posisi yang lebih baik di luar tim saya.","19. Saya mendelegasikan tanggung jawab yang signifikan kepada anggota tim agar mereka tumbuh dan mengambil inisiatif kepemimpinan.","20. Saya aktif merekrut individu yang memiliki potensi besar, bukan hanya yang dapat memenuhi tugas saat ini."]},
     { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemimpin di luar tim/departemen saya sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat dan kinerja seluruh organisasi.","23. Keputusan dan tindakan saya selalu didasarkan pada prinsip yang diyakini oleh sebagian besar karyawan/stakeholder.","24. Saya telah menciptakan budaya atau sistem kepemimpinan yang akan tetap efektif setelah saya tidak lagi menjabat.","25. Saya dikenal luas di industri atau perusahaan sebagai panutan yang inspiratif dan memiliki integritas tinggi."]}
 ];
 
-let userName = "";
-let currentQuestionIndex = 0;
+const reportDetails = {
+    1: { title: "Level 1: Position", desc: "Kepemimpinan Anda didasarkan pada otoritas jabatan. Tim bekerja karena keharusan.", rec: "Bangunlah hubungan personal dan empati untuk mendapatkan kepercayaan sukarela dari tim." },
+    2: { title: "Level 2: Permission", desc: "Anda memimpin melalui hubungan baik. Tim merasa nyaman dan senang bekerja dengan Anda.", rec: "Gunakan hubungan baik untuk mulai menetapkan standar hasil tim." },
+    3: { title: "Level 3: Production", desc: "Anda memimpin melalui hasil nyata. Reputasi Anda didasarkan pada prestasi tim.", rec: "Mulailah mendelegasikan tanggung jawab besar untuk mengembangkan calon pemimpin baru." },
+    4: { title: "Level 4: People Development", desc: "Anda fokus pada pemberdayaan. Anda dikenal sebagai mentor yang mencetak pemimpin.", rec: "Pastikan sistem kepemimpinan tetap berjalan mandiri meskipun tanpa kehadiran Anda." },
+    5: { title: "Level 5: Pinnacle", desc: "Anda memimpin melalui jati diri dan integritas. Anda menjadi panutan lintas generasi.", rec: "Teruslah membangun warisan budaya kerja dan membimbing pemimpin di tingkat strategis." }
+};
+
+let userData = { name: "", phone: "" };
+let currentQ = 0;
 const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
-// Inisialisasi & Mulai Tes
-function startTest() {
-    const input = document.getElementById('user-name');
-    if (input.value.trim() === "") return alert("Mohon masukkan nama lengkap Anda.");
-    userName = input.value;
-    document.getElementById('name-input-screen').classList.add('hidden');
-    document.getElementById('quiz-content').classList.remove('hidden');
-    initializeQuestions();
-    renderCurrentQuestion();
-}
-
-function initializeQuestions() {
-    allQuestionsFlat.length = 0;
-    let globalIndex = 0;
-    questionsData.forEach(lvl => {
-        lvl.questions.forEach(txt => {
-            globalIndex++;
-            allQuestionsFlat.push({ index: globalIndex, id: `Q${globalIndex}`, text: txt, levelGroup: lvl.group });
-            userAnswers[`Q${globalIndex}`] = 0;
-        });
+questionsData.forEach(lvl => {
+    lvl.questions.forEach((txt, i) => {
+        allQuestionsFlat.push({ id: `${lvl.group}_${i}`, text: txt, levelGroup: lvl.group });
     });
+});
+
+function startTest() {
+    userData.name = document.getElementById('user-name').value;
+    userData.phone = document.getElementById('user-phone').value;
+    if(!userData.name || !userData.phone) return alert("Mohon lengkapi Nama dan No WhatsApp.");
+    
+    document.getElementById('registration-screen').classList.add('hidden');
+    document.getElementById('quiz-content').classList.remove('hidden');
+    renderQuestion();
 }
 
-function renderCurrentQuestion() {
-    const container = document.getElementById('questions-container');
-    const q = allQuestionsFlat[currentQuestionIndex];
-    container.innerHTML = `
-        <div class="scale-legend-full">1: Sngt Tdk Setuju | 2: Tdk Setuju | 3: Netral | 4: Setuju | 5: Sngt Setuju</div>
-        <div style="margin-bottom:20px;">
-            <p style="color:#666;">Pertanyaan ${q.index} dari 25</p>
-            <p style="font-size:18px; font-weight:bold; margin:10px 0;">${q.text}</p>
+function renderQuestion() {
+    const q = allQuestionsFlat[currentQ];
+    document.getElementById('quiz-header').innerHTML = `<p style="color:#888">Asesmen ${currentQ + 1}/25</p><h4>${q.text}</h4>`;
+    document.getElementById('questions-container').innerHTML = `
+        <div class="options-grid">
+            ${[1,2,3,4,5].map(v => `
+                <label class="opt-label">
+                    <input type="radio" name="q" value="${v}" ${userAnswers[q.id]==v?'checked':''} onchange="saveAnswer('${q.id}', ${v})">
+                    <div class="opt-circle">${v}</div>
+                </label>
+            `).join('')}
         </div>
-        <div style="display:flex; justify-content:space-around; background:#f8f9fa; padding:15px; border-radius:10px;">
-            ${[1,2,3,4,5].map(i => `<label style="cursor:pointer; text-align:center;"><input type="radio" name="${q.id}" value="${i}" ${userAnswers[q.id]==i?'checked':''} onchange="saveAnswer('${q.id}', ${i})"><br><b>${i}</b></label>`).join('')}
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:#999; margin-top:-10px;">
+            <span>Sangat Tidak Setuju</span>
+            <span>Sangat Setuju</span>
         </div>`;
-    updateNavigation();
+    updateNav();
 }
 
-function saveAnswer(id, val) { 
-    userAnswers[id] = val; 
-    updateNavigation(); 
+function saveAnswer(id, val) { userAnswers[id] = val; updateNav(); }
+
+function updateNav() {
+    const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
+    document.getElementById('next-btn').disabled = !answered;
+    document.getElementById('prev-btn').classList.toggle('hidden', currentQ === 0);
+    const last = currentQ === 24;
+    document.getElementById('next-btn').classList.toggle('hidden', last);
+    document.getElementById('submit-btn').classList.toggle('hidden', !last);
 }
 
-function updateNavigation() {
-    const isAnswered = userAnswers[allQuestionsFlat[currentQuestionIndex].id] !== 0;
-    document.getElementById('prev-btn').classList.toggle('hidden', currentQuestionIndex === 0);
-    const isLast = currentQuestionIndex === 24;
-    document.getElementById('next-btn').classList.toggle('hidden', isLast);
-    document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
-    document.getElementById('next-btn').disabled = !isAnswered;
-}
-
-document.getElementById('next-btn').onclick = () => { currentQuestionIndex++; renderCurrentQuestion(); };
-document.getElementById('prev-btn').onclick = () => { currentQuestionIndex--; renderCurrentQuestion(); };
-
-// PERBAIKAN: Fungsi Submit untuk Pindah Layar
-document.getElementById('quiz-form').onsubmit = (e) => {
-    e.preventDefault();
-    calculateResults();
-};
+document.getElementById('next-btn').onclick = () => { currentQ++; renderQuestion(); };
+document.getElementById('prev-btn').onclick = () => { currentQ--; renderQuestion(); };
 
 function calculateResults() {
     const avgs = {};
+    let sumTotal = 0;
+
     questionsData.forEach(lvl => {
-        const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + userAnswers[q.id], 0);
+        const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
         avgs[lvl.group] = (sum / 5).toFixed(1);
+        sumTotal += parseFloat(avgs[lvl.group]);
     });
+
     let mainLvlNum = 1;
     for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
     
-    // SEMBUNYIKAN KUIS & TAMPILKAN HASIL
-    document.getElementById('quiz-content').classList.add('hidden');
-    displayResults(mainLvlNum, avgs);
-}
+    const lvlName = questionsData[mainLvlNum-1].name;
+    const finalAvg = (sumTotal / 5).toFixed(1);
 
-function displayResults(lvlNum, avgs) {
+    fetch(SCRIPT_URL, { 
+        method: 'POST', 
+        mode: 'no-cors', 
+        body: JSON.stringify({ 
+            name: userData.name, 
+            phone: userData.phone, 
+            levelName: lvlName, 
+            avgScore: finalAvg 
+        }) 
+    });
+
+    document.getElementById('quiz-content').classList.add('hidden');
     document.getElementById('results').classList.remove('hidden');
-    document.getElementById('report-user-name-header').textContent = userName;
-    
-    const lvlName = questionsData[lvlNum-1].name;
-    document.getElementById('level-result').innerHTML = `<h2 style="color:#007bff; margin:20px 0;">Level Utama: ${lvlName}</h2>`;
+    document.getElementById('display-name').innerText = userData.name;
     
     renderChart(avgs);
-    renderTable(avgs);
-    document.getElementById('download-cert-btn').onclick = () => generatePDF(lvlName, avgs);
+    document.getElementById('level-result-summary').innerHTML = `<h3 style="color:#007bff;">Level Utama: ${lvlName}</h3>`;
+}
+
+function requestAccess() {
+    const message = `Halo Admin Araya Consulting,
+
+Saya *${userData.name}* telah menyelesaikan *Leadership Strategic Assessment*. 
+
+Saya bermaksud melakukan aktivasi untuk mengunduh **Sertifikat Resmi dan Laporan Analisis Lengkap** dalam format PDF sebagai referensi pengembangan kepemimpinan saya.
+
+Mohon informasi mengenai prosedur pembayaran dan pengiriman kode aktivasi.
+Terima kasih.
+
+---
+Data Peserta:
+Nama: ${userData.name}
+No. HP: ${userData.phone}`;
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+function unlockCertificate() {
+    if(document.getElementById('access-code').value === ACCESS_CODE_VALID) {
+        document.querySelector('.activation-box').classList.add('hidden');
+        document.getElementById('cert-area').classList.remove('hidden');
+        
+        const avgs = {};
+        questionsData.forEach(lvl => {
+            const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
+            avgs[lvl.group] = (sum / 5).toFixed(1);
+        });
+        let mainLvlNum = 1;
+        for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
+        
+        document.getElementById('download-btn').onclick = () => generatePDF(mainLvlNum, avgs);
+    } else { alert("Kode Aktivasi Salah."); }
 }
 
 function renderChart(avgs) {
     const ctx = document.getElementById('scoreChart').getContext('2d');
     if(myChart) myChart.destroy();
-    // Warna-warni pada grafik batang
-    const barColors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'];
     myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
-            datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: barColors }]
+            datasets: [{ label: 'Skor Anda', data: Object.values(avgs), backgroundColor: ['#ff6384','#36a2eb','#ffce56','#4bc0c0','#9966ff'] }]
         },
         options: { scales: { y: { min: 0, max: 5 } } }
     });
 }
 
-function renderTable(avgs) {
-    const tbody = document.querySelector('#score-table tbody');
-    tbody.innerHTML = questionsData.map(d => `<tr><td>Level ${d.level}</td><td>${d.name}</td><td>${avgs[d.group]}</td></tr>`).join('');
-}
-
-function generatePDF(lvlName, avgs) {
+function generatePDF(lvlNum, avgs) {
     const wrapper = document.getElementById('certificate-wrapper');
+    const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
     wrapper.innerHTML = `
         <div class="cert-canvas">
-            <div style="text-align:center;"><img src="logo-araya.png" style="width:160px;"></div>
-            <h1 style="text-align:center; font-size:24px; color:#0056b3; margin:20px 0;">LAPORAN HASIL ASESMEN KEPEMIMPINAN</h1>
-            <p style="text-align:center;">Nama Peserta: <br><strong style="font-size:24px;">${userName}</strong></p>
+            <div style="text-align:center"><img src="logo-araya.png" style="width:180px;"></div>
+            <h1 style="text-align:center; color:#0056b3; font-size:24px;">LAPORAN ANALISIS KEPEMIMPINAN</h1>
+            <p style="text-align:center">Diberikan kepada: <br><strong style="font-size:24px;">${userData.name}</strong></p>
             <div style="border-top:2px solid #0056b3; margin:15px 0;"></div>
-            <div style="background:#f0f8ff; padding:15px; border-radius:10px; border:1px solid #b3e0ff; text-align:center;"><h2 style="margin:0; color:#0056b3;">Level Utama: ${lvlName}</h2></div>
-            <div style="margin-top:20px; font-size:14px; text-align:left;">
-                <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:12px;">
-                    <thead><tr style="background:#007bff; color:white;"><th style="padding:8px; border:1px solid #ddd;">Level</th><th style="padding:8px; border:1px solid #ddd;">Nama Level</th><th style="padding:8px; border:1px solid #ddd;">Skor</th></tr></thead>
-                    <tbody>${questionsData.map(d => `<tr><td style="padding:8px; border:1px solid #ddd; text-align:center;">Level ${d.level}</td><td style="padding:8px; border:1px solid #ddd;">${d.name}</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">${avgs[d.group]}</td></tr>`).join('')}</tbody>
-                </table>
+            <h2 style="color:#0056b3; margin-bottom:5px;">${info.title}</h2>
+            <div style="margin:20px 0; background:#f9f9f9; padding:20px; border-radius:10px;">
+                <p><strong>Deskripsi Profil:</strong> ${info.desc}</p>
+                <p><strong>Rekomendasi 90 Hari:</strong> ${info.rec}</p>
             </div>
-            <div style="margin-top:auto; width:100%; display:flex; justify-content:space-between; align-items:flex-end;">
-                <div style="text-align:left;"><p>Tuban, ${dateStr}</p><div style="position:relative; height:70px;"><img src="ttd.png" style="width:120px; position:absolute; bottom:5px; left:10px; z-index:10;"></div><div style="border-top:1px solid #000; width:220px; padding-top:5px;"><strong>Founder Araya Consulting</strong></div></div>
-                <img src="logo-araya-wm.png" style="width:90px; opacity:0.1;">
+            <table style="width:100%; border-collapse:collapse; margin-top:20px;">
+                <tr style="background:#0056b3; color:white;"><th style="padding:10px; border:1px solid #ddd;">Level</th><th style="padding:10px; border:1px solid #ddd;">Skor Rata-rata</th></tr>
+                ${questionsData.map(d => `<tr><td style="border:1px solid #ddd; padding:10px;">${d.name}</td><td style="border:1px solid #ddd; padding:10px; text-align:center; font-weight:bold;">${avgs[d.group]}</td></tr>`).join('')}
+            </table>
+            <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div>
+                    <p>Tuban, ${dateStr}</p>
+                    <img src="ttd.png" style="width:120px;">
+                    <p><strong>Ali Mahfud</strong><br>Founder Araya Consulting</p>
+                </div>
+                <img src="logo-araya-wm.png" style="width:100px; opacity:0.1;">
             </div>
         </div>`;
 
-    const opt = { margin: 0, filename: `Laporan_${userName}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-    html2pdf().set(opt).from(wrapper).save();
+    html2pdf().set({ margin:0, filename:`Laporan_Leadership_${userData.name}.pdf`, html2canvas:{scale:2, useCORS:true}, jsPDF:{format:'a4', orientation:'portrait'} }).from(wrapper).save();
 }
+
+document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); calculateResults(); };
