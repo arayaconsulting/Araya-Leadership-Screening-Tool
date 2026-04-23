@@ -1,7 +1,6 @@
-// CONFIGURATION - Araya Leadership Assessment
+// CONFIGURATION - Leadership Strategic Assessment
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzw-wO7nvdSRyVm87qWoJh7rSLTFf5IiBwbmV6JMOuVz-hXY49tbJWY_uIvk89kbDNujw/exec"; 
 const WHATSAPP_NUMBER = "6285232526003"; 
-const ACCESS_CODE_VALID = "ARAYA2026"; 
 
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", questions: ["1. Saya mengandalkan otoritas jabatan saya untuk memastikan anggota tim mengikuti arahan.","2. Anggota tim saya cenderung menunggu perintah sebelum memulai pekerjaan baru.","3. Saya percaya hak istimewa kepemimpinan datang secara otomatis dengan posisi.","4. Anggota tim hanya bekerja sesuai deskripsi pekerjaan minimal mereka.","5. Orang-orang mengikuti saya karena mereka harus, bukan karena mereka ingin."]},
@@ -25,13 +24,14 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
+allQuestionsFlat.length = 0;
 questionsData.forEach(lvl => {
     lvl.questions.forEach((txt, i) => {
         allQuestionsFlat.push({ id: `${lvl.group}_${i}`, text: txt, levelGroup: lvl.group });
     });
 });
 
-function startTest() {
+window.startTest = function() {
     userData.name = document.getElementById('user-name').value;
     userData.phone = document.getElementById('user-phone').value;
     if(!userData.name || !userData.phone) return alert("Mohon lengkapi Nama dan No WhatsApp.");
@@ -60,7 +60,10 @@ function renderQuestion() {
     updateNav();
 }
 
-function saveAnswer(id, val) { userAnswers[id] = val; updateNav(); }
+window.saveAnswer = function(id, val) { 
+    userAnswers[id] = val; 
+    updateNav(); 
+}
 
 function updateNav() {
     const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
@@ -74,7 +77,7 @@ function updateNav() {
 document.getElementById('next-btn').onclick = () => { currentQ++; renderQuestion(); };
 document.getElementById('prev-btn').onclick = () => { currentQ--; renderQuestion(); };
 
-function calculateResults() {
+window.calculateResults = function() {
     const avgs = {};
     let sumTotal = 0;
 
@@ -90,6 +93,7 @@ function calculateResults() {
     const lvlName = questionsData[mainLvlNum-1].name;
     const finalAvg = (sumTotal / 5).toFixed(1);
 
+    // KIRIM DATA & TRANSISI HALAMAN OTOMATIS
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
@@ -99,50 +103,44 @@ function calculateResults() {
             levelName: lvlName, 
             avgScore: finalAvg 
         }) 
+    }).then(() => {
+        document.getElementById('quiz-content').classList.add('hidden');
+        displayResults(mainLvlNum, avgs);
+    }).catch(() => {
+        document.getElementById('quiz-content').classList.add('hidden');
+        displayResults(mainLvlNum, avgs);
     });
+}
 
-    document.getElementById('quiz-content').classList.add('hidden');
+function displayResults(lvlNum, avgs) {
     document.getElementById('results').classList.remove('hidden');
     document.getElementById('display-name').innerText = userData.name;
+    const lvlName = questionsData[lvlNum-1].name;
+    
+    document.getElementById('level-result-summary').innerHTML = `
+        <div style="text-align:center; margin-bottom:20px;">
+            <h2 style="margin-bottom:10px;">Hasil: ${lvlName}</h2>
+            <p>Analisis selesai. Silakan hubungi Mas Ali Mahfud untuk mendapatkan Kode Aktivasi sertifikat premium Anda.</p>
+        </div>`;
     
     renderChart(avgs);
-    document.getElementById('level-result-summary').innerHTML = `<h3 style="color:#007bff;">Level Utama: ${lvlName}</h3>`;
-}
+    
+    window.requestAccess = function() {
+        const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya baru saja menyelesaikan Tes Leadership. Saya ingin memesan Kode Aktivasi untuk mengunduh Sertifikat Analisis Lengkap.\n\nNo WA: ${userData.phone}`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+    };
 
-function requestAccess() {
-    const message = `Halo Admin Araya Consulting,
-
-Saya *${userData.name}* telah menyelesaikan *Leadership Strategic Assessment*. 
-
-Saya bermaksud melakukan aktivasi untuk mengunduh **Sertifikat Resmi dan Laporan Analisis Lengkap** dalam format PDF sebagai referensi pengembangan kepemimpinan saya.
-
-Mohon informasi mengenai prosedur pembayaran dan pengiriman kode aktivasi.
-Terima kasih.
-
----
-Data Peserta:
-Nama: ${userData.name}
-No. HP: ${userData.phone}`;
-
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-}
-
-function unlockCertificate() {
-    if(document.getElementById('access-code').value === ACCESS_CODE_VALID) {
-        document.querySelector('.activation-box').classList.add('hidden');
-        document.getElementById('cert-area').classList.remove('hidden');
-        
-        const avgs = {};
-        questionsData.forEach(lvl => {
-            const sum = allQuestionsFlat.filter(q => q.levelGroup === lvl.group).reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
-            avgs[lvl.group] = (sum / 5).toFixed(1);
-        });
-        let mainLvlNum = 1;
-        for(let i=5; i>=1; i--) { if(parseFloat(avgs[`L${i}`]) >= 4.0) { mainLvlNum = i; break; } }
-        
-        document.getElementById('download-btn').onclick = () => generatePDF(mainLvlNum, avgs);
-    } else { alert("Kode Aktivasi Salah."); }
+    window.unlockCertificate = function() {
+        const codeInput = document.getElementById('access-code').value;
+        // Kode ini akan menerima kode apa pun yang berawalan ARAYA (Sesuai auto-generate Apps Script)
+        if(codeInput.includes("ARAYA")) {
+            document.querySelector('.activation-box').classList.add('hidden');
+            document.getElementById('cert-area').classList.remove('hidden');
+            document.getElementById('download-btn').onclick = () => generatePDF(lvlNum, avgs);
+        } else {
+            alert("Kode Aktivasi Salah atau Tidak Dikenali.");
+        }
+    };
 }
 
 function renderChart(avgs) {
@@ -163,6 +161,7 @@ function generatePDF(lvlNum, avgs) {
     const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
+    wrapper.style.display = 'block';
     wrapper.innerHTML = `
         <div class="cert-canvas">
             <div style="text-align:center"><img src="logo-araya.png" style="width:180px;"></div>
@@ -188,7 +187,7 @@ function generatePDF(lvlNum, avgs) {
             </div>
         </div>`;
 
-    html2pdf().set({ margin:0, filename:`Laporan_Leadership_${userData.name}.pdf`, html2canvas:{scale:2, useCORS:true}, jsPDF:{format:'a4', orientation:'portrait'} }).from(wrapper).save();
+    html2pdf().set({ margin:0, filename:`Laporan_Leadership_${userData.name}.pdf`, html2canvas:{scale:2, useCORS:true}, jsPDF:{format:'a4', orientation:'portrait'} }).from(wrapper).save().then(() => {
+        wrapper.style.display = 'none';
+    });
 }
-
-document.getElementById('quiz-form').onsubmit = (e) => { e.preventDefault(); calculateResults(); };
