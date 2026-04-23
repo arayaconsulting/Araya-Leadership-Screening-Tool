@@ -24,6 +24,7 @@ const allQuestionsFlat = [];
 const userAnswers = {};
 let myChart;
 
+// Inisialisasi
 allQuestionsFlat.length = 0;
 questionsData.forEach(lvl => {
     lvl.questions.forEach((txt, i) => {
@@ -82,28 +83,22 @@ window.calculateResults = function() {
         sumTotal += parseFloat(avgs[lvl.group]);
     });
 
+    // LOGIKA SEQUENTIAL (MAXWELL)
     let finalLevel = 1; 
     const threshold = 4.0; 
-
     for (let i = 1; i <= 5; i++) {
-        if (parseFloat(avgs[`L${i}`]) >= threshold) {
-            finalLevel = i;
-        } else {
-            break; 
-        }
+        if (parseFloat(avgs[`L${i}`]) >= threshold) { finalLevel = i; } 
+        else { break; }
     }
 
     const lvlName = questionsData[finalLevel-1].name;
-    const finalAvg = (sumTotal / 5).toFixed(1);
-
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(finalLevel, avgs);
 
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
-        cache: 'no-cache',
-        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: finalAvg }) 
+        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: lvlName, avgScore: (sumTotal/5).toFixed(1) }) 
     });
 };
 
@@ -112,37 +107,28 @@ function displayResults(lvlNum, avgs) {
     const lvlName = questionsData[lvlNum-1].name;
     document.getElementById('level-result-summary').innerHTML = `
         <div style="text-align:center; padding:20px; background:#f0f7ff; border-radius:12px; border:1px solid #007bff; margin-bottom:20px;">
-            <h3 style="margin-top:0; color:#0056b3;">Hasil Analisis Kepemimpinan</h3>
-            <h1 style="font-size:24px; color:#333;">${lvlName}</h1>
-            <p style="font-size:15px; color:#555; line-height:1.6;">
-                Bapak/Ibu <b>${userData.name}</b>, skor Anda menunjukkan potensi besar. Namun, untuk menjadi pemimpin level strategis, Anda butuh peta jalan yang jelas.
-            </p>
+            <h3>Hasil Analisis Kepemimpinan</h3>
+            <h1 style="font-size:24px;">${lvlName}</h1>
+            <p>Bapak/Ibu <b>${userData.name}</b>, skor Anda menunjukkan potensi besar.</p>
         </div>`;
     document.getElementById('persuasive-call-to-action').innerHTML = `
-        <p style="font-size:14px; color:#444; margin-bottom:15px; text-align:center;">
-            Dapatkan <b>Laporan PDF Lengkap</b> yang berisi: <br>
-            ✅ Analisis mendalam karakter Anda <br>
-            ✅ Action Plan 90 Hari untuk naik level
-        </p>`;
+        <p style="text-align:center;">Dapatkan <b>Laporan PDF Lengkap</b> dan Action Plan 90 Hari.</p>`;
     renderChart(avgs);
     window.currentAvgs = avgs;
     window.currentLvlNum = lvlNum;
 }
 
 window.requestAccess = function() {
-    const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya ingin memesan Kode Aktivasi untuk Laporan Leadership Assessment saya.\nNo HP: ${userData.phone}`;
+    const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya ingin memesan Kode Aktivasi Laporan Leadership.\nNo HP: ${userData.phone}`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
 };
 
 window.unlockCertificate = function() {
     const code = document.getElementById('access-code').value.toUpperCase();
     if(code.includes("AY") || code.includes("ARAYA")) {
-        document.getElementById('persuasive-call-to-action').innerHTML = "<b>Kode Valid! Menyiapkan Laporan Eksklusif...</b>";
-        setTimeout(() => {
-            generatePDF(window.currentLvlNum, window.currentAvgs);
-            document.querySelector('.activation-box').classList.add('hidden');
-            document.getElementById('cert-area').classList.remove('hidden');
-        }, 1500);
+        generatePDF(window.currentLvlNum, window.currentAvgs);
+        document.querySelector('.activation-box').classList.add('hidden');
+        document.getElementById('cert-area').classList.remove('hidden');
     } else { alert("Kode Aktivasi Salah."); }
 };
 
@@ -159,78 +145,75 @@ function renderChart(avgs) {
     });
 }
 
+// SINKRONISASI PDF: Fix Potong & Multi-page
 function generatePDF(lvlNum, avgs) {
     const wrapper = document.getElementById('certificate-wrapper');
     const info = reportDetails[lvlNum];
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     
     wrapper.style.display = 'block';
-    // FORMAT PORTRAIT: Lebar 790px agar pas di kertas A4 tegak
+    // Menggunakan tinggi kontainer tetap (1120px) agar muat di A4
     wrapper.innerHTML = `
-        <div id="pdf-container" style="width:790px; padding:40px; background:#fff; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:'Arial', sans-serif; color: #1a1a1a;">
-            <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.04; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-30deg) scale(1.1);">
+        <div id="pdf-container" style="width:794px; height:1120px; padding:35px; background:#fff; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; overflow:hidden; display:flex; flex-direction:column;">
+            
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.03; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.2);">
                 ${Array(12).fill('<img src="logo-araya.png" style="width:140px; margin:50px;">').join('')}
             </div>
 
-            <div style="text-align:center; position:relative; z-index:1; margin-bottom: 30px;">
-                <img src="logo-araya.png" style="width:180px; margin: 0 auto 15px auto; display:block;">
-                <h2 style="margin:0; font-size:26px; letter-spacing:3px; border-bottom: 4px solid #333; display: inline-block; padding-bottom: 5px;">SERTIFIKAT ANALISIS LEADERSHIP</h2>
-                <p style="margin:20px 0 5px 0; font-size:18px;">Diberikan kepada:</p>
-                <h1 style="margin:0; font-size:42px; font-weight:bold; color:#000; text-transform: uppercase;">${userData.name}</h1>
-                
-                <div style="background:#1e293b; color:#fff; display:inline-block; padding:12px 50px; border-radius:8px; margin-top:25px; font-size:22px; font-weight:bold; letter-spacing:1px;">
-                    ${info.title.toUpperCase()}
+            <div style="text-align:center; position:relative; z-index:1; margin-bottom: 20px;">
+                <img src="logo-araya.png" style="width:160px; margin: 0 auto 10px auto; display:block;">
+                <h2 style="margin:0; font-size:22px; letter-spacing:2px; border-bottom: 2px solid #333; display: inline-block;">LAPORAN ANALISIS KEPEMIMPINAN</h2>
+                <p style="margin:10px 0 5px 0;">Diberikan kepada:</p>
+                <h1 style="margin:0; font-size:32px; font-weight:bold; text-transform: uppercase;">${userData.name}</h1>
+                <div style="background:#1e293b; color:#fff; display:inline-block; padding:10px 40px; border-radius:8px; margin-top:15px; font-size:18px; font-weight:bold;">
+                    HASIL UTAMA: ${info.title.toUpperCase()}
                 </div>
             </div>
 
-            <div style="position:relative; z-index:1; margin-bottom: 30px; padding: 0 10px;">
-                <h4 style="margin:0 0 8px 0; font-size:18px; color:#0056b3; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Leadership Insight:</h4>
-                <p style="font-size:15px; line-height:1.7; margin:0 0 20px 0; text-align:justify; color: #333;">
-                    ${info.desc} ${info.insight}
-                </p>
+            <div style="position:relative; z-index:1; flex-grow:1;">
+                <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; border-bottom:2px solid #eee;">Leadership Insight:</h4>
+                <p style="font-size:13px; line-height:1.5; margin:0 0 15px 0; text-align:justify;">${info.desc} ${info.insight}</p>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 25px;">
+                <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; border-bottom:2px solid #eee;">Gaya Komunikasi:</h4>
+                <p style="font-size:13px; line-height:1.5; margin-bottom:15px;">${info.komunikasi}</p>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
                     <div>
-                        <h4 style="margin:0 0 8px 0; font-size:17px; color:#28a745; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Kekuatan Utama (+):</h4>
-                        <p style="font-size:14px; line-height:1.6; color: #333;">${info.kekuatan}</p>
+                        <h4 style="margin:0 0 5px 0; font-size:16px; color:#28a745; border-bottom:2px solid #eee;">Kekuatan Utama (+):</h4>
+                        <p style="font-size:13px; line-height:1.4;">${info.kekuatan}</p>
                     </div>
                     <div>
-                        <h4 style="margin:0 0 8px 0; font-size:17px; color:#dc3545; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Area Pengembangan (-):</h4>
-                        <p style="font-size:14px; line-height:1.6; color: #333;">${info.kelemahan}</p>
+                        <h4 style="margin:0 0 5px 0; font-size:16px; color:#dc3545; border-bottom:2px solid #eee;">Area Pengembangan (-):</h4>
+                        <p style="font-size:13px; line-height:1.4;">${info.kelemahan}</p>
                     </div>
                 </div>
 
-                <h4 style="margin:0 0 8px 0; font-size:17px; color:#0056b3; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Gaya Komunikasi:</h4>
-                <p style="font-size:15px; line-height:1.6; margin-bottom:25px; color: #333;">${info.komunikasi}</p>
-
-                <h4 style="margin:0 0 8px 0; font-size:17px; color:#d9534f; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Strategi 90 Hari:</h4>
-                <div style="background:#fffcf5; padding:15px; border-radius:10px; border:1px solid #ffeeba;">
-                    <p style="font-size:15px; line-height:1.7; margin:0; font-style:italic; color: #856404;">
-                        ${info.rec}
-                    </p>
+                <h4 style="margin:0 0 5px 0; font-size:16px; color:#d9534f; border-bottom:2px solid #eee;">Strategi Pengembangan 90 Hari:</h4>
+                <div style="background:#fffcf5; padding:12px; border-radius:8px; border:1px solid #ffeeba;">
+                    <p style="font-size:13px; line-height:1.5; margin:0; font-style:italic; color: #856404;">${info.rec}</p>
                 </div>
 
-                <h4 style="margin:30px 0 10px 0; font-size:17px; color:#0056b3; text-transform:uppercase; border-bottom:2px solid #eee; padding-bottom:3px;">Dinamika Skor:</h4>
-                <table style="width:100%; font-size:14px; border-collapse: collapse;">
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Position (Level 1)</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Permission (Level 2)</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Production (Level 3)</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">People Dev (Level 4)</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Pinnacle (Level 5)</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
+                <h4 style="margin:20px 0 5px 0; font-size:16px; color:#0056b3; border-bottom:2px solid #eee;">Dinamika Skor Kepemimpinan:</h4>
+                <table style="width:100%; font-size:13px; border-collapse: collapse;">
+                    <tr style="border-bottom:1px solid #eee;"><td style="padding:4px 0;">Level 1: Position</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
+                    <tr style="border-bottom:1px solid #eee;"><td style="padding:4px 0;">Level 2: Permission</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
+                    <tr style="border-bottom:1px solid #eee;"><td style="padding:4px 0;">Level 3: Production</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
+                    <tr style="border-bottom:1px solid #eee;"><td style="padding:4px 0;">Level 4: People Development</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
+                    <tr style="border-bottom:1px solid #eee;"><td style="padding:4px 0;">Level 5: Pinnacle</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
                 </table>
             </div>
 
-            <div style="margin-top:50px; padding:0 10px; display:flex; justify-content:space-between; align-items:flex-end; position:relative; z-index:1;">
-                <div style="font-size:14px; color:#666;">
-                    <p style="margin:0;">ID Laporan: <b>LEAD-${Math.floor(Date.now()/1000)}</b></p>
-                    <p style="margin:5px 0;">Tanggal: <b>${dateStr}</b></p>
-                    <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
+            <div style="margin-top:20px; display:flex; justify-content:space-between; align-items:flex-end; position:relative; z-index:1;">
+                <div style="font-size:12px; color:#666;">
+                    <p style="margin:0;">ID Laporan: LEAD-${Math.floor(Date.now()/1000)}</p>
+                    <p style="margin:3px 0;">Tanggal: ${dateStr}</p>
+                    <p style="font-weight:bold; color:#0056b3; margin:0;">Araya Consulting - Your Growth Partner</p>
                 </div>
                 <div style="text-align:center;">
-                    <p style="margin:0; font-size:15px; color:#333;">Disahkan oleh,</p>
-                    <img src="ttd.png" style="width:150px; margin: 10px auto; display:block;">
-                    <p style="margin:0; font-weight:bold; font-size:20px; border-top:2px solid #000; display:inline-block; padding: 5px 15px 0 15px;">ALI MAHFUD</p>
-                    <p style="margin:3px 0 0 0; font-size:14px; color:#666; font-weight:bold;">Founder Araya Consulting</p>
+                    <p style="margin:0; font-size:13px;">Disahkan oleh,</p>
+                    <img src="ttd.png" style="width:130px; margin: 5px auto; display:block;">
+                    <p style="margin:0; font-weight:bold; font-size:18px; border-top:2px solid #000; display:inline-block; padding: 5px 15px 0 15px;">ALI MAHFUD</p>
+                    <p style="margin:3px 0 0 0; font-size:12px; color:#666; font-weight:bold;">Founder Araya Consulting</p>
                 </div>
             </div>
         </div>`;
@@ -238,12 +221,17 @@ function generatePDF(lvlNum, avgs) {
     setTimeout(() => {
         const element = document.getElementById('pdf-container');
         html2pdf().from(element).set({
-            margin: [10, 10, 10, 10], // Margin internal PDF
-            filename: `Laporan_Leadership_${userData.name}.pdf`,
-            html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // FIX: Kertas Portrait
+            margin: 0, 
+            filename: 'Laporan_Leadership_' + userData.name + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                width: 794 
+            },
+            jsPDF: { unit: 'px', format: [794, 1122], orientation: 'portrait' } 
         }).save().then(() => { 
             wrapper.style.display = 'none'; 
         });
-    }, 1200);
+    }, 1000);
 }
