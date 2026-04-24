@@ -5,11 +5,12 @@ const WHATSAPP_NUMBER = "6285232526003";
 const questionsData = [
     { level: 1, name: "Position (Jabatan)", group: "L1", questions: ["1. Saya mengandalkan otoritas jabatan saya untuk memastikan anggota tim mengikuti arahan.","2. Anggota tim saya cenderung menunggu perintah sebelum memulai pekerjaan baru.","3. Saya percaya hak istimewa kepemimpinan datang secara otomatis dengan posisi.","4. Anggota tim hanya bekerja sesuai deskripsi pekerjaan minimal mereka.","5. Orang-orang mengikuti saya karena mereka harus, bukan karena mereka ingin."]},
     { level: 2, name: "Permission (Izin)", group: "L2", questions: ["6. Saya meluangkan waktu untuk mengenal anggota tim saya secara pribadi, di luar pekerjaan.","7. Saya membangun kepercayaan dengan tim melalui komunikasi yang terbuka dan jujur.","8. Saya secara aktif mendengarkan dan menghargai masukan tim, meskipun berbeda dengan pandangan saya.","9. Saya berfokus untuk menciptakan lingkungan kerja yang positif and kolaboratif.","10. Anggota tim saya bersedia memberikan usaha ekstra karena hubungan baik kami."]},
-    { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsisten memimpin tim saya untuk mencapai target dan hasil nyata.","12. Saya bertanggung jawab penuh atas hasil kerja tim, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh keberhasilan yang diraih.","14. Saya menetapkan standar kinerja yang tinggi dengan memberikan teladan hasil kerja nyata.","15. Kredibilitas saya di organisasi didasarkan pada pencapaian, bukan hanya posisi saya."]},
-    { level: 4, name: "People Development", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar berkembang.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit baru.","18. Saya berinvestasi dalam pengembangan orang meskipun mereka mungkin akan pindah ke posisi lain.","19. Saya mendelegasikan tanggung jawab signifikan agar anggota tim tumbuh dalam kapasitas pemimpin.","20. Saya aktif mencari dan merekrut individu yang memiliki potensi besar untuk masa depan."]},
-    { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemimpin di luar tim sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat organisasi.","23. Keputusan dan tindakan saya sesuai prinsip yang diyakini oleh organisasi.","24. Saya telah menciptakan budaya kepemimpinan yang tetap efektif meskipun saya tidak hadir.","25. Saya dikenal luas sebagai panutan yang inspiratif dengan integritas tinggi."]}
+    { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsitu pimpin tim saya untuk mencapai target dan hasil nyata.","12. Saya bertanggung jawab penuh atas hasil kerja tim, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh keberhasilan yang diraih.","14. Saya menetapkan standar kinerja yang tinggi dengan memberikan teladan hasil kerja nyata.","15. Kredibilitas saya di organisasi didasarkan pada pencapaian, bukan hanya posisi saya."]},
+    { level: 4, name: "People Development", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar berkembang.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memingin unit baru.","18. Saya berinvestasi dalam pengembangan orang meskipun mereka mungkin akan pindah ke posisi lain.","19. Saya mendelegasikan tanggung jawab signifikan agar anggota tim tumbuh dalam kapasitas pemimpin.","20. Saya aktif mencari dan merekrut individu yang memiliki potensi besar untuk masa depan."]},
+    { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemingin di luar tim sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat organisasi.","23. Keputusan dan tindakan saya sesuai prinsip yang diyakini oleh organisasi.","24. Saya telah menciptakan budaya kepemimpinan yang tetap efektif meskipun saya tidak hadir.","25. Saya dikenal luas sebagai panutan yang inspiratif dengan integritas tinggi."]}
 ];
 
+// DESKRIPSI LAMA YANG MENDALAM
 const reportDetails = {
     1: { title: "Level 1: Position (Jabatan)", desc: "Kepemimpinan didasarkan pada otoritas formal. Anggota tim mengikuti karena kewajiban kontrak kerja.", insight: "Level awal yang berisiko jika bertahan lama; tim cenderung bekerja dengan standar minimal.", kekuatan: "Struktur otoritas jelas, disiplin terhadap aturan dasar organisasi.", kelemahan: "Kurangnya loyalitas emosional; inovasi sulit muncul karena staf takut salah.", komunikasi: "Searah (Top-Down). Fokus pada instruksi dan kepatuhan prosedur.", rec: "Luangkan waktu mengenal staf secara personal. Berhenti mengandalkan jabatan." },
     2: { title: "Level 2: Permission (Hubungan)", desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).", insight: "Lingkungan kerja menyenangkan dan kepercayaan mulai tumbuh kuat.", kekuatan: "Budaya harmonis, empati tinggi, komunikasi dua arah lancar.", kelemahan: "Seringkali sungkan menegur staf yang buruk demi menjaga perasaan.", komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.", rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat hasil." },
@@ -106,7 +107,7 @@ function displayResults(lvlNum, avgs) {
         <div style="text-align:left; background:#fffcf0; border:1px solid #fde68a; padding:15px; border-radius:12px;">
             <p style="font-size:14px; color:#92400e; margin:0; line-height:1.6;">
                 Bapak/Ibu <b>${userData.name}</b>, grafik menunjukkan potensi besar Anda. 
-                Dapatkan <b>Laporan PDF Eksklusif</b> yang berisi analisis mendalam karakter Anda serta <b>Action Plan 90 Hari</b> untuk mencapai level kepemimpinan tertinggi (Pinnacle).
+                Dapatkan <b>Laporan PDF Eksklusif</b> yang berisi analisis mendalam karakter Anda serta <b>Action Plan 90 Hari</b> untuk mencapai level kepemimpinan tertinggi.
             </p>
         </div>`;
 
@@ -173,97 +174,97 @@ async function generatePDF() {
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     const reportID = `LEAD-${Date.now()}`;
 
-    // ENGINE MANDIRI: Buat elemen di luar layar dengan ukuran A4 Fix
-    const offscreenContainer = document.createElement('div');
-    offscreenContainer.style.position = 'fixed';
-    offscreenContainer.style.left = '-2000px';
-    offscreenContainer.style.top = '0';
-    offscreenContainer.style.width = '794px'; // A4 width
-    offscreenContainer.style.backgroundColor = '#fff';
-    document.body.appendChild(offscreenContainer);
+    // ENGINE RENDERING MANDIRI (Full A4 Tanpa Terpotong)
+    const element = document.createElement('div');
+    element.style.width = '794px'; 
+    element.style.position = 'fixed';
+    element.style.left = '-2000px'; // Sembunyikan dari layar
+    element.style.top = '0';
+    element.style.background = '#fff';
+    document.body.appendChild(element);
 
-    offscreenContainer.innerHTML = `
-        <div id="pdf-content" style="width:794px; height:1120px; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; position:relative; border:20px solid #0056b3; display:flex; flex-direction:column; background: white;">
+    element.innerHTML = `
+        <div style="width:794px; height:1123px; border:15px solid #0056b3; box-sizing:border-box; position:relative; font-family:Arial, sans-serif; color:#1a1a1a; padding:50px; display:flex; flex-direction:column; background: white;">
             
-            <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.04; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.2);">
-                ${Array(16).fill('<img src="logo-araya.png" style="width:140px; margin:40px;">').join('')}
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.03; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.2);">
+                ${Array(20).fill('<img src="logo-araya.png" style="width:130px; margin:30px;">').join('')}
             </div>
 
-            <div style="position:absolute; top:0; left:0; width:100%; height:12px; background: linear-gradient(90deg, #0056b3, #c5a059);"></div>
-
-            <div style="position:relative; z-index:1; padding: 50px; flex-grow:1; display:flex; flex-direction:column;">
-                <div style="text-align:center; margin-bottom:30px;">
-                    <img src="logo-araya.png" style="width:200px; margin: 0 auto 20px auto; display:block;">
-                    <h3 style="letter-spacing:6px; color:#64748b; font-size:14px; margin-bottom:10px; font-weight:normal;">LAPORAN ANALISIS STRATEGIS</h3>
-                    <h1 style="font-size:36px; color:#1e293b; margin:0; font-weight:bold; border-bottom:2px solid #0056b3; display:inline-block; padding-bottom:10px;">KEPEMIMPINAN</h1>
-                </div>
-
+            <div style="position:relative; z-index:1; flex-grow:1; display:flex; flex-direction:column;">
                 <div style="text-align:center; margin-bottom:40px;">
-                    <p style="font-size:18px; color:#64748b; margin-bottom:5px;">Diberikan Kepada:</p>
-                    <h2 style="font-size:42px; color:#000; margin:0; text-transform:uppercase; letter-spacing:1px;">${userData.name}</h2>
-                </div>
-
-                <div style="background:#1e293b; color:white; padding:25px; border-radius:12px; margin-bottom:30px; text-align:center;">
-                    <p style="margin:0; font-size:14px; opacity:0.8; letter-spacing:2px; text-transform:uppercase;">Hasil Evaluasi Utama:</p>
-                    <h2 style="margin:8px 0 0 0; font-size:28px; color:#c5a059;">${info.title.toUpperCase()}</h2>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
-                    <div style="background:#f8fafc; padding:20px; border-radius:10px; border-left:5px solid #0056b3;">
-                        <h4 style="margin:0 0 10px 0; font-size:15px; color:#0056b3; text-transform:uppercase;">Leadership Insight</h4>
-                        <p style="font-size:13px; line-height:1.6; margin:0; color:#334155; text-align:justify;">${info.desc} ${info.insight}</p>
-                    </div>
-                    <div style="background:#f8fafc; padding:20px; border-radius:10px; border-left:5px solid #0056b3;">
-                        <h4 style="margin:0 0 10px 0; font-size:15px; color:#0056b3; text-transform:uppercase;">Gaya Komunikasi</h4>
-                        <p style="font-size:13px; line-height:1.6; margin:0; color:#334155;">${info.komunikasi}</p>
+                    <img src="logo-araya.png" style="width:190px; margin: 0 auto 20px auto; display:block;">
+                    <h2 style="margin:0; font-size:24px; letter-spacing:1px; border-bottom:3px solid #333; display: inline-block; padding-bottom:5px;">LAPORAN ANALISIS KEPEMIMPINAN</h2>
+                    <p style="margin:15px 0 5px 0; font-size:16px;">Diberikan kepada:</p>
+                    <h1 style="margin:0; font-size:40px; font-weight:bold; color:#000; text-transform:uppercase;">${userData.name}</h1>
+                    <div style="background:#1e293b; color:#fff; display:inline-block; padding:12px 50px; border-radius:8px; margin-top:20px; font-size:20px; font-weight:bold;">
+                        HASIL UTAMA: ${info.title.toUpperCase()}
                     </div>
                 </div>
 
-                <div style="background:#fffcf0; padding:25px; border-radius:12px; border:1px solid #fde68a; margin-bottom:40px;">
-                    <h4 style="margin:0 0 10px 0; font-size:15px; color:#92400e; text-transform:uppercase; letter-spacing:1px;">Strategi Pengembangan 90 Hari</h4>
-                    <p style="font-size:14px; line-height:1.7; font-style:italic; color:#78350f; margin:0;">"${info.rec}"</p>
+                <div style="margin-bottom:15px;">
+                    <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #eee;">Leadership Insight:</h4>
+                    <p style="font-size:14px; line-height:1.6; margin:0; text-align:justify;">${info.desc} ${info.insight}</p>
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #eee;">Gaya Komunikasi:</h4>
+                    <p style="font-size:14px; line-height:1.6; margin:0;">${info.komunikasi}</p>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:15px;">
+                    <div>
+                        <h4 style="margin:0 0 5px 0; font-size:16px; color:#28a745; text-transform:uppercase; border-bottom:1px solid #eee;">Kekuatan Utama (+):</h4>
+                        <p style="font-size:13px; line-height:1.5;">${info.kekuatan}</p>
+                    </div>
+                    <div>
+                        <h4 style="margin:0 0 5px 0; font-size:16px; color:#dc3545; text-transform:uppercase; border-bottom:1px solid #eee;">Area Pengembangan (-):</h4>
+                        <p style="font-size:13px; line-height:1.5;">${info.kelemahan}</p>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:20px;">
+                    <h4 style="margin:0 0 5px 0; font-size:16px; color:#d9534f; text-transform:uppercase; border-bottom:1px solid #eee;">Strategi Pengembangan 90 Hari:</h4>
+                    <div style="background:#fffcf5; padding:15px; border-radius:10px; border:1px solid #ffeeba;">
+                        <p style="font-size:14px; line-height:1.6; margin:0; font-style:italic; color:#856404;">"${info.rec}"</p>
+                    </div>
                 </div>
 
                 <div style="flex-grow:1;">
-                    <h4 style="margin:0 0 10px 0; font-size:13px; color:#64748b; border-bottom:1px solid #eee; padding-bottom:5px;">DINAMIKA SKOR KEPEMIMPINAN:</h4>
-                    <table style="width:100%; font-size:12px; border-collapse:collapse;">
-                        ${Object.keys(avgs).map((key, i) => `
-                            <tr style="border-bottom:1px solid #f1f5f9;">
-                                <td style="padding:6px 0; color:#475569;">Level ${i+1}: ${questionsData[i].name}</td>
-                                <td style="text-align:right; font-weight:bold; color:#1e293b;">${avgs[key]}</td>
-                            </tr>
-                        `).join('')}
+                    <h4 style="margin:0 0 5px 0; font-size:16px; color:#0056b3; text-transform:uppercase; border-bottom:1px solid #eee;">Dinamika Skor Kepemimpinan:</h4>
+                    <table style="width:100%; font-size:14px; margin-top:10px; border-collapse:collapse;">
+                        <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Position (Level 1)</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Permission (Level 2)</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Production (Level 3)</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">People Development (Level 4)</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:7px 0;">Pinnacle (Level 5)</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
                     </table>
                 </div>
 
-                <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #eee; padding-top:30px;">
-                    <div style="font-size:11px; color:#94a3b8; line-height:1.8;">
-                        <p style="margin:0;">Report ID: <b>${reportID}</b></p>
-                        <p style="margin:0;">Analysis Date: <b>${dateStr}</b></p>
-                        <p style="margin:8px 0 0 0; font-weight:bold; color:#0056b3; font-size:13px;">Araya Consulting - Your Growth Partner</p>
+                <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; padding-top:20px; border-top:1px solid #eee;">
+                    <div style="font-size:12px; color:#666;">
+                        <p style="margin:0;">ID Laporan: <b>${reportID}</b></p>
+                        <p style="margin:2px 0;">Tanggal: <b>${dateStr}</b></p>
+                        <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
                     </div>
                     <div style="text-align:center;">
-                        <p style="margin:0 0 5px 0; font-size:13px; color:#334155;">Disahkan secara digital,</p>
-                        <img src="ttd.png" style="width:130px; margin-bottom:5px;">
-                        <div style="border-top:2px solid #000; width:200px; margin:0 auto; padding-top:8px;">
-                            <b style="font-size:18px; color:#000; letter-spacing:1px;">ALI MAHFUD</b><br>
-                            <span style="font-size:11px; color:#64748b; font-weight:bold; text-transform:uppercase;">Founder Araya Consulting</span>
-                        </div>
+                        <p style="margin:0; font-size:14px; color:#333;">Disahkan secara digital,</p>
+                        <img src="ttd.png" style="width:140px; margin: 5px auto; display:block;">
+                        <p style="margin:0; font-weight:bold; font-size:18px; border-top:2px solid #000; display:inline-block; padding: 0 15px;">ALI MAHFUD</p>
+                        <p style="margin:2px 0 0 0; font-size:12px; color:#666; font-weight:bold;">Founder Araya Consulting</p>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
 
-    // PASTI DOWNLOAD: Paksa render dan Blob Download
+    // PROSES BLOB DOWNLOAD (Sesuai Logic DISC yang Sukses)
     setTimeout(async () => {
         try {
-            const canvas = await html2canvas(document.getElementById('pdf-content'), { 
+            const canvas = await html2canvas(element, { 
                 scale: 2, 
                 useCORS: true, 
                 logging: false,
                 width: 794,
-                height: 1120
+                height: 1123
             });
             
             const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -271,22 +272,20 @@ async function generatePDF() {
             const pdf = new jsPDF('p', 'mm', 'a4');
             pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
             
-            // DOWNLOAD VIA BLOB
+            // METODE BLOB: Memaksa HP Memulai Download
             const blob = pdf.output('blob');
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Laporan_Leadership_${userData.name.replace(/\s+/g, '_')}.pdf`;
-            document.body.appendChild(a);
+            a.download = `Leadership_Report_${userData.name.replace(/\s+/g, '_')}.pdf`;
             a.click();
             
             // Cleanup
-            document.body.removeChild(a);
-            document.body.removeChild(offscreenContainer);
+            document.body.removeChild(element);
             URL.revokeObjectURL(url);
         } catch (err) {
             console.error(err);
-            alert("Gagal mengunduh. Silakan gunakan Chrome/Safari.");
+            alert("Gagal mengunduh. Silakan gunakan Chrome atau Safari.");
         }
     }, 1500);
 }
