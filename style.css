@@ -1,174 +1,107 @@
 :root {
     --primary: #0056b3;
-    --secondary: #ffc107;
-    --bg: #f4f7f6;
-    --text: #333;
+    --secondary: #1e293b;
+    --accent: #c5a059;
+    --bg: #f8fafc;
+    --text: #334155;
 }
 
-/* Base Styles */
-body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background: var(--bg); 
-    color: var(--text); 
-    margin: 0; 
-    padding: 10px; 
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    background-color: var(--bg);
+    overflow-x: hidden;
 }
 
-.container { 
-    max-width: 500px; 
-    margin: 20px auto; 
-    background: #fff; 
-    padding: 25px; 
-    border-radius: 15px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+.bg-gradient {
+    position: fixed;
+    top: 0; width: 100%; height: 400px;
+    background: linear-gradient(135deg, #0056b3 0%, #002d5e 100%);
+    z-index: -1;
+    border-bottom-left-radius: 50% 20%;
+    border-bottom-right-radius: 50% 20%;
 }
 
-.hidden { display: none; }
-
-.logo-placeholder { 
-    text-align: center; 
-    margin-bottom: 20px; 
+.container {
+    padding: 20px;
+    max-width: 500px;
+    margin: 40px auto;
 }
 
-.logo-placeholder img { width: 150px; }
-
-h2 { 
-    color: var(--primary); 
-    text-align: center; 
-    margin-top: 0; 
+.main-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-input { 
-    width: 100%; 
-    padding: 12px; 
-    margin: 10px 0; 
-    border: 1px solid #ddd; 
-    border-radius: 8px; 
-    box-sizing: border-box; 
-    font-size: 16px; 
-}
+header { text-align: center; margin-bottom: 30px; }
+.app-logo { width: 160px; }
 
-/* Buttons */
-#primary-btn, #next-btn, .unlock-btn { 
-    width: 100%; 
-    padding: 15px; 
-    background: var(--primary); 
-    color: #fff; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-size: 16px; 
-    font-weight: bold; 
-    transition: 0.3s; 
-}
+h1.title { font-size: 28px; color: var(--secondary); margin: 0; font-weight: 700; text-align: center; }
+.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
 
-#primary-btn:hover { background: #004494; }
-
-.wa-btn { 
-    width: 100%; 
-    padding: 15px; 
-    background: #25d366; 
-    color: #fff; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-size: 16px; 
-    font-weight: bold; 
-    margin-bottom: 10px; 
-}
-
-/* Quiz Options */
-.options-grid { 
-    display: flex; 
-    justify-content: space-between; 
-    margin: 20px 0; 
-}
-
-.opt-label { 
-    cursor: pointer; 
-    text-align: center; 
-    flex: 1; 
-}
-
-.opt-label input { display: none; }
-
-.opt-circle { 
-    width: 40px; 
-    height: 40px; 
-    line-height: 40px; 
-    border-radius: 50%; 
-    border: 2px solid #ddd; 
-    margin: 0 auto; 
-    transition: 0.3s; 
-}
-
-.opt-label input:checked + .opt-circle { 
-    background: var(--primary); 
-    color: #fff; 
-    border-color: var(--primary); 
-    transform: scale(1.1); 
-}
-
-.nav-btns { 
-    display: flex; 
-    gap: 10px; 
-    margin-top: 20px; 
-}
-
-#prev-btn { 
-    flex: 1; 
-    padding: 12px; 
-    border-radius: 8px; 
-    border: 1px solid #ccc; 
-    background: #eee; 
-    cursor: pointer; 
-}
-
-/* Result & Activation Box */
-.activation-box { 
-    margin-top: 25px; 
-    padding: 20px; 
-    border: 2px dashed #007bff; 
-    border-radius: 12px; 
-    background: #f0f7ff; 
-}
-
-.reload-btn { 
-    width: 100%; 
-    margin-top: 15px; 
-    padding: 10px; 
-    background: #6c757d; 
-    color: #fff; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-}
-
-.chart-container { 
-    margin: 20px 0; 
-    height: 250px; 
-}
-
-/* ============================================================
-   FIX AREA: SERTIFIKAT PDF (MENGHILANGKAN RUANG KOSONG)
-   ============================================================ */
-
-/* Pastikan wrapper sertifikat tidak mewarisi margin/padding dari body atau container */
-#certificate-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 800px; /* Sesuai konfigurasi windowWidth di script.js */
-    margin: 0 !important;
-    padding: 0 !important;
-    z-index: -9999;
-    background: white;
-}
-
-#pdf-container {
-    margin: 0 !important;
-    padding: 40px !important; /* Padding internal agar isi sertifikat tidak menempel border */
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    font-family: inherit;
+    font-size: 15px;
 }
+
+#primary-btn, #next-btn, #submit-btn, .unlock-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#primary-btn:active { transform: scale(0.98); }
+
+.hidden { display: none !important; }
+
+/* Quiz Styling */
+.progress-container { background: #e2e8f0; height: 6px; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+#progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+
+#quiz-header h4 { font-size: 18px; line-height: 1.5; color: var(--secondary); margin-bottom: 25px; }
+
+.options-grid { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.opt-label { cursor: pointer; text-align: center; flex: 1; }
+.opt-label input { display: none; }
+.opt-circle {
+    width: 45px; height: 45px; line-height: 45px;
+    border: 2px solid #e2e8f0; border-radius: 50%;
+    margin: 0 auto 8px; color: #94a3b8; font-weight: 600;
+    transition: 0.2s;
+}
+.opt-label input:checked + .opt-circle {
+    background: var(--primary); border-color: var(--primary); color: white;
+    box-shadow: 0 4px 10px rgba(0,86,179,0.3);
+}
+
+.nav-btns { display: flex; gap: 10px; margin-top: 30px; }
+#prev-btn { background: #f1f5f9; color: var(--secondary); width: 100%; border: none; border-radius: 12px; font-weight: 600; }
+
+/* Result Box */
+.premium-box {
+    background: #fffbeb; border: 1px solid #fde68a; padding: 20px; border-radius: 16px; margin-top: 25px;
+}
+.wa-btn {
+    width: 100%; padding: 14px; background: #25d366; color: white; border: none;
+    border-radius: 12px; font-weight: 600; margin-bottom: 20px; cursor: pointer;
+}
+.activation-form { display: flex; gap: 8px; }
+.activation-form input { flex: 2; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; }
+.activation-form button { flex: 1; padding: 12px; font-size: 13px; }
