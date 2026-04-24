@@ -11,20 +11,18 @@ const questionsData = [
 ];
 
 const reportDetails = {
-    1: { title: "Level 1: Position", desc: "Kepemimpinan Anda didasarkan pada hak jabatan formal. Orang mengikuti karena harus.", rec: "Mulailah melayani tim, bukan sekadar memerintah melalui otoritas jabatan." },
-    2: { title: "Level 2: Permission", desc: "Anda memimpin melalui hubungan. Orang mengikuti karena mereka ingin secara sukarela.", rec: "Bangun standar kinerja yang jelas sambil tetap memelihara hubungan personal." },
-    3: { title: "Level 3: Production", desc: "Anda memimpin melalui hasil nyata. Anda telah membangun kredibilitas eksekusi.", rec: "Jangan hanya fokus pada angka, mulailah melatih orang lain untuk melakukan apa yang Anda bisa." },
-    4: { title: "Level 4: People Development", desc: "Fokus Anda adalah reproduksi. Anda mencetak pemimpin-pemimpin baru di tim.", rec: "Berdayakan mereka lebih luas untuk mengambil keputusan strategis tanpa Anda." },
-    5: { title: "Level 5: Pinnacle", desc: "Level tertinggi. Orang mengikuti karena siapa diri Anda dan apa yang Anda wakili.", rec: "Fokus pada legacy dan pengaruh skala luas untuk kemajuan organisasi jangka panjang." }
+    1: { title: "Level 1: Position (Jabatan)", desc: "Kepemimpinan didasarkan pada otoritas formal. Anggota tim mengikuti karena kewajiban kontrak kerja.", insight: "Level awal yang berisiko jika bertahan lama; tim cenderung bekerja dengan standar minimal.", kekuatan: "Struktur otoritas jelas, disiplin terhadap aturan dasar organisasi.", kelemahan: "Kurangnya loyalitas emosional; inovasi sulit muncul karena staf takut salah.", komunikasi: "Searah (Top-Down). Fokus pada instruksi dan kepatuhan prosedur.", rec: "Luangkan waktu mengenal staf secara personal. Berhenti mengandalkan jabatan." },
+    2: { title: "Level 2: Permission (Hubungan)", desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).", insight: "Lingkungan kerja menyenangkan dan kepercayaan mulai tumbuh kuat.", kekuatan: "Budaya harmonis, empati tinggi, komunikasi dua arah lancar.", kelemahan: "Seringkali sungkan menegur staf yang buruk demi menjaga perasaan.", komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.", rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat hasil." },
+    3: { title: "Level 3: Production (Hasil)", desc: "Anda memimpin melalui hasil nyata. Reputasi didasarkan pada prestasi bersama tim.", insight: "Fokus pada kemenangan melenyapkan masalah kecil. Anda adalah eksekutor handal.", kekuatan: "Kredibilitas tinggi, goal-oriented, mampu menciptakan momentum sukses.", kelemahan: "Risiko burnout jika terus mengejar target tanpa memperhatikan manusia.", komunikasi: "To-the-point dan fokus pada solusi. Menginspirasi melalui teladan hasil.", rec: "Delegasikan tanggung jawab penting agar tim merasa memiliki proyek." },
+    4: { title: "Level 4: People Development", desc: "Fokus Anda adalah mencetak pemimpin baru. Anda dikenal sebagai mentor handal.", insight: "Kesuksesan diukur dari seberapa hebat orang yang Anda didik. Anda multiplier.", kekuatan: "Identifikasi potensi, pemberdayaan luar biasa, loyalitas jangka panjang.", kelemahan: "Sulit melepaskan kader terbaik untuk naik ke posisi lebih tinggi di unit lain.", komunikasi: "Coaching & Mentoring. Banyak bertanya untuk memicu pemikiran strategis.", rec: "Berikan otonomi penuh pada kader. Biarkan mereka mengambil keputusan strategis." },
+    5: { title: "Level 5: Pinnacle (Puncak)", desc: "Memimpin melalui reputasi dan integritas teruji waktu. Anda adalah simbol organisasi.", insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai Anda.", kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, membangun legacy.", kelemahan: "Jarak komunikasi dengan frontliner bisa menjauh tanpa sistem aspirasi.", komunikasi: "Inspiratif dan filosofis. Fokus pada nilai inti dan warisan (legacy).", rec: "Fokus pada strategi tingkat tinggi dan kaderisasi direksi. Gunakan pengaruh skala luas." }
 };
 
 let userData = { name: "", phone: "" };
 let currentQ = 0;
 const allQuestionsFlat = [];
 const userAnswers = {};
-let myChart;
 
-// Flatten questions
 questionsData.forEach(lvl => {
     lvl.questions.forEach((txt, i) => {
         allQuestionsFlat.push({ id: `${lvl.group}_${i}`, text: txt, group: lvl.group });
@@ -43,7 +41,7 @@ window.startTest = function() {
 function renderQuestion() {
     const q = allQuestionsFlat[currentQ];
     document.getElementById('progress-bar').style.width = `${((currentQ + 1) / 25) * 100}%`;
-    document.getElementById('quiz-header').innerHTML = `<p style="font-size:12px; color:#64748b; font-weight:600; text-transform:uppercase;">Pertanyaan ${currentQ + 1} dari 25</p><h4>${q.text}</h4>`;
+    document.getElementById('quiz-header').innerHTML = `<p style="font-size:12px; color:#64748b; font-weight:600; text-transform:uppercase;">Asesmen ${currentQ + 1} / 25</p><h4>${q.text}</h4>`;
     document.getElementById('questions-container').innerHTML = `
         <div class="options-grid">
             ${[1,2,3,4,5].map(v => `
@@ -60,7 +58,11 @@ function renderQuestion() {
     updateNav();
 }
 
-window.saveAnswer = function(id, val) { userAnswers[id] = val; updateNav(); setTimeout(() => { if(currentQ < 24) { currentQ++; renderQuestion(); } }, 300); };
+window.saveAnswer = function(id, val) { 
+    userAnswers[id] = val; 
+    updateNav(); 
+    // AUTO-NEXT DIHAPUS sesuai permintaan Bapak agar user klik "Selanjutnya"
+};
 
 function updateNav() {
     const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
@@ -76,13 +78,27 @@ document.getElementById('prev-btn').onclick = () => { currentQ--; renderQuestion
 
 window.calculateResults = function() {
     const avgs = {};
+    let sumTotal = 0;
     questionsData.forEach(lvl => {
         const sum = allQuestionsFlat.filter(q => q.group === lvl.group).reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
         avgs[lvl.group] = (sum / 5).toFixed(1);
+        sumTotal += parseFloat(avgs[lvl.group]);
     });
 
     let finalLevel = 1;
     for (let i = 1; i <= 5; i++) { if (avgs[`L${i}`] >= 4.0) finalLevel = i; else break; }
+
+    // DATABASE SYNC
+    fetch(SCRIPT_URL, { 
+        method: 'POST', 
+        mode: 'no-cors', 
+        body: JSON.stringify({ 
+            name: userData.name, 
+            phone: userData.phone, 
+            levelName: questionsData[finalLevel-1].name, 
+            avgScore: (sumTotal/5).toFixed(1) 
+        }) 
+    });
 
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(finalLevel, avgs);
@@ -90,17 +106,22 @@ window.calculateResults = function() {
 
 function displayResults(lvlNum, avgs) {
     document.getElementById('results').classList.remove('hidden');
-    const info = reportDetails[lvlNum];
+    
+    // NAMA LEVEL DISEMBUNYIKAN sesuai permintaan
     document.getElementById('level-result-summary').innerHTML = `
-        <div style="text-align:center; padding-bottom:20px;">
-            <p style="font-size:14px; margin-bottom:5px;">Hasil Analisis Kepemimpinan:</p>
-            <h2 style="color:#0056b3; margin:0; font-size:24px;">${info.title}</h2>
+        <div style="text-align:center; padding-bottom:15px;">
+            <h2 style="color:#0056b3; margin:0; font-size:22px;">Analisis Skor Berhasil</h2>
+            <p style="font-size:14px; color:#64748b;">Lihat dinamika kepemimpinan Anda pada grafik di bawah ini.</p>
         </div>`;
 
     document.getElementById('persuasive-call-to-action').innerHTML = `
-        <p style="font-size:14px; color:#92400e; line-height:1.5;">
-            <b>${userData.name.split('')[0]}</b>, Anda berada di ambang transformasi. Dapatkan Action Plan 90 hari untuk mencapai Level tertinggi.
-        </p>`;
+        <div style="text-align:left; background:#fffbeb; border-left:4px solid #d97706; padding:15px; border-radius:8px;">
+            <p style="font-size:14px; color:#92400e; margin:0; line-height:1.6;">
+                Bapak/Ibu <b>${userData.name}</b>, grafik menunjukkan kapasitas kepemimpinan Anda saat ini. 
+                Untuk mengetahui <b>di level mana Anda berada</b> dan mendapatkan <b>Panduan Strategis 90 Hari</b> 
+                guna mencapai level Pinnacle, silakan aktivasi laporan premium Anda.
+            </p>
+        </div>`;
 
     renderChart(avgs);
     window.currentResults = { lvlNum, avgs };
@@ -112,14 +133,18 @@ function renderChart(avgs) {
         type: 'bar',
         data: {
             labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
-            datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#0056b3', borderRadius: 8 }]
+            datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#0056b3', borderRadius: 5 }]
         },
-        options: { scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } }
+        options: { 
+            indexAxis: 'y',
+            scales: { x: { min: 0, max: 5 } }, 
+            plugins: { legend: { display: false } } 
+        }
     });
 }
 
 window.requestAccess = function() {
-    const msg = `Halo Mas Ali, saya *${userData.name}*. Ingin memesan Kode Aktivasi Laporan Leadership.\nNo HP: ${userData.phone}`;
+    const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya ingin aktivasi Kode Laporan Leadership Strategic Assessment.\nNo HP: ${userData.phone}`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
 };
 
@@ -132,73 +157,99 @@ window.unlockCertificate = function() {
     } else { alert("Kode Aktivasi Salah."); }
 };
 
-// ELEGAN PDF GENERATION
 async function generatePDF() {
     const { lvlNum, avgs } = window.currentResults;
     const info = reportDetails[lvlNum];
     const wrapper = document.getElementById('certificate-wrapper');
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
 
+    // RE-INSTATE DESKRIPSI LAMA (Lengkap)
     wrapper.innerHTML = `
-        <div id="pdf-content" style="width:794px; height:1123px; background:white; padding:60px; box-sizing:border-box; font-family:'Inter', sans-serif; position:relative; border:20px solid #0056b3;">
-            <div style="position:absolute; top:0; left:0; right:0; height:10px; background:#c5a059;"></div>
+        <div id="pdf-content" style="width:794px; height:1123px; background:white; padding:50px; box-sizing:border-box; font-family:Arial, sans-serif; position:relative; border:18px solid #0056b3; display:flex; flex-direction:column;">
             
-            <div style="text-align:center;">
-                <img src="logo-araya.png" style="width:180px; margin-bottom:40px;">
-                <h3 style="letter-spacing:4px; color:#64748b; font-weight:400; margin-bottom:10px;">LAPORAN ANALISIS</h3>
-                <h1 style="font-size:42px; color:#1e293b; margin:0; font-weight:700;">KEPEMIMPINAN</h1>
+            <div style="text-align:center; margin-bottom:30px;">
+                <img src="logo-araya.png" style="width:170px; margin-bottom:15px;">
+                <h2 style="margin:0; font-size:24px; letter-spacing:1px; border-bottom:2px solid #333; display:inline-block; padding-bottom:5px;">LAPORAN ANALISIS KEPEMIMPINAN</h2>
+                <p style="margin:20px 0 5px 0; font-size:16px;">Diberikan kepada:</p>
+                <h1 style="margin:0; font-size:38px; font-weight:bold; color:#000; text-transform:uppercase;">${userData.name}</h1>
+                <div style="background:#1e293b; color:#fff; display:inline-block; padding:10px 40px; border-radius:8px; margin-top:20px; font-size:18px; font-weight:bold;">
+                    HASIL UTAMA: ${info.title.toUpperCase()}
+                </div>
             </div>
 
-            <div style="margin:60px 0; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0; padding:30px 0; text-align:center;">
-                <p style="font-size:18px; color:#64748b; margin-bottom:10px;">Diberikan Kepada:</p>
-                <h2 style="font-size:36px; color:#0056b3; margin:0; text-transform:uppercase;">${userData.name}</h2>
+            <div style="margin-bottom:15px;">
+                <h4 style="margin:0 0 5px 0; color:#0056b3; border-bottom:1px solid #eee;">LEADERSHIP INSIGHT:</h4>
+                <p style="font-size:14px; line-height:1.5; margin:0; text-align:justify;">${info.desc} ${info.insight}</p>
             </div>
 
-            <div style="background:#f8fafc; padding:30px; border-radius:15px; margin-bottom:40px;">
-                <h4 style="color:#c5a059; margin-top:0; text-transform:uppercase; letter-spacing:1px;">Hasil Utama: ${info.title}</h4>
-                <p style="line-height:1.8; color:#334155; font-size:16px;">${info.desc}</p>
+            <div style="margin-bottom:15px;">
+                <h4 style="margin:0 0 5px 0; color:#0056b3; border-bottom:1px solid #eee;">GAYA KOMUNIKASI:</h4>
+                <p style="font-size:14px; line-height:1.5; margin:0;">${info.komunikasi}</p>
             </div>
 
-            <div style="margin-bottom:40px;">
-                <h4 style="color:#0056b3; border-bottom:2px solid #0056b3; display:inline-block; padding-bottom:5px;">STRATEGI PENGEMBANGAN</h4>
-                <p style="line-height:1.8; font-style:italic; color:#475569;">"${info.rec}"</p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:15px;">
+                <div>
+                    <h4 style="margin:0 0 5px 0; color:#28a745; border-bottom:1px solid #eee;">KEKUATAN UTAMA (+):</h4>
+                    <p style="font-size:13px; line-height:1.4;">${info.kekuatan}</p>
+                </div>
+                <div>
+                    <h4 style="margin:0 0 5px 0; color:#dc3545; border-bottom:1px solid #eee;">AREA PENGEMBANGAN (-):</h4>
+                    <p style="font-size:13px; line-height:1.4;">${info.kelemahan}</p>
+                </div>
             </div>
 
-            <table style="width:100%; border-collapse:collapse; margin-top:40px;">
-                <tr>
-                    <td style="width:60%;">
-                        <p style="font-size:12px; color:#94a3b8;">ID Laporan: LEAD-${Date.now()}</p>
-                        <p style="font-size:14px; color:#1e293b;">Tanggal Analisis: <b>${dateStr}</b></p>
-                    </td>
-                    <td style="text-align:center;">
-                        <p style="font-size:14px; margin-bottom:10px;">Disahkan secara digital,</p>
-                        <img src="ttd.png" style="width:120px; margin-bottom:5px;">
-                        <div style="border-top:1.5px solid #1e293b; width:180px; margin:0 auto; padding-top:5px;">
-                            <b>ALI MAHFUD</b><br><span style="font-size:11px;">Founder Araya Consulting</span>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <div style="margin-bottom:20px;">
+                <h4 style="margin:0 0 5px 0; color:#d97706; border-bottom:1px solid #eee;">STRATEGI PENGEMBANGAN 90 HARI:</h4>
+                <div style="background:#fffcf5; padding:12px; border:1px solid #fde68a; border-radius:8px;">
+                    <p style="font-size:14px; font-style:italic; color:#92400e; margin:0;">${info.rec}</p>
+                </div>
+            </div>
+
+            <div style="flex-grow:1;">
+                <h4 style="margin:0 0 5px 0; color:#0056b3; border-bottom:1px solid #eee;">DINAMIKA SKOR:</h4>
+                <table style="width:100%; font-size:13px; margin-top:5px; border-collapse:collapse;">
+                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 1: Position</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
+                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 2: Permission</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
+                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 3: Production</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
+                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 4: People Development</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
+                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 5: Pinnacle</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
+                </table>
+            </div>
+
+            <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div style="font-size:11px; color:#64748b;">
+                    <p style="margin:0;">ID Laporan: <b>LEAD-${Date.now()}</b></p>
+                    <p style="margin:3px 0;">Tanggal: <b>${dateStr}</b></p>
+                    <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
+                </div>
+                <div style="text-align:center;">
+                    <p style="margin:0; font-size:13px;">Disahkan secara digital,</p>
+                    <img src="ttd.png" style="width:110px; margin:5px 0;">
+                    <div style="border-top:1.5px solid #000; padding-top:3px;">
+                        <b style="font-size:16px;">ALI MAHFUD</b><br>
+                        <span style="font-size:11px; color:#64748b;">Founder Araya Consulting</span>
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 
-    // PASTI UNDUH DI HP: Menggunakan Blobs
     setTimeout(async () => {
         const element = document.getElementById('pdf-content');
-        const canvas = await html2canvas(element, { scale: 2 });
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const canvas = await html2canvas(element, { 
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            y: 0,
+            scrollY: 0
+        });
+        
+        const imgData = canvas.toDataURL('image/jpeg', 0.98);
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
         
-        // Triggers direct download in mobile browsers
-        const blob = pdf.output('blob');
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `Leadership_Report_${userData.name.replace(/\s/g, '_')}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // SAVE LANGSUNG (IDENTIK DENGAN DISC)
+        pdf.save(`Laporan_Leadership_${userData.name.replace(/\s+/g, '_')}.pdf`);
     }, 1000);
 }
