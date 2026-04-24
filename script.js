@@ -156,15 +156,13 @@ window.unlockCertificate = async function() {
             btn.innerHTML = "Unduh Laporan";
         }
     } catch (e) {
-        // Fallback manual jika database tidak merespon JSON
         if(code.includes("AY") || code.includes("ARAYA")) {
              generatePDF();
              document.querySelector('.premium-box').classList.add('hidden');
              document.getElementById('cert-area').classList.remove('hidden');
         } else {
-             alert("Gagal terhubung ke server. Pastikan kode benar.");
+             alert("Gagal terhubung ke server.");
              btn.disabled = false;
-             btn.innerHTML = "Unduh Laporan";
         }
     }
 };
@@ -172,17 +170,20 @@ window.unlockCertificate = async function() {
 async function generatePDF() {
     const { lvlNum, avgs } = window.currentResults;
     const info = reportDetails[lvlNum];
-    const wrapper = document.getElementById('certificate-wrapper');
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     const reportID = `LEAD-${Date.now()}`;
 
-    // ISOLASI ELEMENT AGAR TIDAK BOCOR KE WEB
-    const element = document.createElement('div');
-    element.style.width = '794px';
-    element.style.background = '#fff';
+    // ENGINE MANDIRI: Buat elemen di luar layar dengan ukuran A4 Fix
+    const offscreenContainer = document.createElement('div');
+    offscreenContainer.style.position = 'fixed';
+    offscreenContainer.style.left = '-2000px';
+    offscreenContainer.style.top = '0';
+    offscreenContainer.style.width = '794px'; // A4 width
+    offscreenContainer.style.backgroundColor = '#fff';
+    document.body.appendChild(offscreenContainer);
 
-    element.innerHTML = `
-        <div id="pdf-content" style="width:794px; height:1123px; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; position:relative; border:20px solid #0056b3; display:flex; flex-direction:column; background: white;">
+    offscreenContainer.innerHTML = `
+        <div id="pdf-content" style="width:794px; height:1120px; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; position:relative; border:20px solid #0056b3; display:flex; flex-direction:column; background: white;">
             
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.04; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.2);">
                 ${Array(16).fill('<img src="logo-araya.png" style="width:140px; margin:40px;">').join('')}
@@ -191,8 +192,8 @@ async function generatePDF() {
             <div style="position:absolute; top:0; left:0; width:100%; height:12px; background: linear-gradient(90deg, #0056b3, #c5a059);"></div>
 
             <div style="position:relative; z-index:1; padding: 50px; flex-grow:1; display:flex; flex-direction:column;">
-                <div style="text-align:center; margin-bottom:40px;">
-                    <img src="logo-araya.png" style="width:200px; margin: 0 auto 25px auto; display:block;">
+                <div style="text-align:center; margin-bottom:30px;">
+                    <img src="logo-araya.png" style="width:200px; margin: 0 auto 20px auto; display:block;">
                     <h3 style="letter-spacing:6px; color:#64748b; font-size:14px; margin-bottom:10px; font-weight:normal;">LAPORAN ANALISIS STRATEGIS</h3>
                     <h1 style="font-size:36px; color:#1e293b; margin:0; font-weight:bold; border-bottom:2px solid #0056b3; display:inline-block; padding-bottom:10px;">KEPEMIMPINAN</h1>
                 </div>
@@ -202,7 +203,7 @@ async function generatePDF() {
                     <h2 style="font-size:42px; color:#000; margin:0; text-transform:uppercase; letter-spacing:1px;">${userData.name}</h2>
                 </div>
 
-                <div style="background:#1e293b; color:white; padding:25px; border-radius:12px; margin-bottom:30px; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                <div style="background:#1e293b; color:white; padding:25px; border-radius:12px; margin-bottom:30px; text-align:center;">
                     <p style="margin:0; font-size:14px; opacity:0.8; letter-spacing:2px; text-transform:uppercase;">Hasil Evaluasi Utama:</p>
                     <h2 style="margin:8px 0 0 0; font-size:28px; color:#c5a059;">${info.title.toUpperCase()}</h2>
                 </div>
@@ -218,20 +219,21 @@ async function generatePDF() {
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
-                    <div>
-                        <h4 style="margin:0 0 8px 0; font-size:14px; color:#28a745; text-transform:uppercase;">Kekuatan Utama (+)</h4>
-                        <p style="font-size:13px; line-height:1.5; color:#475569; margin:0;">${info.kekuatan}</p>
-                    </div>
-                    <div>
-                        <h4 style="margin:0 0 8px 0; font-size:14px; color:#dc3545; text-transform:uppercase;">Area Pengembangan (-)</h4>
-                        <p style="font-size:13px; line-height:1.5; color:#475569; margin:0;">${info.kelemahan}</p>
-                    </div>
-                </div>
-
                 <div style="background:#fffcf0; padding:25px; border-radius:12px; border:1px solid #fde68a; margin-bottom:40px;">
                     <h4 style="margin:0 0 10px 0; font-size:15px; color:#92400e; text-transform:uppercase; letter-spacing:1px;">Strategi Pengembangan 90 Hari</h4>
                     <p style="font-size:14px; line-height:1.7; font-style:italic; color:#78350f; margin:0;">"${info.rec}"</p>
+                </div>
+
+                <div style="flex-grow:1;">
+                    <h4 style="margin:0 0 10px 0; font-size:13px; color:#64748b; border-bottom:1px solid #eee; padding-bottom:5px;">DINAMIKA SKOR KEPEMIMPINAN:</h4>
+                    <table style="width:100%; font-size:12px; border-collapse:collapse;">
+                        ${Object.keys(avgs).map((key, i) => `
+                            <tr style="border-bottom:1px solid #f1f5f9;">
+                                <td style="padding:6px 0; color:#475569;">Level ${i+1}: ${questionsData[i].name}</td>
+                                <td style="text-align:right; font-weight:bold; color:#1e293b;">${avgs[key]}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
                 </div>
 
                 <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #eee; padding-top:30px;">
@@ -253,17 +255,15 @@ async function generatePDF() {
         </div>
     `;
 
-    // BLOB DOWNLOAD LOGIC (PALING AMAN UNTUK MOBILE)
-    document.body.appendChild(element); // Pasang sejenak agar bisa dipotret
-
+    // PASTI DOWNLOAD: Paksa render dan Blob Download
     setTimeout(async () => {
         try {
-            const canvas = await html2canvas(element, { 
+            const canvas = await html2canvas(document.getElementById('pdf-content'), { 
                 scale: 2, 
                 useCORS: true, 
                 logging: false,
-                y: 0,
-                scrollY: 0 
+                width: 794,
+                height: 1120
             });
             
             const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -271,19 +271,22 @@ async function generatePDF() {
             const pdf = new jsPDF('p', 'mm', 'a4');
             pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
             
-            // DOWNLOAD VIA BLOB (Pemicu Dialog Save File di HP)
+            // DOWNLOAD VIA BLOB
             const blob = pdf.output('blob');
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `Laporan_Leadership_${userData.name.replace(/\s+/g, '_')}.pdf`;
+            document.body.appendChild(a);
             a.click();
+            
+            // Cleanup
+            document.body.removeChild(a);
+            document.body.removeChild(offscreenContainer);
             URL.revokeObjectURL(url);
-
-            document.body.removeChild(element); // Hapus setelah selesai
         } catch (err) {
-            console.error("PDF Error:", err);
-            alert("Gagal mengunduh file. Mohon gunakan browser Chrome atau Safari.");
+            console.error(err);
+            alert("Gagal mengunduh. Silakan gunakan Chrome/Safari.");
         }
     }, 1500);
 }
