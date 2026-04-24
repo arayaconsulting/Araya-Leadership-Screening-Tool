@@ -58,11 +58,7 @@ function renderQuestion() {
     updateNav();
 }
 
-window.saveAnswer = function(id, val) { 
-    userAnswers[id] = val; 
-    updateNav(); 
-    // AUTO-NEXT DIHAPUS sesuai permintaan Bapak agar user klik "Selanjutnya"
-};
+window.saveAnswer = function(id, val) { userAnswers[id] = val; updateNav(); };
 
 function updateNav() {
     const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
@@ -88,16 +84,10 @@ window.calculateResults = function() {
     let finalLevel = 1;
     for (let i = 1; i <= 5; i++) { if (avgs[`L${i}`] >= 4.0) finalLevel = i; else break; }
 
-    // DATABASE SYNC
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
-        body: JSON.stringify({ 
-            name: userData.name, 
-            phone: userData.phone, 
-            levelName: questionsData[finalLevel-1].name, 
-            avgScore: (sumTotal/5).toFixed(1) 
-        }) 
+        body: JSON.stringify({ name: userData.name, phone: userData.phone, levelName: questionsData[finalLevel-1].name, avgScore: (sumTotal/5).toFixed(1) }) 
     });
 
     document.getElementById('quiz-content').classList.add('hidden');
@@ -106,20 +96,17 @@ window.calculateResults = function() {
 
 function displayResults(lvlNum, avgs) {
     document.getElementById('results').classList.remove('hidden');
-    
-    // NAMA LEVEL DISEMBUNYIKAN sesuai permintaan
     document.getElementById('level-result-summary').innerHTML = `
         <div style="text-align:center; padding-bottom:15px;">
-            <h2 style="color:#0056b3; margin:0; font-size:22px;">Analisis Skor Berhasil</h2>
-            <p style="font-size:14px; color:#64748b;">Lihat dinamika kepemimpinan Anda pada grafik di bawah ini.</p>
+            <h2 style="color:#0056b3; margin:0; font-size:22px;">Skor Berhasil Dianalisis</h2>
+            <p style="font-size:14px; color:#64748b;">Dinamika Kapasitas Kepemimpinan Anda</p>
         </div>`;
 
     document.getElementById('persuasive-call-to-action').innerHTML = `
-        <div style="text-align:left; background:#fffbeb; border-left:4px solid #d97706; padding:15px; border-radius:8px;">
+        <div style="text-align:left; background:#fffcf0; border:1px solid #fde68a; padding:15px; border-radius:12px;">
             <p style="font-size:14px; color:#92400e; margin:0; line-height:1.6;">
-                Bapak/Ibu <b>${userData.name}</b>, grafik menunjukkan kapasitas kepemimpinan Anda saat ini. 
-                Untuk mengetahui <b>di level mana Anda berada</b> dan mendapatkan <b>Panduan Strategis 90 Hari</b> 
-                guna mencapai level Pinnacle, silakan aktivasi laporan premium Anda.
+                Bapak/Ibu <b>${userData.name}</b>, grafik menunjukkan potensi besar Anda. 
+                Dapatkan <b>Laporan PDF Eksklusif</b> yang berisi analisis mendalam karakter Anda serta <b>Action Plan 90 Hari</b> untuk mencapai level kepemimpinan tertinggi (Pinnacle).
             </p>
         </div>`;
 
@@ -135,22 +122,29 @@ function renderChart(avgs) {
             labels: ['L1', 'L2', 'L3', 'L4', 'L5'],
             datasets: [{ label: 'Skor', data: Object.values(avgs), backgroundColor: '#0056b3', borderRadius: 5 }]
         },
-        options: { 
-            indexAxis: 'y',
-            scales: { x: { min: 0, max: 5 } }, 
-            plugins: { legend: { display: false } } 
-        }
+        options: { indexAxis: 'y', scales: { x: { min: 0, max: 5 } }, plugins: { legend: { display: false } } }
     });
 }
 
 window.requestAccess = function() {
-    const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Saya ingin aktivasi Kode Laporan Leadership Strategic Assessment.\nNo HP: ${userData.phone}`;
+    const msg = `Halo Mas Ali Mahfud, saya *${userData.name}*. Ingin memesan Kode Aktivasi Laporan Leadership.\nNo HP: ${userData.phone}`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
 };
 
 window.unlockCertificate = function() {
     const code = document.getElementById('access-code').value.toUpperCase();
+    
+    // SISTEM 1 KODE 1x PAKAI (Client Side Lock)
+    const usedCodes = JSON.parse(localStorage.getItem('araya_used_codes') || "[]");
+    if(usedCodes.includes(code)) {
+        alert("Maaf, Kode ini sudah pernah digunakan.");
+        return;
+    }
+
     if(code.includes("AY") || code.includes("ARAYA")) {
+        usedCodes.push(code);
+        localStorage.setItem('araya_used_codes', JSON.stringify(usedCodes));
+        
         generatePDF();
         document.querySelector('.premium-box').classList.add('hidden');
         document.getElementById('cert-area').classList.remove('hidden');
@@ -162,72 +156,89 @@ async function generatePDF() {
     const info = reportDetails[lvlNum];
     const wrapper = document.getElementById('certificate-wrapper');
     const dateStr = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+    const reportID = `LEAD-${Date.now()}`;
 
-    // RE-INSTATE DESKRIPSI LAMA (Lengkap)
     wrapper.innerHTML = `
-        <div id="pdf-content" style="width:794px; height:1123px; background:white; padding:50px; box-sizing:border-box; font-family:Arial, sans-serif; position:relative; border:18px solid #0056b3; display:flex; flex-direction:column;">
+        <div id="pdf-content" style="width:794px; height:1123px; background:white; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; position:relative; border:1px solid #eee; display:flex; flex-direction:column;">
             
-            <div style="text-align:center; margin-bottom:30px;">
-                <img src="logo-araya.png" style="width:170px; margin-bottom:15px;">
-                <h2 style="margin:0; font-size:24px; letter-spacing:1px; border-bottom:2px solid #333; display:inline-block; padding-bottom:5px;">LAPORAN ANALISIS KEPEMIMPINAN</h2>
-                <p style="margin:20px 0 5px 0; font-size:16px;">Diberikan kepada:</p>
-                <h1 style="margin:0; font-size:38px; font-weight:bold; color:#000; text-transform:uppercase;">${userData.name}</h1>
-                <div style="background:#1e293b; color:#fff; display:inline-block; padding:10px 40px; border-radius:8px; margin-top:20px; font-size:18px; font-weight:bold;">
-                    HASIL UTAMA: ${info.title.toUpperCase()}
+            <div style="position:absolute; top:0; left:0; width:100%; height:15px; background: linear-gradient(90deg, #0056b3, #c5a059);"></div>
+            <div style="position:absolute; top:15px; left:30px; width:5px; height:150px; background:#0056b3;"></div>
+
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.03; pointer-events:none; z-index:0; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; transform: rotate(-25deg) scale(1.2);">
+                ${Array(16).fill('<img src="logo-araya.png" style="width:140px; margin:40px;">').join('')}
+            </div>
+
+            <div style="position:relative; z-index:1; padding: 60px; flex-grow:1; display:flex; flex-direction:column;">
+                <div style="text-align:center; margin-bottom:40px;">
+                    <img src="logo-araya.png" style="width:190px; margin: 0 auto 20px auto; display:block;">
+                    <h3 style="letter-spacing:5px; color:#64748b; font-size:14px; margin-bottom:10px; font-weight:normal;">LAPORAN ANALISIS STRATEGIS</h3>
+                    <h1 style="font-size:32px; color:#1e293b; margin:0; font-weight:bold; border-bottom:2px solid #0056b3; display:inline-block; padding-bottom:10px;">KEPEMIMPINAN</h1>
                 </div>
-            </div>
 
-            <div style="margin-bottom:15px;">
-                <h4 style="margin:0 0 5px 0; color:#0056b3; border-bottom:1px solid #eee;">LEADERSHIP INSIGHT:</h4>
-                <p style="font-size:14px; line-height:1.5; margin:0; text-align:justify;">${info.desc} ${info.insight}</p>
-            </div>
-
-            <div style="margin-bottom:15px;">
-                <h4 style="margin:0 0 5px 0; color:#0056b3; border-bottom:1px solid #eee;">GAYA KOMUNIKASI:</h4>
-                <p style="font-size:14px; line-height:1.5; margin:0;">${info.komunikasi}</p>
-            </div>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:15px;">
-                <div>
-                    <h4 style="margin:0 0 5px 0; color:#28a745; border-bottom:1px solid #eee;">KEKUATAN UTAMA (+):</h4>
-                    <p style="font-size:13px; line-height:1.4;">${info.kekuatan}</p>
+                <div style="text-align:center; margin-bottom:40px;">
+                    <p style="font-size:16px; color:#64748b; margin-bottom:5px;">Diberikan Kepada:</p>
+                    <h2 style="font-size:36px; color:#000; margin:0; text-transform:uppercase; letter-spacing:1px;">${userData.name}</h2>
                 </div>
-                <div>
-                    <h4 style="margin:0 0 5px 0; color:#dc3545; border-bottom:1px solid #eee;">AREA PENGEMBANGAN (-):</h4>
-                    <p style="font-size:13px; line-height:1.4;">${info.kelemahan}</p>
-                </div>
-            </div>
 
-            <div style="margin-bottom:20px;">
-                <h4 style="margin:0 0 5px 0; color:#d97706; border-bottom:1px solid #eee;">STRATEGI PENGEMBANGAN 90 HARI:</h4>
-                <div style="background:#fffcf5; padding:12px; border:1px solid #fde68a; border-radius:8px;">
-                    <p style="font-size:14px; font-style:italic; color:#92400e; margin:0;">${info.rec}</p>
+                <div style="background:#1e293b; color:white; padding:20px; border-radius:12px; margin-bottom:30px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <p style="margin:0; font-size:14px; opacity:0.8; letter-spacing:2px;">HASIL EVALUASI UTAMA:</p>
+                    <h2 style="margin:5px 0 0 0; font-size:24px; color:#c5a059;">${info.title.toUpperCase()}</h2>
                 </div>
-            </div>
 
-            <div style="flex-grow:1;">
-                <h4 style="margin:0 0 5px 0; color:#0056b3; border-bottom:1px solid #eee;">DINAMIKA SKOR:</h4>
-                <table style="width:100%; font-size:13px; margin-top:5px; border-collapse:collapse;">
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 1: Position</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 2: Permission</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 3: Production</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 4: People Development</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
-                    <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 0;">Level 5: Pinnacle</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
-                </table>
-            </div>
-
-            <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end;">
-                <div style="font-size:11px; color:#64748b;">
-                    <p style="margin:0;">ID Laporan: <b>LEAD-${Date.now()}</b></p>
-                    <p style="margin:3px 0;">Tanggal: <b>${dateStr}</b></p>
-                    <p style="margin:0; font-weight:bold; color:#0056b3;">Araya Consulting - Your Growth Partner</p>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:25px;">
+                    <div style="background:#f8fafc; padding:20px; border-radius:10px; border-left:4px solid #0056b3;">
+                        <h4 style="margin:0 0 10px 0; font-size:14px; color:#0056b3;">LEADERSHIP INSIGHT</h4>
+                        <p style="font-size:13px; line-height:1.6; margin:0; color:#334155; text-align:justify;">${info.desc} ${info.insight}</p>
+                    </div>
+                    <div style="background:#f8fafc; padding:20px; border-radius:10px; border-left:4px solid #0056b3;">
+                        <h4 style="margin:0 0 10px 0; font-size:14px; color:#0056b3;">GAYA KOMUNIKASI</h4>
+                        <p style="font-size:13px; line-height:1.6; margin:0; color:#334155;">${info.komunikasi}</p>
+                    </div>
                 </div>
-                <div style="text-align:center;">
-                    <p style="margin:0; font-size:13px;">Disahkan secara digital,</p>
-                    <img src="ttd.png" style="width:110px; margin:5px 0;">
-                    <div style="border-top:1.5px solid #000; padding-top:3px;">
-                        <b style="font-size:16px;">ALI MAHFUD</b><br>
-                        <span style="font-size:11px; color:#64748b;">Founder Araya Consulting</span>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:25px;">
+                    <div>
+                        <h4 style="margin:0 0 8px 0; font-size:13px; color:#28a745; text-transform:uppercase;">Kekuatan Utama (+)</h4>
+                        <p style="font-size:12px; line-height:1.5; color:#475569; margin:0;">${info.kekuatan}</p>
+                    </div>
+                    <div>
+                        <h4 style="margin:0 0 8px 0; font-size:13px; color:#dc3545; text-transform:uppercase;">Area Pengembangan (-)</h4>
+                        <p style="font-size:12px; line-height:1.5; color:#475569; margin:0;">${info.kelemahan}</p>
+                    </div>
+                </div>
+
+                <div style="background:#fffcf0; padding:20px; border-radius:10px; border:1px solid #fde68a; margin-bottom:30px;">
+                    <h4 style="margin:0 0 8px 0; font-size:14px; color:#92400e;">STRATEGI PENGEMBANGAN 90 HARI</h4>
+                    <p style="font-size:13px; line-height:1.6; font-style:italic; color:#78350f; margin:0;">"${info.rec}"</p>
+                </div>
+
+                <div style="flex-grow:1;">
+                    <h4 style="margin:0 0 10px 0; font-size:13px; color:#64748b; border-bottom:1px solid #eee; padding-bottom:5px;">DINAMIKA SKOR KEPEMIMPINAN:</h4>
+                    <table style="width:100%; font-size:12px; border-collapse:collapse;">
+                        ${Object.keys(avgs).map((key, i) => `
+                            <tr style="border-bottom:1px solid #f1f5f9;">
+                                <td style="padding:6px 0; color:#475569;">Level ${i+1}: ${questionsData[i].name}</td>
+                                <td style="text-align:right; font-weight:bold; color:#1e293b;">${avgs[key]}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+
+                <div style="margin-top:40px; display:flex; justify-content:space-between; align-items:flex-end;">
+                    <div style="font-size:10px; color:#94a3b8; line-height:1.6;">
+                        <p style="margin:0;">Report ID: <b>${reportID}</b></p>
+                        <p style="margin:0;">Analysis Date: <b>${dateStr}</b></p>
+                        <p style="margin:5px 0 0 0; font-weight:bold; color:#0056b3; font-size:11px;">Araya Consulting - Your Growth Partner</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <p style="margin:0 0 5px 0; font-size:12px; color:#334155;">Disahkan secara digital,</p>
+                        <div style="height:70px; display:flex; align-items:center; justify-content:center;">
+                            <img src="ttd.png" style="width:120px;">
+                        </div>
+                        <div style="border-top:1.5px solid #000; width:180px; margin:5px auto 0 auto; padding-top:5px;">
+                            <b style="font-size:15px; color:#000;">ALI MAHFUD</b><br>
+                            <span style="font-size:11px; color:#64748b; font-weight:bold;">Founder Araya Consulting</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,19 +248,18 @@ async function generatePDF() {
     setTimeout(async () => {
         const element = document.getElementById('pdf-content');
         const canvas = await html2canvas(element, { 
-            scale: 2,
-            useCORS: true,
+            scale: 2, 
+            useCORS: true, 
             logging: false,
             y: 0,
-            scrollY: 0
+            scrollY: 0 
         });
         
         const imgData = canvas.toDataURL('image/jpeg', 0.98);
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-        
-        // SAVE LANGSUNG (IDENTIK DENGAN DISC)
-        pdf.save(`Laporan_Leadership_${userData.name.replace(/\s+/g, '_')}.pdf`);
+        pdf.save(`Leadership_Report_${userData.name.replace(/\s+/g, '_')}.pdf`);
+        wrapper.style.display = 'none';
     }, 1000);
 }
