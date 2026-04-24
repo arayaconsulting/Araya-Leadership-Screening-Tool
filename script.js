@@ -3,11 +3,66 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgqw0H2zSNeyG5ZOezl
 const WHATSAPP_NUMBER = "6285232526003"; 
 
 const questionsData = [
-    { level: 1, name: "Position (Jabatan)", group: "L1", questions: ["1. Saya mengandalkan otoritas jabatan saya untuk memastikan anggota tim mengikuti arahan.","2. Anggota tim saya cenderung menunggu perintah sebelum memulai pekerjaan baru.","3. Saya percaya hak istimewa kepemimpinan datang secara otomatis dengan posisi.","4. Anggota tim hanya bekerja sesuai deskripsi pekerjaan minimal mereka.","5. Orang-orang mengikuti saya karena mereka harus, bukan karena mereka ingin."]},
-    { level: 2, name: "Permission (Izin)", group: "L2", questions: ["6. Saya meluangkan waktu untuk mengenal anggota tim saya secara pribadi, di luar pekerjaan.","7. Saya membangun kepercayaan dengan tim melalui komunikasi yang terbuka dan jujur.","8. Saya secara aktif mendengarkan dan menghargai masukan tim, meskipun berbeda dengan pandangan saya.","9. Saya berfokus untuk menciptakan lingkungan kerja yang positif and kolaboratif.","10. Anggota tim saya bersedia memberikan usaha ekstra karena hubungan baik kami."]},
-    { level: 3, name: "Production (Produksi)", group: "L3", questions: ["11. Saya secara konsisten memimpin tim saya untuk mencapai target dan hasil nyata.","12. Saya bertanggung jawab penuh atas hasil kerja tim, baik keberhasilan maupun kegagalan.","13. Tim saya memiliki momentum yang kuat dan termotivasi oleh keberhasilan yang diraih.","14. Saya menetapkan standar kinerja yang tinggi dengan memberikan teladan hasil kerja nyata.","15. Kredibilitas saya di organisasi didasarkan pada pencapaian, bukan hanya posisi saya."]},
-    { level: 4, name: "People Development", group: "L4", questions: ["16. Saya secara rutin menyediakan waktu untuk melatih dan membimbing anggota tim agar berkembang.","17. Anggota tim yang saya bimbing sering kali berhasil dipromosikan atau memimpin unit baru.","18. Saya berinvestasi dalam pengembangan orang meskipun mereka mungkin akan pindah ke posisi lain.","19. Saya mendelegasikan tanggung jawab signifikan agar anggota tim tumbuh dalam kapasitas pemimpin.","20. Saya aktif mencari dan merekrut individu yang memiliki potensi besar untuk masa depan."]},
-    { level: 5, name: "Pinnacle (Puncak)", group: "L5", questions: ["21. Pemimpin di luar tim sering mencari nasihat atau panduan strategis dari saya.","22. Kehadiran dan reputasi saya secara konsisten meningkatkan semangat organisasi.","23. Keputusan dan tindakan saya sesuai prinsip yang diyakini oleh organisasi.","24. Saya telah menciptakan budaya kepemimpinan yang tetap efektif meskipun saya tidak hadir.","25. Saya dikenal luas sebagai panutan yang inspiratif dengan integritas tinggi."]}
+    { 
+        level: 1, 
+        name: "Position (Pondasi Administrasi)", 
+        group: "L1", 
+        questions: [
+            "1. Operasional di organisasi saya dipandu oleh struktur organisasi dan pembagian wewenang yang terdokumentasi secara tertulis.",
+            "2. Kebijakan perusahaan dan kontrak kerja menjadi dasar utama bagi setiap anggota tim dalam menjalankan aktivitas profesionalnya.",
+            "3. Setiap anggota tim memahami batasan tanggung jawab mereka sesuai dengan aturan formal yang berlaku di organisasi.",
+            "4. Ketertiban operasional terjaga karena adanya sistem pengawasan yang memastikan standar prosedur dipatuhi dengan baik.",
+            "5. Saya memastikan wewenang kepemimpinan tetap dihormati guna menjamin stabilitas organisasi."
+        ]
+    },
+    { 
+        level: 2, 
+        name: "Permission (Budaya Kepercayaan)", 
+        group: "L2", 
+        questions: [
+            "6. Budaya organisasi saya memungkinkan setiap anggota tim merasa nyaman untuk menyampaikan masukan secara jujur kepada pemimpin.",
+            "7. Tingkat loyalitas anggota tim saya sangat tinggi, bukan karena keterpaksaan, melainkan karena rasa memiliki terhadap organisasi.",
+            "8. Hubungan antar level di organisasi saya didasarkan pada rasa saling percaya dan komunikasi yang terbuka.",
+            "9. Saya memelihara lingkungan kerja yang suportif, di mana setiap individu merasa dihargai kontribusinya secara personal.",
+            "10. Interaksi di organisasi saya tetap terasa hangat dan manusiawi di tengah tuntutan target pekerjaan yang profesional."
+        ]
+    },
+    { 
+        level: 3, 
+        name: "Production (Kredibilitas Hasil)", 
+        group: "L3", 
+        questions: [
+            "11. Organisasi saya memiliki sejarah pencapaian target strategis yang konsisten dalam kurun waktu 12 bulan terakhir.",
+            "12. Masalah besar dalam organisasi terselesaikan dengan cepat karena adanya budaya yang berorientasi pada pencarian solusi.",
+            "13. Tim saya diakui sebagai unit yang sangat produktif dan memberikan dampak ekonomi nyata bagi bisnis.",
+            "14. Anggota tim merasa percaya diri karena berada di bawah kepemimpinan yang sudah terbukti mampu memenangkan persaingan.",
+            "15. Saya selalu memastikan bahwa standar kualitas hasil kerja di organisasi saya adalah yang terbaik di kelasnya."
+        ]
+    },
+    { 
+        level: 4, 
+        name: "People Development (Investasi Kaderisasi)", 
+        group: "L4", 
+        questions: [
+            "16. Saat ini terdapat sistem kaderisasi yang mampu melahirkan pemimpin-pemimpin baru di dalam organisasi saya secara mandiri.",
+            "17. Saya mengalokasikan sumber daya organisasi secara khusus untuk meningkatkan kapasitas dan kompetensi anggota tim.",
+            "18. Anggota tim saya diberikan ruang untuk memimpin proyek strategis guna mengasah kemampuan pengambilan keputusan mereka.",
+            "19. Keberhasilan kepemimpinan saya diukur dari banyaknya jumlah staf yang naik jabatan atau bertumbuh kapasitasnya.",
+            "20. Regenerasi pemimpin adalah prioritas utama yang saya pantau perkembangannya secara berkala di semua level."
+        ]
+    },
+    { 
+        level: 5, 
+        name: "Pinnacle (Dampak & Legacy)", 
+        group: "L5", 
+        questions: [
+            "21. Organisasi saya memiliki daya tarik tinggi bagi talenta terbaik di luar sana karena reputasi kepemimpinan yang saya bangun.",
+            "22. Bisnis dan budaya kerja saya tetap berjalan unggul dan mandiri meskipun saya tidak terlibat secara operasional.",
+            "23. Saya telah berhasil membangun 'Ekosistem Pemimpin', di mana para pemimpin yang saya cetak kini telah mendidik pemimpin lainnya.",
+            "24. Keputusan-keputusan besar yang saya ambil selalu berlandaskan pada prinsip integritas jangka panjang yang kuat.",
+            "25. Warisan kepemimpinan saya memberikan dampak positif bagi industri atau masyarakat luas di luar batas organisasi saya."
+        ]
+    }
 ];
 
 const reportDetails = {
@@ -15,7 +70,7 @@ const reportDetails = {
     2: { title: "Level 2: Permission (Hubungan)", desc: "Anda memimpin melalui hubungan baik. Orang-orang mengikuti karena mereka ingin (sukarela).", insight: "Lingkungan kerja menyenangkan dan kepercayaan mulai tumbuh kuat.", kekuatan: "Budaya harmonis, empati tinggi, komunikasi dua arah lancar.", kelemahan: "Seringkali sungkan menegur staf yang buruk demi menjaga perasaan.", komunikasi: "Dialogis dan suportif. Anda lebih banyak mendengar daripada memerintah.", rec: "Tetapkan standar kinerja yang jelas. Jangan biarkan keramahan menghambat hasil." },
     3: { title: "Level 3: Production (Hasil)", desc: "Anda memimpin melalui hasil nyata. Reputasi didasarkan pada prestasi bersama tim.", insight: "Fokus pada kemenangan melenyapkan masalah kecil. Anda adalah eksekutor handal.", kekuatan: "Kredibilitas tinggi, goal-oriented, mampu menciptakan momentum sukses.", kelemahan: "Risiko burnout jika terus mengejar target tanpa memperhatikan manusia.", komunikasi: "To-the-point dan fokus pada solusi. Menginspirasi melalui teladan hasil.", rec: "Delegasikan tanggung jawab penting agar tim merasa memiliki proyek." },
     4: { title: "Level 4: People Development", desc: "Fokus Anda adalah mencetak pemimpin baru. Anda dikenal sebagai mentor handal.", insight: "Kesuksesan diukur dari seberapa hebat orang yang Anda didik. Anda multiplier.", kekuatan: "Identifikasi potensi, pemberdayaan luar biasa, loyalitas jangka panjang.", kelemahan: "Sulit melepaskan kader terbaik untuk naik ke posisi lebih tinggi di unit lain.", komunikasi: "Coaching & Mentoring. Banyak bertanya untuk memicu pemikiran strategis.", rec: "Berikan otonomi penuh pada kader. Biarkan mereka mengambil keputusan strategis." },
-    5: { title: "Level 5: Pinnacle (Puncak)", desc: "Memimpin melalui reputasi dan integritas teruji waktu. Anda adalah simbol organisasi.", insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai Anda.", kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, membangun legacy.", kelemahan: "Jarak komunikasi dengan frontliner bisa menjauh tanpa sistem aspirasi.", komunikasi: "Inspiratif dan filosofis. Fokus pada nilai inti dan warisan (legacy).", rec: "Fokus pada strategi tingkat tinggi dan kaderisasi direksi. Gunakan pengaruh skala luas." }
+    5: { title: "Level 5: Pinnacle", desc: "Memimpin melalui reputasi dan integritas teruji waktu. Anda adalah simbol organisasi.", insight: "Pengaruh melampaui posisi. Orang mengikuti karena jati diri dan nilai Anda.", kekuatan: "Visi jangka panjang tajam, integritas tak tergoyahkan, membangun legacy.", kelemahan: "Jarak komunikasi dengan frontliner bisa menjauh tanpa sistem aspirasi.", komunikasi: "Inspiratif dan filosofis. Fokus pada nilai inti dan warisan (legacy).", rec: "Fokus pada strategi tingkat tinggi dan kaderisasi direksi. Gunakan pengaruh skala luas." }
 };
 
 let userData = { name: "", phone: "" };
@@ -58,10 +113,7 @@ function renderQuestion() {
     updateNav();
 }
 
-window.saveAnswer = function(id, val) { 
-    userAnswers[id] = val; 
-    updateNav(); 
-};
+window.saveAnswer = function(id, val) { userAnswers[id] = val; updateNav(); };
 
 function updateNav() {
     const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
@@ -78,14 +130,36 @@ document.getElementById('prev-btn').onclick = () => { currentQ--; renderQuestion
 window.calculateResults = function() {
     const avgs = {};
     let sumTotal = 0;
+    
     questionsData.forEach(lvl => {
-        const sum = allQuestionsFlat.filter(q => q.group === lvl.group).reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
-        avgs[lvl.group] = (sum / 5).toFixed(1);
-        sumTotal += parseFloat(avgs[lvl.group]);
+        const sum = allQuestionsFlat
+            .filter(q => q.group === lvl.group)
+            .reduce((acc, q) => acc + (userAnswers[q.id] || 0), 0);
+        
+        avgs[lvl.group] = parseFloat((sum / 5).toFixed(1));
+        sumTotal += avgs[lvl.group];
     });
 
     let finalLevel = 1;
-    for (let i = 1; i <= 5; i++) { if (avgs[`L${i}`] >= 4.0) finalLevel = i; else break; }
+    const threshold = 4.0;
+
+    if (avgs.L1 >= threshold) {
+        finalLevel = 1;
+        if (avgs.L2 >= threshold) {
+            finalLevel = 2;
+            if (avgs.L3 >= threshold) {
+                finalLevel = 3;
+                if (avgs.L4 >= threshold) {
+                    finalLevel = 4;
+                    if (avgs.L5 >= threshold) {
+                        finalLevel = 5;
+                    }
+                }
+            }
+        }
+    } else {
+        finalLevel = 1;
+    }
 
     fetch(SCRIPT_URL, { 
         method: 'POST', 
@@ -93,8 +167,9 @@ window.calculateResults = function() {
         body: JSON.stringify({ 
             name: userData.name, 
             phone: userData.phone, 
-            levelName: questionsData[finalLevel-1].name, 
-            avgScore: (sumTotal/5).toFixed(1) 
+            levelName: questionsData[finalLevel - 1].name, 
+            avgScore: (sumTotal / 5).toFixed(1),
+            action: "save_score"
         }) 
     });
 
@@ -222,11 +297,11 @@ async function generatePDF() {
                 <div style="flex-grow:1;">
                     <h4 style="margin:0 0 10px 0; color:#1e293b; font-size:13px; border-bottom:1px solid #eee; padding-bottom:5px;">DINAMIKA SKOR KEPEMIMPINAN:</h4>
                     <table style="width:100%; font-size:12px; border-collapse:collapse;">
-                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Level 1: Position</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
-                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Level 2: Permission</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
-                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Level 3: Production</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
-                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Level 4: People Development</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
-                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Level 5: Pinnacle</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Position (L1)</td><td style="text-align:right;"><b>${avgs.L1}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Permission (L2)</td><td style="text-align:right;"><b>${avgs.L2}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Production (L3)</td><td style="text-align:right;"><b>${avgs.L3}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">People Development (L4)</td><td style="text-align:right;"><b>${avgs.L4}</b></td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0;">Pinnacle (L5)</td><td style="text-align:right;"><b>${avgs.L5}</b></td></tr>
                     </table>
                 </div>
 
