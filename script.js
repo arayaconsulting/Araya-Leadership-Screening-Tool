@@ -113,7 +113,10 @@ function renderQuestion() {
     updateNav();
 }
 
-window.saveAnswer = function(id, val) { userAnswers[id] = val; updateNav(); };
+window.saveAnswer = function(id, val) { 
+    userAnswers[id] = val; 
+    updateNav(); 
+};
 
 function updateNav() {
     const answered = userAnswers[allQuestionsFlat[currentQ].id] !== undefined;
@@ -131,6 +134,7 @@ window.calculateResults = function() {
     const avgs = {};
     let sumTotal = 0;
     
+    // 1. Hitung Rata-rata Skor per Level
     questionsData.forEach(lvl => {
         const sum = allQuestionsFlat
             .filter(q => q.group === lvl.group)
@@ -140,27 +144,17 @@ window.calculateResults = function() {
         sumTotal += avgs[lvl.group];
     });
 
+    // 2. LOGIKA BARU: HIGHEST ACHIEVED LEVEL (PROGRESSIVE)
     let finalLevel = 1;
-    const threshold = 4.0;
+    const threshold = 3.5; 
 
-    if (avgs.L1 >= threshold) {
-        finalLevel = 1;
-        if (avgs.L2 >= threshold) {
-            finalLevel = 2;
-            if (avgs.L3 >= threshold) {
-                finalLevel = 3;
-                if (avgs.L4 >= threshold) {
-                    finalLevel = 4;
-                    if (avgs.L5 >= threshold) {
-                        finalLevel = 5;
-                    }
-                }
-            }
-        }
-    } else {
-        finalLevel = 1;
-    }
+    if (avgs.L5 >= threshold) finalLevel = 5;
+    else if (avgs.L4 >= threshold) finalLevel = 4;
+    else if (avgs.L3 >= threshold) finalLevel = 3;
+    else if (avgs.L2 >= threshold) finalLevel = 2;
+    else finalLevel = 1;
 
+    // 3. DATABASE SYNC
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
@@ -173,6 +167,7 @@ window.calculateResults = function() {
         }) 
     });
 
+    // 4. DISPLAY
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(finalLevel, avgs);
 };
@@ -278,11 +273,11 @@ async function generatePDF() {
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:20px;">
                     <div>
-                        <h4 style="margin:0 0 8px 0; font-size:14px; color:#28a745; text-transform:uppercase;">Kekuatan Utama (+)</h4>
+                        <h4 style="margin:0 0 8px 0; font-size:14px; color:#28a745; text-transform:uppercase;">KEKUATAN UTAMA (+)</h4>
                         <p style="font-size:12px; line-height:1.5; color:#334155; margin:0;">${info.kekuatan}</p>
                     </div>
                     <div>
-                        <h4 style="margin:0 0 8px 0; font-size:14px; color:#dc3545; text-transform:uppercase;">Area Pengembangan (-)</h4>
+                        <h4 style="margin:0 0 8px 0; font-size:14px; color:#dc3545; text-transform:uppercase;">AREA PENGEMBANGAN (-)</h4>
                         <p style="font-size:12px; line-height:1.5; color:#334155; margin:0;">${info.kelemahan}</p>
                     </div>
                 </div>
