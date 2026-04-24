@@ -4,63 +4,53 @@ const WHATSAPP_NUMBER = "6285232526003";
 
 const questionsData = [
     { 
-        level: 1, 
-        name: "Position (Pondasi Administrasi)", 
-        group: "L1", 
+        level: 1, name: "Position (Kejelasan Sistem)", group: "L1", 
         questions: [
-            "1. Operasional di organisasi saya dipandu oleh struktur organisasi dan pembagian wewenang yang terdokumentasi secara tertulis.",
-            "2. Kebijakan perusahaan dan kontrak kerja menjadi dasar utama bagi setiap anggota tim dalam menjalankan aktivitas profesionalnya.",
-            "3. Setiap anggota tim memahami batasan tanggung jawab mereka sesuai dengan aturan formal yang berlaku di organisasi.",
-            "4. Ketertiban operasional terjaga karena adanya sistem pengawasan yang memastikan standar prosedur dipatuhi dengan baik.",
-            "5. Saya memastikan wewenang kepemimpinan tetap dihormati guna menjamin stabilitas organisasi."
+            "1. Seluruh operasional tim berjalan di atas garis koordinasi dan deskripsi pekerjaan yang tertulis jelas.",
+            "2. Setiap anggota tim menjalankan tugas sesuai dengan standar aturan/kontrak kerja yang telah disepakati.",
+            "3. Struktur organisasi memastikan tidak ada tumpang tindih wewenang antar departemen atau individu.",
+            "4. Tim menunjukkan disiplin tinggi terhadap jadwal dan prosedur administrasi yang ditetapkan perusahaan.",
+            "5. Saya memelihara sistem pengawasan yang menjamin instruksi strategis dipatuhi hingga level operasional."
         ]
     },
     { 
-        level: 2, 
-        name: "Permission (Budaya Kepercayaan)", 
-        group: "L2", 
+        level: 2, name: "Permission (Budaya Kepercayaan)", group: "L2", 
         questions: [
-            "6. Budaya organisasi saya memungkinkan setiap anggota tim merasa nyaman untuk menyampaikan masukan secara jujur kepada pemimpin.",
-            "7. Tingkat loyalitas anggota tim saya sangat tinggi, bukan karena keterpaksaan, melainkan karena rasa memiliki terhadap organisasi.",
-            "8. Hubungan antar level di organisasi saya didasarkan pada rasa saling percaya dan komunikasi yang terbuka.",
-            "9. Saya memelihara lingkungan kerja yang suportif, di mana setiap individu merasa dihargai kontribusinya secara personal.",
-            "10. Interaksi di organisasi saya tetap terasa hangat dan manusiawi di tengah tuntutan target pekerjaan yang profesional."
+            "6. Anggota tim merasa nyaman untuk memberikan masukan jujur atau kritik kepada saya tanpa rasa takut.",
+            "7. Tingkat perputaran karyawan (turnover) di tim saya sangat rendah karena mereka merasa dihargai.",
+            "8. Hubungan antar level didasarkan pada rasa saling percaya, bukan karena tekanan jabatan.",
+            "9. Saya mengenal dengan baik motivasi dan impian pribadi dari orang-orang kunci di tim saya.",
+            "10. Tim bersedia memberikan usaha ekstra secara sukarela karena mereka percaya pada integritas saya."
         ]
     },
     { 
-        level: 3, 
-        name: "Production (Kredibilitas Hasil)", 
-        group: "L3", 
+        level: 3, name: "Production (Kredibilitas Hasil)", group: "L3", 
         questions: [
-            "11. Organisasi saya memiliki sejarah pencapaian target strategis yang konsisten dalam kurun waktu 12 bulan terakhir.",
-            "12. Masalah besar dalam organisasi terselesaikan dengan cepat karena adanya budaya yang berorientasi pada pencarian solusi.",
-            "13. Tim saya diakui sebagai unit yang sangat produktif dan memberikan dampak ekonomi nyata bagi bisnis.",
-            "14. Anggota tim merasa percaya diri karena berada di bawah kepemimpinan yang sudah terbukti mampu memenangkan persaingan.",
-            "15. Saya selalu memastikan bahwa standar kualitas hasil kerja di organisasi saya adalah yang terbaik di kelasnya."
+            "11. Organisasi saya memiliki rekam jejak mencapai target pertumbuhan yang signifikan dalam 1 tahun terakhir.",
+            "12. Saya memimpin dengan memberikan teladan performa tinggi yang nyata dan bisa ditiru oleh seluruh tim.",
+            "13. Masalah besar terselesaikan dengan cepat karena adanya budaya yang fokus pada solusi hasil akhir.",
+            "14. Tim saya merasa bangga karena organisasi ini dikenal sebagai 'tim pemenang' di bidangnya.",
+            "15. Kredibilitas saya di mata tim dibangun di atas hasil nyata, bukan sekadar janji atau posisi."
         ]
     },
     { 
-        level: 4, 
-        name: "People Development (Investasi Kaderisasi)", 
-        group: "L4", 
+        level: 4, name: "People Development (Kaderisasi)", group: "L4", 
         questions: [
-            "16. Saat ini terdapat sistem kaderisasi yang mampu melahirkan pemimpin-pemimpin baru di dalam organisasi saya secara mandiri.",
-            "17. Saya mengalokasikan sumber daya organisasi secara khusus untuk meningkatkan kapasitas dan kompetensi anggota tim.",
-            "18. Anggota tim saya diberikan ruang untuk memimpin proyek strategis guna mengasah kemampuan pengambilan keputusan mereka.",
-            "19. Keberhasilan kepemimpinan saya diukur dari banyaknya jumlah staf yang naik jabatan atau bertumbuh kapasitasnya.",
-            "20. Regenerasi pemimpin adalah prioritas utama yang saya pantau perkembangannya secara berkala di semua level."
+            "16. Saat ini ada minimal 2 orang di tim yang siap menggantikan peran saya kapanpun jika saya tidak ada.",
+            "17. Saya menyediakan waktu dan anggaran khusus untuk melatih staf agar mereka bisa memimpin unitnya sendiri.",
+            "18. Keberhasilan saya diukur dari berapa banyak anggota tim yang naik jabatan atau bertumbuh kapasitasnya.",
+            "19. Saya mendelegasikan wewenang pengambilan keputusan strategis kepada kader potensial di dalam tim.",
+            "20. Sistem regenerasi sudah berjalan sehingga kualitas organisasi tidak hanya bergantung pada sosok saya."
         ]
     },
     { 
-        level: 5, 
-        name: "Pinnacle (Dampak & Legacy)", 
-        group: "L5", 
+        level: 5, name: "Pinnacle (Dampak & Legacy)", group: "L5", 
         questions: [
-            "21. Organisasi saya memiliki daya tarik tinggi bagi talenta terbaik di luar sana karena reputasi kepemimpinan yang saya bangun.",
-            "22. Bisnis dan budaya kerja saya tetap berjalan unggul dan mandiri meskipun saya tidak terlibat secara operasional.",
-            "23. Saya telah berhasil membangun 'Ekosistem Pemimpin', di mana para pemimpin yang saya cetak kini telah mendidik pemimpin lainnya.",
-            "24. Keputusan-keputusan besar yang saya ambil selalu berlandaskan pada prinsip integritas jangka panjang yang kuat.",
-            "25. Warisan kepemimpinan saya memberikan dampak positif bagi industri atau masyarakat luas di luar batas organisasi saya."
+            "21. Reputasi kepemimpinan saya menjadi alasan utama talenta terbaik ingin bergabung dengan organisasi ini.",
+            "22. Budaya kerja tetap unggul dan produktif meskipun saya tidak terlibat operasional selama berbulan-bulan.",
+            "23. Saya telah melahirkan pemimpin baru yang saat ini juga sudah sukses mencetak pemimpin lainnya.",
+            "24. Nilai-nilai integritas yang saya tanamkan tetap menjadi pedoman meskipun ada pergantian personil.",
+            "25. Dampak kepemimpinan saya memberikan manfaat luas bagi industri atau lingkungan di luar bisnis saya."
         ]
     }
 ];
@@ -96,7 +86,10 @@ window.startTest = function() {
 function renderQuestion() {
     const q = allQuestionsFlat[currentQ];
     document.getElementById('progress-bar').style.width = `${((currentQ + 1) / 25) * 100}%`;
-    document.getElementById('quiz-header').innerHTML = `<p style="font-size:12px; color:#64748b; font-weight:600; text-transform:uppercase;">Asesmen ${currentQ + 1} / 25</p><h4>${q.text}</h4>`;
+    document.getElementById('quiz-header').innerHTML = `
+        <p style="font-size:12px; color:#64748b; font-weight:600; text-transform:uppercase;">Asesmen ${currentQ + 1} / 25</p>
+        <h4>${q.text}</h4>`;
+    
     document.getElementById('questions-container').innerHTML = `
         <div class="options-grid">
             ${[1,2,3,4,5].map(v => `
@@ -106,10 +99,10 @@ function renderQuestion() {
                 </label>
             `).join('')}
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:11px; color:#94a3b8; padding:0 5px;">
-            <span>Sangat Tidak Setuju</span>
-            <span>Sangat Setuju</span>
-        </div>`;
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:#94a3b8; padding:0 15px; font-weight:bold;">
+            <span>SANGAT JARANG / TIDAK PERNAH</span>
+            <span>SELALU / MENJADI BUDAYA</span>
+        </div>`; 
     updateNav();
 }
 
@@ -134,7 +127,6 @@ window.calculateResults = function() {
     const avgs = {};
     let sumTotal = 0;
     
-    // 1. Hitung Rata-rata Skor per Level
     questionsData.forEach(lvl => {
         const sum = allQuestionsFlat
             .filter(q => q.group === lvl.group)
@@ -144,17 +136,28 @@ window.calculateResults = function() {
         sumTotal += avgs[lvl.group];
     });
 
-    // 2. LOGIKA BARU: HIGHEST ACHIEVED LEVEL (PROGRESSIVE)
     let finalLevel = 1;
-    const threshold = 3.5; 
+    const lowThres = 3.8;  
+    const highThres = 4.2; 
 
-    if (avgs.L5 >= threshold) finalLevel = 5;
-    else if (avgs.L4 >= threshold) finalLevel = 4;
-    else if (avgs.L3 >= threshold) finalLevel = 3;
-    else if (avgs.L2 >= threshold) finalLevel = 2;
-    else finalLevel = 1;
+    if (avgs.L1 >= lowThres) {
+        finalLevel = 1; 
+        if (avgs.L2 >= lowThres) {
+            finalLevel = 2;
+            if (avgs.L3 >= highThres) {
+                finalLevel = 3;
+                if (avgs.L4 >= highThres) {
+                    finalLevel = 4;
+                    if (avgs.L5 >= highThres) {
+                        finalLevel = 5;
+                    }
+                }
+            }
+        }
+    } else {
+        finalLevel = 1;
+    }
 
-    // 3. DATABASE SYNC
     fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
@@ -167,7 +170,6 @@ window.calculateResults = function() {
         }) 
     });
 
-    // 4. DISPLAY
     document.getElementById('quiz-content').classList.add('hidden');
     displayResults(finalLevel, avgs);
 };
